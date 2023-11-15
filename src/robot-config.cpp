@@ -22,6 +22,8 @@ motor Intake = motor(PORT1, ratio6_1, false);
 digital_out Wings = digital_out(Exp.A);
 optical TriBallDetect = optical(PORT19);
 rotation CataRotate = rotation(PORT6, false);
+digital_out Blocker = digital_out(Brain.ThreeWirePort.A);
+digital_out Hang = digital_out(Brain.ThreeWirePort.B);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

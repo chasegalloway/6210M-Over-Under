@@ -17,6 +17,8 @@ extern triport Exp;
 extern digital_out Wings;
 extern optical TriBallDetect;
 extern rotation CataRotate;
+extern digital_out Blocker;
+extern digital_out Hang;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

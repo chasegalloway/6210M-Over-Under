@@ -15,6 +15,8 @@
 // Wings                digital_out   A               
 // TriBallDetect        optical       19              
 // CataRotate           rotation      6               
+// Blocker              digital_out   A               
+// Hang                 digital_out   B               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -173,6 +175,7 @@ void pre_auton() {
   FCState = 1;
 
   Wings.set(false);
+  Blocker.set(false);
   sleep(500);
   Intake.spin(fwd);
   sleep(200);
@@ -387,395 +390,390 @@ int SensorsTask() {
 /////////////////////////////////////////////////////////////
 int CatapultTask() {
   while (1) {
-    
+
     sleep(10);
   }
 }
 
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //              ############         ##                    //
-  //                   ##              ##                    //
-  //                   ##              ##                    //
-  //                   ##              ##                    //
-  //                   ##              ##                    //
-  //                   ##              ##                    //
-  //                   ##              ##                    //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////           TASK FOR DISK INTAKE             /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-  int IntakeTask() {
-    Intake.spin(forward);
-    while (1) {
-      sleep(5);
-      Intake.setVelocity(IntakeSpeed, pct);
-    }
+/////////////////////////////////////////////////////////////
+//                                                         //
+//              ############         ##                    //
+//                   ##              ##                    //
+//                   ##              ##                    //
+//                   ##              ##                    //
+//                   ##              ##                    //
+//                   ##              ##                    //
+//                   ##              ##                    //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////           TASK FOR DISK INTAKE             /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+int IntakeTask() {
+  Intake.spin(forward);
+  while (1) {
+    sleep(5);
+    Intake.setVelocity(IntakeSpeed, pct);
   }
+}
 
-  ///////////////////////////////////////////////////////////////
-  //                                                           //
-  //          ############     ########                        //
-  //               ##          ##      ##                      //
-  //               ##          ##       ##                     //
-  //               ##          ##       ##                     //
-  //               ##          ##       ##                     //
-  //               ##          ##      ##                      //
-  //               ##          ########                        //
-  //                                                           //
-  ///////////////////////////////////////////////////////////////
-  ////////                                              /////////
-  ////////             TASK FOR DRIVE MOTOR             /////////
-  ////////                                              /////////
-  ///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+//                                                           //
+//          ############     ########                        //
+//               ##          ##      ##                      //
+//               ##          ##       ##                     //
+//               ##          ##       ##                     //
+//               ##          ##       ##                     //
+//               ##          ##      ##                      //
+//               ##          ########                        //
+//                                                           //
+///////////////////////////////////////////////////////////////
+////////                                              /////////
+////////             TASK FOR DRIVE MOTOR             /////////
+////////                                              /////////
+///////////////////////////////////////////////////////////////
 
-  int DriveTask() {
-    while (1) {
-      if (DriveTrainHold) {
-        LFDrive.setStopping(hold);
-        LRDrive.setStopping(hold);
-        RRDrive.setStopping(hold);
-        RFDrive.setStopping(hold);
-        LCDrive.setStopping(hold);
-        RCDrive.setStopping(hold);
-      } else {
-        LFDrive.setStopping(coast);
-        LRDrive.setStopping(coast);
-        RRDrive.setStopping(coast);
-        RFDrive.setStopping(coast);
-        LCDrive.setStopping(coast);
-        RCDrive.setStopping(coast);
-      }
-
-      LFDrive.setMaxTorque(DriveTorque, pct);
-      LRDrive.setMaxTorque(DriveTorque, pct);
-      RFDrive.setMaxTorque(DriveTorque, pct);
-      RRDrive.setMaxTorque(DriveTorque, pct);
-      LCDrive.setMaxTorque(DriveTorque, pct);
-      RCDrive.setMaxTorque(DriveTorque, pct);
-
-      LFDrive.spin(fwd, LDSpeed, pct);
-      LRDrive.spin(fwd, LDSpeed, pct);
-      LCDrive.spin(fwd, LDSpeed, pct);
-      RFDrive.spin(fwd, RDSpeed, pct);
-      RRDrive.spin(fwd, RDSpeed, pct);
-      RCDrive.spin(fwd, RDSpeed, pct);
-
-      sleep(6);
+int DriveTask() {
+  while (1) {
+    if (DriveTrainHold) {
+      LFDrive.setStopping(hold);
+      LRDrive.setStopping(hold);
+      RRDrive.setStopping(hold);
+      RFDrive.setStopping(hold);
+      LCDrive.setStopping(hold);
+      RCDrive.setStopping(hold);
+    } else {
+      LFDrive.setStopping(coast);
+      LRDrive.setStopping(coast);
+      RRDrive.setStopping(coast);
+      RFDrive.setStopping(coast);
+      LCDrive.setStopping(coast);
+      RCDrive.setStopping(coast);
     }
+
+    LFDrive.setMaxTorque(DriveTorque, pct);
+    LRDrive.setMaxTorque(DriveTorque, pct);
+    RFDrive.setMaxTorque(DriveTorque, pct);
+    RRDrive.setMaxTorque(DriveTorque, pct);
+    LCDrive.setMaxTorque(DriveTorque, pct);
+    RCDrive.setMaxTorque(DriveTorque, pct);
+
+    LFDrive.spin(fwd, LDSpeed, pct);
+    LRDrive.spin(fwd, LDSpeed, pct);
+    LCDrive.spin(fwd, LDSpeed, pct);
+    RFDrive.spin(fwd, RDSpeed, pct);
+    RRDrive.spin(fwd, RDSpeed, pct);
+    RCDrive.spin(fwd, RDSpeed, pct);
+
+    sleep(6);
   }
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //           #########        ###                          //
-  //           ##             ##   ##                        //
-  //           ##            ##     ##                       //
-  //           ########     ###########                      //
-  //           ##           ##       ##                      //
-  //           ##           ##       ##                      //
-  //           ##           ##       ##                      //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////          FUNCTION FOR AUTO DISTANCE        /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-  /* If you want to keep spinning after drive do 1xxx = Speed (xxx being
-  the speed you want) */
-  void AutoDistance(int Speed, double Distance, double Heading) {
-    ResetDriveMotors();
-    sleep(10);
-    int RightTurnDiff;
-    while (fabs(AvgDriveMtrDist) < Distance) {
-      RightTurnDiff = (Heading - Gyro1) * .6;
-      LDSpeed = Speed + RightTurnDiff;
-      RDSpeed = Speed - RightTurnDiff;
-      sleep(10);
-    }
-    StopDriveMotors();
-  }
-
-  void AutoTillStop(int Speed, double Heading) {
-    ResetDriveMotors();
-    ResetTimer();
-    sleep(10);
-    int RightTurnDiff;
-    while (abs(SlowestDrive) > 3 || Clock < 500) {
-      RightTurnDiff = (Heading - Gyro1) * .6;
-      LDSpeed = Speed + RightTurnDiff;
-      RDSpeed = Speed - RightTurnDiff;
-      sleep(10);
-    }
-    StopDriveMotors();
-  }
-
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////          FUNCTION FOR AUTO TURN            /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-  void AutoTurn(int Speed, int Heading, int Accuracy) {
-    while (fabs((abs(Heading) - fabs(Gyro1))) > Accuracy ||
-           fabs(LFDrive.velocity(pct)) > 3.5) {
-      LDSpeed = -(Heading - Gyro1);
-      RDSpeed = +(Heading - Gyro1);
-      sleep(5);
-    }
-    StopDriveMotors();
+}
+/////////////////////////////////////////////////////////////
+//                                                         //
+//           #########        ###                          //
+//           ##             ##   ##                        //
+//           ##            ##     ##                       //
+//           ########     ###########                      //
+//           ##           ##       ##                      //
+//           ##           ##       ##                      //
+//           ##           ##       ##                      //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////          FUNCTION FOR AUTO DISTANCE        /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+/* If you want to keep spinning after drive do 1xxx = Speed (xxx being
+the speed you want) */
+void AutoDistance(int Speed, double Distance, double Heading) {
+  ResetDriveMotors();
+  sleep(10);
+  int RightTurnDiff;
+  while (fabs(AvgDriveMtrDist) < Distance) {
+    RightTurnDiff = (Heading - Gyro1) * .6;
+    LDSpeed = Speed + RightTurnDiff;
+    RDSpeed = Speed - RightTurnDiff;
     sleep(10);
   }
+  StopDriveMotors();
+}
 
-  ///////////////////////////////////////////////////////////////
-  ////////                                            ///////////
-  ////////           FUNCTION FOR AUTO-DRIVE          ///////////
-  ////////                                            ///////////
-  ///////////////////////////////////////////////////////////////
-  void AutoDrive(int Forward, int RightTurn) {
-    LDSpeed = Forward - RightTurn;
-    RDSpeed = Forward + RightTurn;
+void AutoTillStop(int Speed, double Heading) {
+  ResetDriveMotors();
+  ResetTimer();
+  sleep(10);
+  int RightTurnDiff;
+  while (abs(SlowestDrive) > 3 || Clock < 500) {
+    RightTurnDiff = (Heading - Gyro1) * .6;
+    LDSpeed = Speed + RightTurnDiff;
+    RDSpeed = Speed - RightTurnDiff;
+    sleep(10);
+  }
+  StopDriveMotors();
+}
+
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////          FUNCTION FOR AUTO TURN            /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+void AutoTurn(int Speed, int Heading, int Accuracy) {
+  while (fabs((abs(Heading) - fabs(Gyro1))) > Accuracy ||
+         fabs(LFDrive.velocity(pct)) > 3.5) {
+    LDSpeed = -(Heading - Gyro1);
+    RDSpeed = +(Heading - Gyro1);
     sleep(5);
   }
+  StopDriveMotors();
+  sleep(10);
+}
 
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //                ########                                 //
-  //                ##      ##                               //
-  //                ##      ##                               //
-  //                ########                                 //
-  //                ##      ##                               //
-  //                ##      ##                               //
-  //                ########                                 //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////            FUNCTION FOR BUTTONS            /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+////////                                            ///////////
+////////           FUNCTION FOR AUTO-DRIVE          ///////////
+////////                                            ///////////
+///////////////////////////////////////////////////////////////
+void AutoDrive(int Forward, int RightTurn) {
+  LDSpeed = Forward - RightTurn;
+  RDSpeed = Forward + RightTurn;
+  sleep(5);
+}
 
-  void ToggleWings() {
-    Wings.set(!Wings);
+/////////////////////////////////////////////////////////////
+//                                                         //
+//                ########                                 //
+//                ##      ##                               //
+//                ##      ##                               //
+//                ########                                 //
+//                ##      ##                               //
+//                ##      ##                               //
+//                ########                                 //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////            FUNCTION FOR BUTTONS            /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+
+void ToggleWings() { Wings.set(!Wings); }
+void ToggleBlocker() {Blocker.set(!Blocker); }
+void ToggleHang() {Hang.set(!Hang); }
+
+// L-UP =
+void buttonLup_pressed() {}
+
+// L-DOWN =
+void buttonLdown_pressed() {ToggleBlocker(); }
+
+// L-UP RELEASED =
+void buttonLup_released() {}
+
+// L-DOWN RELEASED =
+void buttonLdown_released() {}
+
+// R-UP = Intake UP
+void buttonRup_pressed() { IntakeSpeed = 100; }
+
+// R-DOWN = Intake DOWN
+void buttonRdown_pressed() { IntakeSpeed = -100; }
+
+// R-UP RELEASED = Intake STOP
+void buttonRup_released() { IntakeSpeed = 0; }
+
+// R-DOWN RELEASED = Intake STOP
+void buttonRdown_released() { IntakeSpeed = 0; }
+
+// UP = Wings OUT
+void buttonUP_pressed() { Wings.set(Wings); }
+
+// DOWN = Wings IN
+void buttonDOWN_pressed() { Wings.set(!Wings); }
+
+// RIGHT =
+void buttonRIGHT_pressed() {}
+
+// LEFT =
+void buttonLEFT_pressed() {}
+
+// A =
+void buttonA_pressed() {
+  if (AutonNumber == 1) {
+    AutonNumber = 2;
+  } else if (AutonNumber == 2) {
+    AutonNumber = 3;
+  } else if (AutonNumber == 3) {
+    AutonNumber = 1;
+  } else if (AutonNumber == 4) {
+    AutonNumber = 5;
+  } else if (AutonNumber == 5) {
+    AutonNumber = 1;
   }
+}
 
-  // L-UP = Intake UP
-  void buttonLup_pressed() {  }
+// B =
+void buttonB_pressed() {}
 
-  // L-DOWN = Intake DOWN
-  void buttonLdown_pressed() { IntakeSpeed = -100; }
+// X =
+void buttonX_pressed() { /*Cata reset(?)*/}
 
-  // L-UP RELEASED = Intake STOP
-  void buttonLup_released() { IntakeSpeed = 0; }
+// Y = Robot Reset
+void buttonY_pressed() {}
 
-  // L-DOWN RELEASED = Intake STOP
-  void buttonLdown_released() { IntakeSpeed = 0; }
+void buttonLup_pressed2() {}
 
-  // R-UP = SHOOT
-  void buttonRup_pressed() { IntakeSpeed = 100; }
+void buttonLdown_pressed2() {}
 
-  // R-DOWN =
-  void buttonRdown_pressed() {}
+void buttonRup_pressed2() {}
 
-  // R-UP RELEASED =
-  void buttonRup_released() {}
+void buttonRdown_pressed2() {}
 
-  // R-DOWN RELEASED =
-  void buttonRdown_released() {}
+void buttonRdown_released2() {}
 
-  // UP =
-  void buttonUP_pressed() { }
+void buttonRup_released2() {}
 
-  // DOWN =
-  void buttonDOWN_pressed() { }
+/////////////////////////////////////////////////////////////
+//                                                         //
+//                    #####                                //
+//                   ##   ##                               //
+//                  ##     ##                              //
+//                 ###########                             //
+//                 ##       ##                             //
+//                 ##       ##                             //
+//                 ##       ##                             //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////           AUTONOMOUS SUBFUNCTIONS          /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
 
-  // RIGHT =
-  void buttonRIGHT_pressed() { }
+void AutonSkills() { SetGyro(37); }
 
-  // LEFT =
-  void buttonLEFT_pressed() {}
+void FarSide() { SetGyro(37); }
 
-  // A =
-  void buttonA_pressed() {
-    if (AutonNumber == 1) {
-      AutonNumber = 2;
-    } else if (AutonNumber == 2) {
-      AutonNumber = 3;
-    } else if (AutonNumber == 3) {
-      AutonNumber = 1;
-    } else if (AutonNumber == 4) {
-      AutonNumber = 5;
-    } else if (AutonNumber == 5) {
-      AutonNumber = 1;
-    }
+void NearSide() {
+  SetGyro(37);
+  ToggleWings();
+  sleep(400);
+  AutoTillStop(-60, 80);
+  IntakeSpeed = 100;
+  AutoDistance(60, 10, 40);
+}
+
+/////////////////////////////////////////////////////////////
+//                                                         //
+//                    #####                                //
+//                   ##   ##                               //
+//                  ##     ##                              //
+//                 ###########                             //
+//                 ##       ##                             //
+//                 ##       ##                             //
+//                 ##       ##                             //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////          FEILD CONTROL AUTONOMOUS          /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+
+void autonomous() {
+  AutoHappen = true;
+  AutonRunning = true;
+  DriveTrainHold = true;
+  if (AutonNumber == 1) {
+    FarSide();
+  } else if (AutonNumber == 2) {
+    NearSide();
+  } else if (AutonNumber == 3) {
+    AutonSkills();
+  } else if (AutonNumber == 4) {
+
+  } else {
   }
+}
 
-  // B =
-  void buttonB_pressed() {}
+/////////////////////////////////////////////////////////////
+//                                                         //
+//              ##        ##                               //
+//              ##        ##                               //
+//              ##        ##                               //
+//              ##        ##                               //
+//              ##        ##                               //
+//               ##      ##                                //
+//                 ######                                  //
+//                                                         //
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////           FUNCTION FOR USERCONTROL         /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
 
-  // X = (JUST ABOVE USERCONTROL)
+//  void buttonX_pressed() {
+//    if (!AutoHappen) {
+//      autonomous();
+//    }
+//  }
 
-  // Y = Robot Reset
-  void buttonY_pressed() {}
+void usercontrol() {
+  ResetTimer();
+  IntakeTaskRunning = true;
+  AutonRunning = false;
+  DriveTrainHold = false;
+  DriveTorque = 100;
+  FCState = 4;
+  IntakeSpeed = 0;
 
-  void buttonLup_pressed2() {}
-
-  void buttonLdown_pressed2() {}
-
-  void buttonRup_pressed2() {}
-
-  void buttonRdown_pressed2() {}
-
-  void buttonRdown_released2() {}
-
-  void buttonRup_released2() {}
-
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //                    #####                                //
-  //                   ##   ##                               //
-  //                  ##     ##                              //
-  //                 ###########                             //
-  //                 ##       ##                             //
-  //                 ##       ##                             //
-  //                 ##       ##                             //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////           AUTONOMOUS SUBFUNCTIONS          /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
- 
- void AutonSkills() {
-    SetGyro(37);
-  }
-
- void FarSide() {
-    SetGyro(37);
-  }
-
- void NearSide() {
-    SetGyro(37);
-ToggleWings();
-sleep(400);
-AutoTillStop(-60, 80);
-IntakeSpeed = 100;
-AutoDistance(60, 10, 40);
-
-  }
-
-
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //                    #####                                //
-  //                   ##   ##                               //
-  //                  ##     ##                              //
-  //                 ###########                             //
-  //                 ##       ##                             //
-  //                 ##       ##                             //
-  //                 ##       ##                             //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////          FEILD CONTROL AUTONOMOUS          /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-
-  void autonomous() {
-    AutoHappen = true;
-    AutonRunning = true;
-    DriveTrainHold = true;
-    if (AutonNumber == 1) {
-      FarSide();
-    } else if (AutonNumber == 2) {
-      NearSide();
-    } else if (AutonNumber == 3) {
-      AutonSkills();
-    } else if (AutonNumber == 4) {
-
-    } else {
-    }
-  }
-
-  /////////////////////////////////////////////////////////////
-  //                                                         //
-  //              ##        ##                               //
-  //              ##        ##                               //
-  //              ##        ##                               //
-  //              ##        ##                               //
-  //              ##        ##                               //
-  //               ##      ##                                //
-  //                 ######                                  //
-  //                                                         //
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////           FUNCTION FOR USERCONTROL         /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-
-  void buttonX_pressed() {
-    if (!AutoHappen) {
-      autonomous();
-    }
-  }
-
-  void usercontrol() {
-    ResetTimer();
-    IntakeTaskRunning = true;
-    AutonRunning = false;
-    DriveTrainHold = false;
-    DriveTorque = 100;
-    FCState = 4;
-    IntakeSpeed = 0;
-
-    while (1) {
-      sleep(10);
-      if (AutonRunning == false) {
-        ControllerAxis1 = Controller1.Axis1.value();
-        if (abs(ControllerAxis1) < 15) {
-          ControllerAxis1 = 0;
-        }
-        ControllerAxis2 = Controller1.Axis2.value();
-        if (abs(ControllerAxis2) < 15) {
-          ControllerAxis2 = 0;
-        }
-        ControllerAxis3 = Controller1.Axis3.value();
-        if (abs(ControllerAxis3) < 15) {
-          ControllerAxis3 = 0;
-        }
-        ControllerAxis4 = Controller1.Axis4.value();
-        if (abs(ControllerAxis4) < 15) {
-          ControllerAxis4 = 0;
-        }
+  while (1) {
+    sleep(10);
+    if (AutonRunning == false) {
+      ControllerAxis1 = Controller1.Axis1.value();
+      if (abs(ControllerAxis1) < 15) {
+        ControllerAxis1 = 0;
+      }
+      ControllerAxis2 = Controller1.Axis2.value();
+      if (abs(ControllerAxis2) < 15) {
+        ControllerAxis2 = 0;
+      }
+      ControllerAxis3 = Controller1.Axis3.value();
+      if (abs(ControllerAxis3) < 15) {
+        ControllerAxis3 = 0;
+      }
+      ControllerAxis4 = Controller1.Axis4.value();
+      if (abs(ControllerAxis4) < 15) {
+        ControllerAxis4 = 0;
       }
     }
   }
+}
 
-  /////////////////////////////////////////////////////////////
-  ////////                                            /////////
-  ////////         MAIN PROGRAM (START TASKS)         /////////
-  ////////                                            /////////
-  /////////////////////////////////////////////////////////////
-  int main() {
-    pre_auton();
-    task taskBrainScreen(BrainScreenTask);
-    task taskCntrlrScreen(CntrlrScreenTask);
-    task taskSensors(SensorsTask);
-    task taskDrive(DriveTask);
-    task taskCatapult(CatapultTask);
-    task taskIntake(IntakeTask);
-    Controller1.ButtonL1.pressed(buttonLup_pressed);
-    Controller1.ButtonL2.pressed(buttonLdown_pressed);
-    Controller1.ButtonL1.released(buttonLup_released);
-    Controller1.ButtonL2.released(buttonLdown_released);
-    Controller1.ButtonR1.pressed(buttonRup_pressed);
-    Controller1.ButtonR2.pressed(buttonRdown_pressed);
-    Controller1.ButtonR1.released(buttonRup_released);
-    Controller1.ButtonR2.released(buttonRdown_released);
-    Controller1.ButtonUp.pressed(buttonUP_pressed);
-    Controller1.ButtonDown.pressed(buttonDOWN_pressed);
-    Controller1.ButtonRight.pressed(buttonRIGHT_pressed);
-    Controller1.ButtonLeft.pressed(buttonLEFT_pressed);
-    Controller1.ButtonA.pressed(buttonA_pressed);
-    Controller1.ButtonB.pressed(buttonB_pressed);
-    Controller1.ButtonX.pressed(buttonX_pressed);
-    Controller1.ButtonY.pressed(buttonY_pressed);
-  }
+/////////////////////////////////////////////////////////////
+////////                                            /////////
+////////         MAIN PROGRAM (START TASKS)         /////////
+////////                                            /////////
+/////////////////////////////////////////////////////////////
+int main() {
+  pre_auton();
+  task taskBrainScreen(BrainScreenTask);
+  task taskCntrlrScreen(CntrlrScreenTask);
+  task taskSensors(SensorsTask);
+  task taskDrive(DriveTask);
+  task taskCatapult(CatapultTask);
+  task taskIntake(IntakeTask);
+  Controller1.ButtonL1.pressed(buttonLup_pressed);
+  Controller1.ButtonL2.pressed(buttonLdown_pressed);
+  Controller1.ButtonL1.released(buttonLup_released);
+  Controller1.ButtonL2.released(buttonLdown_released);
+  Controller1.ButtonR1.pressed(buttonRup_pressed);
+  Controller1.ButtonR2.pressed(buttonRdown_pressed);
+  Controller1.ButtonR1.released(buttonRup_released);
+  Controller1.ButtonR2.released(buttonRdown_released);
+  Controller1.ButtonUp.pressed(buttonUP_pressed);
+  Controller1.ButtonDown.pressed(buttonDOWN_pressed);
+  Controller1.ButtonRight.pressed(buttonRIGHT_pressed);
+  Controller1.ButtonLeft.pressed(buttonLEFT_pressed);
+  Controller1.ButtonA.pressed(buttonA_pressed);
+  Controller1.ButtonB.pressed(buttonB_pressed);
+  Controller1.ButtonX.pressed(buttonX_pressed);
+  Controller1.ButtonY.pressed(buttonY_pressed);
+}
