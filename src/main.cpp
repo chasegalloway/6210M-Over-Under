@@ -1,22 +1,25 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         14              
-// Controller1          controller                    
-// RRDrive              motor         2               
-// LRDrive              motor         12              
-// Inertial1            inertial      4               
-// RCDrive              motor         3               
-// LCDrive              motor         13              
-// Catapult             motor         21              
-// Intake               motor         1               
-// Exp                  triport       10              
-// Wings                digital_out   A               
-// TriBallDetect        optical       19              
-// CataRotate           rotation      6               
-// Blocker              digital_out   A               
-// Hang                 digital_out   B               
+// RFDrive              motor         13
+// LFDrive              motor         14
+// Controller1          controller
+// RRDrive              motor         11
+// LRDrive              motor         18
+// Inertial1            inertial      1
+// RCDrive              motor         12
+// LCDrive              motor         20
+// Catapult             motor         19
+// Intake               motor         16
+// Exp                  triport       21
+// WingsLeft            digital_out   A
+// TriBallDetect        optical       2
+// CataRotate           rotation      15
+// Blocker              digital_out   D
+// Hang                 digital_out   C
+// WingsRight           digital_out   B
+// LowHang              digital_out   F
+// ButtHang             digital_out   G
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -35,6 +38,7 @@ int ControllerAxis1;
 int ControllerAxis2;
 int ControllerAxis3;
 int ControllerAxis4;
+int EndgameButtonCount;
 
 // Sensor Variables
 double AvgDriveMtrDist;
@@ -57,7 +61,14 @@ int IntakeSpeed = 0;
 int IntakeTorque = 100;
 
 // Catapult Variables
-float CatapultSpeed = 60;
+bool CataSlip = true;
+bool CatapultSlipPosition = true;
+bool CataMode = false;
+int CataState = 3;
+float CatapultGoal;
+int CatapultState = 3;
+int MotorStop = 1;
+bool XToggle = true;
 
 // Color Sensor Variables
 int colorNumber = 0;
@@ -174,11 +185,15 @@ void pre_auton() {
   // SET FIELD CONTROL STATE
   FCState = 1;
 
-  Wings.set(false);
+  WingsLeft.set(false);
+  WingsRight.set(false);
   Blocker.set(false);
+  Hang.set(false);
+  LowHang.set(false);
   sleep(500);
   Intake.spin(fwd);
   sleep(200);
+  CataRotate.setPosition(0, deg);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -214,7 +229,7 @@ int BrainScreenTask() {
     Brain.Screen.printAt(370, 80, "Axis4: %d", ControllerAxis4);
     Brain.Screen.printAt(320, 110, "Reflect: %3.2f  ");
     Brain.Screen.printAt(320, 150, "PotR: %3.2f   ");
-    Brain.Screen.printAt(320, 170, "RingDumperROT: %5.2f   ");
+    // Brain.Screen.printAt(320, 170, "RingDumperROT: %5.2f   ");
 
     if (AutonSelect == 5) {
       Brain.Screen.printAt(1, 210, "AUTON SKILLS");
@@ -272,11 +287,12 @@ int CntrlrScreenTask() {
   while (1) {
     sleep(100);
     Controller1.Screen.setCursor(1, 1);
-    Controller1.Screen.print("Fly: %2.0f ", CatapultSpeed);
+    // Controller1.Screen.print("Fly: %2.0f ", CatapultSpeed);
     Controller1.Screen.setCursor(1, 12);
-    Controller1.Screen.print("Gyro: %3.0f  ", Gyro1);
+    Controller1.Screen.print("Gyro: %3.0f  ", Inertial1.roll());
     Controller1.Screen.setCursor(2, 1);
-    Controller1.Screen.print("Auton: %1.0f  ", AutonNumber);
+    Controller1.Screen.print("Auton: %d  ", AutonNumber);
+    Controller1.Screen.print("Rotate: %3.0f  ", CataRotate.value());
     // Controller1.Screen.setCursor(3, 1);
     // Controller1.Screen.print(ObjThere);
     // Controller1.Screen.setCursor(3, 7);
@@ -321,8 +337,8 @@ int SensorsTask() {
   while (1) {
     sleep(5);
     // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES
-    AvgDriveMtrDist = LFDrive.position(deg) +
-                      RRDrive.position(deg) * .1 * 14 / 48; // SCALED TO INCHES
+    AvgDriveMtrDist = (LFDrive.position(deg) + RRDrive.position(deg)) * 0.025 *
+                      21.5 / 20; // SCALED TO INCHES
     // GET AVERAGE MOTOR SPEED PERCENTAGE
     AvgDriveMtrSpeed = (LFDrive.velocity(pct) + RRDrive.velocity(pct)) * .5;
 
@@ -388,11 +404,64 @@ int SensorsTask() {
 ////////            TASK FOR Catapult               /////////
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
-int CatapultTask() {
-  while (1) {
-
-    sleep(10);
+void Shoot() { // Shoots
+  if (CatapultSlipPosition) {
+    CataSlip = false;
+    Catapult.setVelocity(100, pct);
+    sleep(200);
+    CataSlip = true;
+    MotorStop = 1;
   }
+}
+
+void CataModeState() {
+  if (CataMode) {
+    CatapultSlipPosition = false;
+    CataSlip = false;
+    CataMode = false;
+    Catapult.setVelocity(100, pct);
+    sleep(400);
+    CataSlip = true;
+    CatapultState = 2;
+    MotorStop = 1;
+  } else {
+    CatapultState = 1;
+    MotorStop = 1;
+    CatapultSlipPosition = true;
+    CataSlip = true;
+  }
+}
+
+int CatapultTask() {
+  Catapult.spin(forward);
+  while (1) {
+    if (CataSlip) {
+      Catapult.setVelocity(
+          (((CatapultGoal - CataRotate.position(degrees)) * 1.9) * MotorStop),
+          percent);
+    }
+    if (CatapultState == 1) {
+      CatapultGoal = 58.0;
+    }
+    if (CatapultState == 2) {
+      CatapultGoal = 50.0;
+    }
+    if (CatapultState == 3) {
+      CatapultGoal = 20.0;
+    }
+    if ((CataRotate.position(degrees) > 57.0) && CatapultState == 1) {
+      MotorStop = 0;
+    }
+    if ((CataRotate.position(degrees) > 49.0) && CatapultState == 2) {
+      MotorStop = 0;
+    }
+    if ((CataRotate.position(degrees) > 19.0) && CatapultState == 3) {
+      MotorStop = 0;
+    }
+    wait(0.08, seconds);
+    wait(5, msec);
+  }
+  return 0;
 }
 
 /////////////////////////////////////////////////////////////
@@ -407,7 +476,7 @@ int CatapultTask() {
 //                                                         //
 /////////////////////////////////////////////////////////////
 ////////                                            /////////
-////////           TASK FOR DISK INTAKE             /////////
+////////           TASK FOR INTAKE                  /////////
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 int IntakeTask() {
@@ -491,7 +560,7 @@ void AutoDistance(int Speed, double Distance, double Heading) {
   sleep(10);
   int RightTurnDiff;
   while (fabs(AvgDriveMtrDist) < Distance) {
-    RightTurnDiff = (Heading - Gyro1) * .6;
+    RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
     sleep(10);
@@ -505,7 +574,21 @@ void AutoTillStop(int Speed, double Heading) {
   sleep(10);
   int RightTurnDiff;
   while (abs(SlowestDrive) > 3 || Clock < 500) {
-    RightTurnDiff = (Heading - Gyro1) * .6;
+    RightTurnDiff = (Heading - Gyro1) * .65;
+    LDSpeed = Speed + RightTurnDiff;
+    RDSpeed = Speed - RightTurnDiff;
+    sleep(10);
+  }
+  StopDriveMotors();
+}
+
+void AutoTillHop(int Speed, double Heading) {
+  ResetDriveMotors();
+  ResetTimer();
+  sleep(10);
+  int RightTurnDiff;
+  while (Inertial1.roll() > -10) {
+    RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
     sleep(10);
@@ -519,12 +602,23 @@ void AutoTillStop(int Speed, double Heading) {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 void AutoTurn(int Speed, int Heading, int Accuracy) {
+  float lsp;
+  float rsp;
   while (fabs((abs(Heading) - fabs(Gyro1))) > Accuracy ||
-         fabs(LFDrive.velocity(pct)) > 3.5) {
-    LDSpeed = -(Heading - Gyro1);
-    RDSpeed = +(Heading - Gyro1);
+         fabs(LFDrive.velocity(pct)) > 2.5) {
+    lsp = +(Heading - Gyro1) * .5;
+    if (fabs(lsp) < 2) {
+      lsp = 2 * fabs(lsp) / lsp;
+    }
+    LDSpeed = lsp;
+    rsp = -(Heading - Gyro1) * .5;
+    if (fabs(rsp) < 2) {
+      rsp = 2 * fabs(rsp) / rsp;
+    }
+    RDSpeed = rsp;
     sleep(5);
   }
+
   StopDriveMotors();
   sleep(10);
 }
@@ -556,15 +650,24 @@ void AutoDrive(int Forward, int RightTurn) {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-void ToggleWings() { Wings.set(!Wings); }
-void ToggleBlocker() {Blocker.set(!Blocker); }
-void ToggleHang() {Hang.set(!Hang); }
-
+void ToggleButtHang() { ButtHang.set(!ButtHang); }
+void ToggleLowHang() { LowHang.set(!LowHang); }
+void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
+void ToggleBlocker() { Blocker.set(!Blocker); }
+void ToggleHang() { Hang.set(!Hang); }
+void ToggleWingsOut() {
+  WingsLeft = true;
+  WingsRight = true;
+}
+void ToggleWingsIn() {
+  WingsLeft = false;
+  WingsRight = false;
+}
 // L-UP =
-void buttonLup_pressed() {}
+void buttonLup_pressed() { Shoot(); }
 
 // L-DOWN =
-void buttonLdown_pressed() {ToggleBlocker(); }
+void buttonLdown_pressed() { ToggleBlocker(); }
 
 // L-UP RELEASED =
 void buttonLup_released() {}
@@ -585,18 +688,27 @@ void buttonRup_released() { IntakeSpeed = 0; }
 void buttonRdown_released() { IntakeSpeed = 0; }
 
 // UP = Wings OUT
-void buttonUP_pressed() { Wings.set(Wings); }
+void buttonUP_pressed() { ToggleWingsOut(); }
 
 // DOWN = Wings IN
-void buttonDOWN_pressed() { Wings.set(!Wings); }
+void buttonDOWN_pressed() { ToggleWingsIn(); }
 
 // RIGHT =
-void buttonRIGHT_pressed() {}
+void buttonRIGHT_pressed() {
+  (Hang = false), (WingsLeft = false), (WingsRight = false);
+}
 
 // LEFT =
-void buttonLEFT_pressed() {}
+void buttonLEFT_pressed() {
+  if (Clock > 75000 || EndgameButtonCount == 4) {
+    ToggleHang(), ToggleBlocker();
+  } else {
+    EndgameButtonCount += 1;
+  }
+}
 
 // A =
+
 void buttonA_pressed() {
   if (AutonNumber == 1) {
     AutonNumber = 2;
@@ -612,13 +724,33 @@ void buttonA_pressed() {
 }
 
 // B =
-void buttonB_pressed() {}
+void buttonB_pressed() {
+  if (Clock > 75000 || EndgameButtonCount == 4) {
+    ToggleLowHang();
+  } else {
+    EndgameButtonCount += 1;
+  }
+}
 
 // X =
-void buttonX_pressed() { /*Cata reset(?)*/}
+ void buttonX_pressed() {
+   CataModeState();
+  if (XToggle) {
+    CataMode = true;
+    XToggle = false;
+  } else {
+    (CataMode = false), (XToggle = true);
+  }
+} 
 
-// Y = Robot Reset
-void buttonY_pressed() {}
+// Y = Butt Boost
+void buttonY_pressed() {
+  if (Clock > 75000 || EndgameButtonCount == 4) {
+    ToggleButtHang();
+  } else {
+    EndgameButtonCount += 1;
+  }
+}
 
 void buttonLup_pressed2() {}
 
@@ -648,18 +780,41 @@ void buttonRup_released2() {}
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-void AutonSkills() { SetGyro(37); }
-
-void FarSide() { SetGyro(37); }
+void FarSide() {}
 
 void NearSide() {
-  SetGyro(37);
-  ToggleWings();
-  sleep(400);
-  AutoTillStop(-60, 80);
+  SetGyro(-40);
+  ToggleLeftWing();
+  sleep(200);
+  AutoTurn(80, -90, 10);
+  ToggleLeftWing();
+  CatapultState = 2;
+  MotorStop = 1;
+  AutoTurn(80, 25, 2);
   IntakeSpeed = 100;
-  AutoDistance(60, 10, 40);
+  AutoDistance(80, 47, 17);
+  sleep(400);
+  IntakeSpeed = 0;
+  AutoDistance(-60, 10, 17);
+  AutoTurn(80, 90, 5);
+  AutoTillHop(60, 90);
+  IntakeSpeed = -100;
+  sleep(750);
+  IntakeSpeed = 0;
+  DriveTorque = 25;
+  AutoDistance(-50, 18, 90);
+  AutoTurn(50, 220, 3);
+  AutoTillStop(50, 210);
+  DriveTorque = 100;
+  AutoTurn(50, 160, 3);
+  AutoDistance(50, 6, 145);
+  IntakeSpeed = -100;
+  AutoDistance(60, 38, 80);
+  sleep(500);
+  IntakeSpeed = 0;
 }
+
+void AutonSkills() { SetGyro(37); }
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -682,17 +837,17 @@ void autonomous() {
   AutonRunning = true;
   DriveTrainHold = true;
   if (AutonNumber == 1) {
-    FarSide();
-  } else if (AutonNumber == 2) {
     NearSide();
+  } else if (AutonNumber == 2) {
+    FarSide();
   } else if (AutonNumber == 3) {
     AutonSkills();
   } else if (AutonNumber == 4) {
-
   } else {
   }
-}
 
+}
+// void buttonX_pressed() { autonomous(); }
 /////////////////////////////////////////////////////////////
 //                                                         //
 //              ##        ##                               //
@@ -709,12 +864,6 @@ void autonomous() {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-//  void buttonX_pressed() {
-//    if (!AutoHappen) {
-//      autonomous();
-//    }
-//  }
-
 void usercontrol() {
   ResetTimer();
   IntakeTaskRunning = true;
@@ -723,6 +872,10 @@ void usercontrol() {
   DriveTorque = 100;
   FCState = 4;
   IntakeSpeed = 0;
+
+  if (Clock >= 140000) {
+    ButtHang = false;
+  }
 
   while (1) {
     sleep(10);
@@ -743,6 +896,9 @@ void usercontrol() {
       if (abs(ControllerAxis4) < 15) {
         ControllerAxis4 = 0;
       }
+
+      LDSpeed = ControllerAxis3 + ControllerAxis1;
+      RDSpeed = ControllerAxis3 - ControllerAxis1;
     }
   }
 }
