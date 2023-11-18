@@ -683,6 +683,7 @@ void AutoDrive(int Forward, int RightTurn) {
 void ToggleButtHang() { ButtHang.set(!ButtHang); }
 void ToggleLowHang() { LowHang.set(!LowHang); }
 void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
+void ToggleRightWing() {WingsRight.set(!WingsRight); }
 //void ToggleBlocker() { Blocker.set(!Blocker); }
 void ToggleHang() { Hang.set(!Hang); }
 void ToggleWingsOut() {
@@ -870,13 +871,23 @@ void CloseSideScore() {
 }
 
 void AutonSkills() {
-  SetGyro(0);
+  /* SetGyro(0);
   MotorStop = 1;
   CatapultState = 1;
   AutoTurn(60, -15, 2);
   DriveTorque = 20;
   AutoDistance(50, 3, -10);
-  sleep(35000);
+  sleep(35000); */
+  SetGyro(0);
+  ToggleLeftWing();
+  sleep(500);
+  ToggleLeftWing();
+  CatapultState = 2;
+  MotorStop = 1;
+  AutoDistance(80, 45, 0);
+  IntakeSpeed = 100;
+  sleep(2000);
+  IntakeSpeed  = 0;
 }
 
 void Block() { 
