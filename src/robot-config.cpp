@@ -20,13 +20,13 @@ motor LCDrive = motor(PORT20, ratio18_1, true);
 motor Catapult = motor(PORT19, ratio36_1, false);
 motor Intake = motor(PORT16, ratio6_1, false);
 digital_out WingsLeft = digital_out(Exp.A);
-optical TriBallDetect = optical(PORT2);
 rotation CataRotate = rotation(PORT15, false);
 digital_out Blocker = digital_out(Exp.D);
 digital_out Hang = digital_out(Exp.C);
 digital_out WingsRight = digital_out(Exp.B);
 digital_out LowHang = digital_out(Exp.F);
 digital_out ButtHang = digital_out(Exp.G);
+distance TriballDetect = distance(PORT2);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

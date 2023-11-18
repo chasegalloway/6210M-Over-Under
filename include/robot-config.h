@@ -15,13 +15,13 @@ extern motor Catapult;
 extern motor Intake;
 extern triport Exp;
 extern digital_out WingsLeft;
-extern optical TriBallDetect;
 extern rotation CataRotate;
 extern digital_out Blocker;
 extern digital_out Hang;
 extern digital_out WingsRight;
 extern digital_out LowHang;
 extern digital_out ButtHang;
+extern distance TriballDetect;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

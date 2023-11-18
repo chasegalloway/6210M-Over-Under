@@ -13,13 +13,13 @@
 // Intake               motor         16
 // Exp                  triport       21
 // WingsLeft            digital_out   A
-// TriBallDetect        optical       2
 // CataRotate           rotation      15
 // Blocker              digital_out   D
 // Hang                 digital_out   C
 // WingsRight           digital_out   B
 // LowHang              digital_out   F
 // ButtHang             digital_out   G
+// TriballDetect        distance      2
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -47,6 +47,7 @@ double Gyro1;
 int Clock;
 int SlowestDrive;
 int FastestDrive;
+float TriBallThere;
 
 // Drive Train Variables
 int LDSpeed = 0;
@@ -73,7 +74,6 @@ bool XToggle = true;
 // Color Sensor Variables
 int colorNumber = 0;
 bool isRed = false;
-bool TriBallThere = false;
 bool startRolling = true;
 float CataTensionStorage = true;
 
@@ -85,8 +85,6 @@ int AutonSide = 1;
 int AutoGryoCorr = 0;
 int AutonNumber = 1;
 bool AutoHappen = false;
-int AutonSelect = 1; // SELECTION OF AUTON ROUTINE 1=AUTON SKILLS , 2=LEFT 2,
-                     // 3=LEFT 3, 4=RIGHT 1, 5=RIGHT 2, 6=RIGHT 3,
 
 ///////////////////////////////////////////////////////////////
 //                                                           //
@@ -187,7 +185,7 @@ void pre_auton() {
 
   WingsLeft.set(false);
   WingsRight.set(false);
-  Blocker.set(false);
+ // Blocker.set(false);
   Hang.set(false);
   LowHang.set(false);
   sleep(500);
@@ -231,20 +229,20 @@ int BrainScreenTask() {
     Brain.Screen.printAt(320, 150, "PotR: %3.2f   ");
     // Brain.Screen.printAt(320, 170, "RingDumperROT: %5.2f   ");
 
-    if (AutonSelect == 5) {
-      Brain.Screen.printAt(1, 210, "AUTON SKILLS");
-      Brain.Screen.setFillColor(black);
-    } else if (AutonSelect == 1) {
-      Brain.Screen.printAt(1, 210, "Auton: Red Square");
+    if (AutonNumber == 5) {
+      Brain.Screen.printAt(1, 210, "Auton: None");
+      Brain.Screen.setFillColor(purple);
+    } else if (AutonNumber == 1) {
+      Brain.Screen.printAt(1, 210, "Auton: Close Side WP");
       Brain.Screen.setFillColor(red);
-    } else if (AutonSelect == 2) {
-      Brain.Screen.printAt(1, 210, "Auton: Red Rectangle");
-      Brain.Screen.setFillColor(orange);
-    } else if (AutonSelect == 3) {
-      Brain.Screen.printAt(1, 210, "Auton: Blue Square");
+    } else if (AutonNumber == 2) {
+      Brain.Screen.printAt(1, 210, "Auton: Close Side Score");
+      Brain.Screen.setFillColor(yellow);
+    } else if (AutonNumber == 3) {
+      Brain.Screen.printAt(1, 210, "Auton: Skills");
       Brain.Screen.setFillColor(blue);
-    } else if (AutonSelect == 4) {
-      Brain.Screen.printAt(1, 210, "Auton: Blue Rectangle");
+    } else if (AutonNumber == 4) {
+      Brain.Screen.printAt(1, 210, "Auton: Block");
       Brain.Screen.setFillColor(green);
     }
 
@@ -282,22 +280,42 @@ int BrainScreenTask() {
 ////////  TASK TO PRINT DATA TO Controller'S SCREEN   /////////
 ////////                                              /////////
 ///////////////////////////////////////////////////////////////
+
+/*int CataStateTypeTask() {
+  while (1) {
+    if (CataState == 1) {
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.setCursor(2, 1);
+      Controller1.Screen.print("CataState: 1 INTAKE ONLY");
+
+  }
+    if (CataState == 2) {
+      Controller1.Screen.clearScreen();
+      Controller1.Screen.setCursor(2, 1);
+      Controller1.Screen.print("CataState: 2 FIRE");
+
+    }
+    sleep(100);
+  }
+  return(0);
+} */
+
 int CntrlrScreenTask() {
+
   Controller1.Screen.clearScreen();
   while (1) {
     sleep(100);
     Controller1.Screen.setCursor(1, 1);
     // Controller1.Screen.print("Fly: %2.0f ", CatapultSpeed);
-    Controller1.Screen.setCursor(1, 12);
-    Controller1.Screen.print("Gyro: %3.0f  ", Inertial1.roll());
+    Controller1.Screen.print("Gyro: %3.0f  ", Gyro1);
     Controller1.Screen.setCursor(2, 1);
-    Controller1.Screen.print("Auton: %d  ", AutonNumber);
-    Controller1.Screen.print("Rotate: %3.0f  ", CataRotate.value());
+    // Controller1.Screen.print("Auton: %d  ", AutonNumber);
+    Controller1.Screen.print("CataState: %d  ", CatapultState);
     // Controller1.Screen.setCursor(3, 1);
     // Controller1.Screen.print(ObjThere);
     // Controller1.Screen.setCursor(3, 7);
     // Controller1.Screen.print(isRed);
-    Controller1.Screen.clearLine(3);
+     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.print("%2.0f ", Intake.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 4);
@@ -313,7 +331,7 @@ int CntrlrScreenTask() {
     Controller1.Screen.setCursor(3, 19);
     Controller1.Screen.print("%2.0f ", RRDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 22);
-    Controller1.Screen.print("%2.0f  ", Catapult.temperature(fahrenheit) / 10);
+    Controller1.Screen.print("%2.0f  ", Catapult.temperature(fahrenheit) / 10); 
   }
 }
 
@@ -384,8 +402,6 @@ int SensorsTask() {
 
     // GET BRAIN CLOCK MSEC
     Clock = Brain.timer(msec);
-
-    TriBallThere = TriBallDetect.isNearObject();
   }
 }
 
@@ -463,6 +479,20 @@ int CatapultTask() {
   }
   return 0;
 }
+
+int TriballDetectTask() {
+  while (1) {
+    TriBallThere = (TriballDetect.objectDistance(mm));
+    if (TriBallThere <= 15) {
+      wait(100, msec);
+      Shoot();
+    }
+    sleep(5);
+  }
+  return 0;
+}
+
+
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -653,7 +683,7 @@ void AutoDrive(int Forward, int RightTurn) {
 void ToggleButtHang() { ButtHang.set(!ButtHang); }
 void ToggleLowHang() { LowHang.set(!LowHang); }
 void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
-void ToggleBlocker() { Blocker.set(!Blocker); }
+//void ToggleBlocker() { Blocker.set(!Blocker); }
 void ToggleHang() { Hang.set(!Hang); }
 void ToggleWingsOut() {
   WingsLeft = true;
@@ -667,7 +697,7 @@ void ToggleWingsIn() {
 void buttonLup_pressed() { Shoot(); }
 
 // L-DOWN =
-void buttonLdown_pressed() { ToggleBlocker(); }
+void buttonLdown_pressed() { /*ToggleBlocker();*/ }
 
 // L-UP RELEASED =
 void buttonLup_released() {}
@@ -701,7 +731,7 @@ void buttonRIGHT_pressed() {
 // LEFT =
 void buttonLEFT_pressed() {
   if (Clock > 75000 || EndgameButtonCount == 4) {
-    ToggleHang(), ToggleBlocker();
+    ToggleHang()/*, ToggleBlocker()*/;
   } else {
     EndgameButtonCount += 1;
   }
@@ -733,15 +763,15 @@ void buttonB_pressed() {
 }
 
 // X =
- void buttonX_pressed() {
-   CataModeState();
+void buttonX_pressed() {
+  CataModeState();
   if (XToggle) {
     CataMode = true;
     XToggle = false;
   } else {
     (CataMode = false), (XToggle = true);
   }
-} 
+}
 
 // Y = Butt Boost
 void buttonY_pressed() {
@@ -780,9 +810,23 @@ void buttonRup_released2() {}
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-void FarSide() {}
+void CloseSideWP() {
+  SetGyro(-40);
+  ToggleWingsOut();
+  sleep(200);
+  AutoTurn(80, -90, 10);
+  ToggleWingsIn();
+  sleep(500);
+  AutoTurn(50, -260, 3);
+  CatapultState = 2;
+  MotorStop = 1;
+  IntakeSpeed = -100;
+  AutoDistance(60, 20, -260);
+  AutoDistance(60, 15, -270);
 
-void NearSide() {
+}
+
+void CloseSideScore() {
   SetGyro(-40);
   ToggleLeftWing();
   sleep(200);
@@ -801,20 +845,52 @@ void NearSide() {
   IntakeSpeed = -100;
   sleep(750);
   IntakeSpeed = 0;
-  DriveTorque = 25;
-  AutoDistance(-50, 18, 90);
-  AutoTurn(50, 220, 3);
-  AutoTillStop(50, 210);
   DriveTorque = 100;
-  AutoTurn(50, 160, 3);
+  AutoDistance(-50, 13, 90);
+  AutoTurn(50, 220, 3);
+  DriveTorque = 20;
+  AutoDistance(50, 20, 220);
+  AutoTillStop(40, 220);
+  DriveTorque = 100;
+  AutoTurn(50, 150, 3);
   AutoDistance(50, 6, 145);
   IntakeSpeed = -100;
-  AutoDistance(60, 38, 80);
+  AutoDistance(60, 28, 80);
+  //ToggleLeftWing();
+  //AutoTurn(50, 125, 2);
   sleep(500);
   IntakeSpeed = 0;
+  AutoDistance(-60, 20, 80);
+  AutoTurn(60, -100, 2);
+  DriveTorque = 25;
+  AutoTillStop(40, -110);
+  MotorStop = 1;
+  CatapultState = 1;
+
 }
 
-void AutonSkills() { SetGyro(37); }
+void AutonSkills() {
+  SetGyro(0);
+  MotorStop = 1;
+  CatapultState = 1;
+  AutoTurn(60, -15, 2);
+  DriveTorque = 20;
+  AutoDistance(50, 3, -10);
+  sleep(35000);
+}
+
+void Block() { 
+  SetGyro(0);
+  ToggleLeftWing();
+  sleep(500);
+  ToggleLeftWing();
+  CatapultState = 2;
+  MotorStop = 1;
+  AutoDistance(80, 45, 0);
+  IntakeSpeed = 100;
+  sleep(2000);
+  IntakeSpeed  = 0;
+}
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -837,15 +913,15 @@ void autonomous() {
   AutonRunning = true;
   DriveTrainHold = true;
   if (AutonNumber == 1) {
-    NearSide();
+    CloseSideWP();
   } else if (AutonNumber == 2) {
-    FarSide();
+    CloseSideScore();
   } else if (AutonNumber == 3) {
     AutonSkills();
   } else if (AutonNumber == 4) {
+    Block();
   } else {
   }
-
 }
 // void buttonX_pressed() { autonomous(); }
 /////////////////////////////////////////////////////////////
@@ -865,10 +941,13 @@ void autonomous() {
 /////////////////////////////////////////////////////////////
 
 void usercontrol() {
+   MotorStop = 1;
   ResetTimer();
   IntakeTaskRunning = true;
   AutonRunning = false;
   DriveTrainHold = false;
+  WingsLeft = false;
+  WingsRight = false;
   DriveTorque = 100;
   FCState = 4;
   IntakeSpeed = 0;
@@ -915,7 +994,9 @@ int main() {
   task taskSensors(SensorsTask);
   task taskDrive(DriveTask);
   task taskCatapult(CatapultTask);
+  task taskTriballDetect(TriballDetectTask);
   task taskIntake(IntakeTask);
+  // task taskCataState(CataStateTypeTask);
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
   Controller1.ButtonL1.released(buttonLup_released);
