@@ -885,9 +885,13 @@ void AutonSkills() {
   CatapultState = 1;
   AutoTurn(60, -15, 2);
   DriveTorque = 20;
-  AutoDistance(50, 3, -10);
-  sleep(35000); 
- 
+  AutoDistance(50, 3, -20);
+  sleep(2); 
+  DriveTorque = 100;
+  AutoDistance(-50, 3, -20);
+  AutoTurn(50, 20, 2);
+  AutoDistance(-50, 20, 20);
+  AutoDistance(-60, 70, 0);
 }
 
 void CloseSideBlock() { 
