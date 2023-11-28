@@ -455,7 +455,7 @@ int CatapultTask() {
           percent);
     }
     if (CatapultState == 1) {
-      CatapultGoal = 58.0;
+      CatapultGoal = 57.5;
     }
     if (CatapultState == 2) {
       CatapultGoal = 50.0;
