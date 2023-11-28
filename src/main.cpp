@@ -229,21 +229,28 @@ int BrainScreenTask() {
     Brain.Screen.printAt(320, 150, "PotR: %3.2f   ");
     // Brain.Screen.printAt(320, 170, "RingDumperROT: %5.2f   ");
 
-    if (AutonNumber == 5) {
-      Brain.Screen.printAt(1, 210, "Auton: None");
-      Brain.Screen.setFillColor(purple);
-    } else if (AutonNumber == 1) {
+    if (AutonNumber == 1) {
       Brain.Screen.printAt(1, 210, "Auton: Close Side WP");
       Brain.Screen.setFillColor(red);
     } else if (AutonNumber == 2) {
-      Brain.Screen.printAt(1, 210, "Auton: Close Side Score");
-      Brain.Screen.setFillColor(yellow);
-    } else if (AutonNumber == 3) {
-      Brain.Screen.printAt(1, 210, "Auton: Skills");
+      Brain.Screen.printAt(1, 210, "Auton: Close Side Elims");
       Brain.Screen.setFillColor(blue);
+    } else if (AutonNumber == 3) {
+      Brain.Screen.printAt(1, 210, "Auton: Close Side Blocking");
+      Brain.Screen.setFillColor( "#008000");
     } else if (AutonNumber == 4) {
-      Brain.Screen.printAt(1, 210, "Auton: Block");
-      Brain.Screen.setFillColor(green);
+      Brain.Screen.printAt(1, 210, "Auton: Far Side WP");
+      Brain.Screen.setFillColor( "#403e39");
+    } else if (AutonNumber == 5) {
+      Brain.Screen.printAt(1, 210, "Auton: Far Side Elims");
+      Brain.Screen.setFillColor(purple);
+    } else if (AutonNumber == 6) {
+      Brain.Screen.printAt(1, 210, "Auton: Skills");
+      Brain.Screen.setFillColor( "#fc9e05");
+    } else if (AutonNumber == 7) {
+      Brain.Screen.printAt(1, 210, "Auton: None");
+      Brain.Screen.setFillColor(black);
+    }
     }
 
     if (FCState == 0) {
@@ -263,7 +270,8 @@ int BrainScreenTask() {
       Brain.Screen.printAt(320, 200, "Driver");
     }
   }
-}
+
+
 
 ///////////////////////////////////////////////////////////////
 //                                                           //
@@ -280,42 +288,28 @@ int BrainScreenTask() {
 ////////  TASK TO PRINT DATA TO Controller'S SCREEN   /////////
 ////////                                              /////////
 ///////////////////////////////////////////////////////////////
-
-/*int CataStateTypeTask() {
-  while (1) {
-    if (CataState == 1) {
-      Controller1.Screen.clearScreen();
-      Controller1.Screen.setCursor(2, 1);
-      Controller1.Screen.print("CataState: 1 INTAKE ONLY");
-
-  }
-    if (CataState == 2) {
-      Controller1.Screen.clearScreen();
-      Controller1.Screen.setCursor(2, 1);
-      Controller1.Screen.print("CataState: 2 FIRE");
-
-    }
-    sleep(100);
-  }
-  return(0);
-} */
-
 int CntrlrScreenTask() {
 
   Controller1.Screen.clearScreen();
   while (1) {
     sleep(100);
+    //Prints Initrial Heading to Controller
     Controller1.Screen.setCursor(1, 1);
-    // Controller1.Screen.print("Fly: %2.0f ", CatapultSpeed);
     Controller1.Screen.print("Gyro: %3.0f  ", Gyro1);
+    //Prints Catapult State to Controller
     Controller1.Screen.setCursor(2, 1);
-    // Controller1.Screen.print("Auton: %d  ", AutonNumber);
-    Controller1.Screen.print("CataState: %d  ", CatapultState);
-    // Controller1.Screen.setCursor(3, 1);
-    // Controller1.Screen.print(ObjThere);
-    // Controller1.Screen.setCursor(3, 7);
-    // Controller1.Screen.print(isRed);
-     Controller1.Screen.clearLine(3);
+    if (CatapultState == 3){
+      Controller1.Screen.print("Cata: PreMatch");
+    }
+    else if(CatapultState == 2){
+      Controller1.Screen.print("Cata: Intake Only");
+    }
+    else{
+     Controller1.Screen.clearLine(2);
+     Controller1.Screen.print("Cata: Shoot");
+    }
+    //Prints Motor Temps to Controller
+    Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.print("%2.0f ", Intake.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 4);
@@ -420,7 +414,9 @@ int SensorsTask() {
 ////////            TASK FOR Catapult               /////////
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
-void Shoot() { // Shoots
+
+//Shoots the Catapult
+void Shoot() { 
   if (CatapultSlipPosition) {
     CataSlip = false;
     Catapult.setVelocity(100, pct);
@@ -430,6 +426,7 @@ void Shoot() { // Shoots
   }
 }
 
+//Task To Change Between Intake and shoot on the catapult
 void CataModeState() {
   if (CataMode) {
     CatapultSlipPosition = false;
@@ -448,6 +445,7 @@ void CataModeState() {
   }
 }
 
+//Catapult Rotation points
 int CatapultTask() {
   Catapult.spin(forward);
   while (1) {
@@ -684,7 +682,7 @@ void ToggleButtHang() { ButtHang.set(!ButtHang); }
 void ToggleLowHang() { LowHang.set(!LowHang); }
 void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
 void ToggleRightWing() {WingsRight.set(!WingsRight); }
-//void ToggleBlocker() { Blocker.set(!Blocker); }
+void ToggleBlocker() { Blocker.set(!Blocker); }
 void ToggleHang() { Hang.set(!Hang); }
 void ToggleWingsOut() {
   WingsLeft = true;
@@ -698,7 +696,7 @@ void ToggleWingsIn() {
 void buttonLup_pressed() { Shoot(); }
 
 // L-DOWN =
-void buttonLdown_pressed() { /*ToggleBlocker();*/ }
+void buttonLdown_pressed() { ToggleBlocker(); }
 
 // L-UP RELEASED =
 void buttonLup_released() {}
@@ -732,24 +730,35 @@ void buttonRIGHT_pressed() {
 // LEFT =
 void buttonLEFT_pressed() {
   if (Clock > 75000 || EndgameButtonCount == 4) {
-    ToggleHang()/*, ToggleBlocker()*/;
+    ToggleHang(), ToggleBlocker();
   } else {
     EndgameButtonCount += 1;
   }
 }
-
-// A =
-
-void buttonA_pressed() {
+// Brain Pressed =
+void brain_pressed() {
   if (AutonNumber == 1) {
+    //close side WP
     AutonNumber = 2;
   } else if (AutonNumber == 2) {
+    // close side Elims
     AutonNumber = 3;
   } else if (AutonNumber == 3) {
-    AutonNumber = 1;
+    //close side Blocking
+    AutonNumber = 4;
   } else if (AutonNumber == 4) {
+    //far side WP
     AutonNumber = 5;
   } else if (AutonNumber == 5) {
+    //far side Elims
+    AutonNumber = 6;
+  }
+  else if (AutonNumber == 6) {
+    //skills
+    AutonNumber = 7;
+  }
+  else if (AutonNumber == 7) {
+    //none
     AutonNumber = 1;
   }
 }
@@ -827,7 +836,7 @@ void CloseSideWP() {
 
 }
 
-void CloseSideScore() {
+void CloseSideElims() {
   SetGyro(-40);
   ToggleLeftWing();
   sleep(200);
@@ -871,13 +880,17 @@ void CloseSideScore() {
 }
 
 void AutonSkills() {
-  /* SetGyro(0);
+  SetGyro(0);
   MotorStop = 1;
   CatapultState = 1;
   AutoTurn(60, -15, 2);
   DriveTorque = 20;
   AutoDistance(50, 3, -10);
-  sleep(35000); */
+  sleep(35000); 
+ 
+}
+
+void CloseSideBlock() { 
   SetGyro(0);
   ToggleLeftWing();
   sleep(500);
@@ -890,17 +903,56 @@ void AutonSkills() {
   IntakeSpeed  = 0;
 }
 
-void Block() { 
-  SetGyro(0);
-  ToggleLeftWing();
-  sleep(500);
-  ToggleLeftWing();
-  CatapultState = 2;
+void FarSideWP() {
+  SetGyro(90);
   MotorStop = 1;
-  AutoDistance(80, 45, 0);
+  CatapultState = 2;
+  sleep(300);
   IntakeSpeed = 100;
-  sleep(2000);
-  IntakeSpeed  = 0;
+  //ToggleRightWing();
+  AutoTurn(60, 45, 3);
+  AutoDistance(70, 5, 45);
+  AutoTurn(60, 15, 2);
+  IntakeSpeed = -100;
+  //ToggleRightWing();
+  sleep(100);
+  AutoDistance(80, 20, 20);
+  //ToggleRightWing();
+  AutoDistance(-80, 10, 0);
+  AutoTurn(60, -65, 1);
+  IntakeSpeed = 100;
+  AutoDistance(80, 45, -65);
+  sleep(100);
+  AutoTurn(60, 10, 3);
+  //IntakeSpeed = 0;
+  AutoDistance(70, 2, 10);
+  AutoTurn(60, 90, 3);
+  ToggleLeftWing();
+  IntakeSpeed = 0;
+  /*sleep(50);
+  AutoDistance(70, 15, 90);
+  IntakeSpeed = -100;
+  AutoDistance(70, 10, 90);
+  sleep(50);
+  AutoDistance(70, 20, 90);
+  AutoTurn(60, -20, 3);
+  IntakeSpeed = 100;
+  AutoDistance(70, 15, 20);
+  sleep (100);
+  AutoDistance(-70, 15, 20);
+  AutoTurn(60, 90, 3);
+  AutoDistance(70, 10, 90);
+  IntakeSpeed = -100;
+  AutoDistance(70, 10, 90);*/
+
+
+
+
+  
+}
+
+void FarSideElims() {
+
 }
 
 /////////////////////////////////////////////////////////////
@@ -926,15 +978,19 @@ void autonomous() {
   if (AutonNumber == 1) {
     CloseSideWP();
   } else if (AutonNumber == 2) {
-    CloseSideScore();
+    CloseSideElims();
   } else if (AutonNumber == 3) {
-    AutonSkills();
+    CloseSideBlock();
   } else if (AutonNumber == 4) {
-    Block();
-  } else {
+    FarSideWP();
+  } else if (AutonNumber == 5) {
+    FarSideElims();
+  } else if (AutonNumber == 6) {
+    AutonSkills();
   }
+    
 }
-// void buttonX_pressed() { autonomous(); }
+ void buttonA_pressed() { autonomous(); }
 /////////////////////////////////////////////////////////////
 //                                                         //
 //              ##        ##                               //
@@ -1007,7 +1063,7 @@ int main() {
   task taskCatapult(CatapultTask);
   task taskTriballDetect(TriballDetectTask);
   task taskIntake(IntakeTask);
-  // task taskCataState(CataStateTypeTask);
+  Brain.Screen.pressed(brain_pressed);
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
   Controller1.ButtonL1.released(buttonLup_released);
