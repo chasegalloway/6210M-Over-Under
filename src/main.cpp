@@ -888,10 +888,25 @@ void AutonSkills() {
   AutoDistance(50, 3, -20);
   sleep(2); 
   DriveTorque = 100;
-  AutoDistance(-50, 3, -20);
-  AutoTurn(50, 20, 2);
-  AutoDistance(-50, 20, 20);
-  AutoDistance(-60, 70, 0);
+  AutoDistance(-80, 3, -20);
+  AutoTurn(50, 25, 2);
+  AutoDistance(-80, 15, 20);
+  AutoDistance(-80, 50, 0);
+  AutoDistance(-60, 25, 0);
+  AutoTurn(70, -45, 2);
+  DriveTorque = 20;
+  AutoDistance(-80, 30, -75);
+  sleep(100);
+  AutoDistance(80, 6, -75);
+  AutoDistance(-80, 4, -75);
+  sleep(100);
+  AutoDistance(80, 8, -90);
+  /*AutoTurn(70, -90, 2);
+  AutoDistance(-80, -40, -100);
+  AutoTurn(70, 180, 2);
+  ToggleWingsOut();*/
+
+
 }
 
 void CloseSideBlock() { 
