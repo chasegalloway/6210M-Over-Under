@@ -185,7 +185,7 @@ void pre_auton() {
 
   WingsLeft.set(false);
   WingsRight.set(false);
- // Blocker.set(false);
+  // Blocker.set(false);
   Hang.set(false);
   LowHang.set(false);
   sleep(500);
@@ -237,41 +237,39 @@ int BrainScreenTask() {
       Brain.Screen.setFillColor(blue);
     } else if (AutonNumber == 3) {
       Brain.Screen.printAt(1, 210, "Auton: Close Side Blocking");
-      Brain.Screen.setFillColor( "#008000");
+      Brain.Screen.setFillColor("#008000");
     } else if (AutonNumber == 4) {
       Brain.Screen.printAt(1, 210, "Auton: Far Side WP");
-      Brain.Screen.setFillColor( "#403e39");
+      Brain.Screen.setFillColor("#403e39");
     } else if (AutonNumber == 5) {
       Brain.Screen.printAt(1, 210, "Auton: Far Side Elims");
       Brain.Screen.setFillColor(purple);
     } else if (AutonNumber == 6) {
       Brain.Screen.printAt(1, 210, "Auton: Skills");
-      Brain.Screen.setFillColor( "#fc9e05");
+      Brain.Screen.setFillColor("#fc9e05");
     } else if (AutonNumber == 7) {
       Brain.Screen.printAt(1, 210, "Auton: None");
       Brain.Screen.setFillColor(black);
     }
-    }
-
-    if (FCState == 0) {
-      Brain.Screen.printAt(320, 200, "Pre Auton");
-    }
-    if (FCState == 1) {
-      Brain.Screen.printAt(320, 200, "Pre Auton Done");
-    }
-    if (FCState == 2) {
-      Brain.Screen.printAt(320, 200, "Autonomous");
-      Brain.Screen.printAt(320, 220, "Step %d", AutonStep);
-    }
-    if (FCState == 3) {
-      Brain.Screen.printAt(320, 200, "Autonomous Done");
-    }
-    if (FCState == 4) {
-      Brain.Screen.printAt(320, 200, "Driver");
-    }
   }
 
-
+  if (FCState == 0) {
+    Brain.Screen.printAt(320, 200, "Pre Auton");
+  }
+  if (FCState == 1) {
+    Brain.Screen.printAt(320, 200, "Pre Auton Done");
+  }
+  if (FCState == 2) {
+    Brain.Screen.printAt(320, 200, "Autonomous");
+    Brain.Screen.printAt(320, 220, "Step %d", AutonStep);
+  }
+  if (FCState == 3) {
+    Brain.Screen.printAt(320, 200, "Autonomous Done");
+  }
+  if (FCState == 4) {
+    Brain.Screen.printAt(320, 200, "Driver");
+  }
+}
 
 ///////////////////////////////////////////////////////////////
 //                                                           //
@@ -293,22 +291,20 @@ int CntrlrScreenTask() {
   Controller1.Screen.clearScreen();
   while (1) {
     sleep(100);
-    //Prints Initrial Heading to Controller
+    // Prints Initrial Heading to Controller
     Controller1.Screen.setCursor(1, 1);
     Controller1.Screen.print("Gyro: %3.0f  ", Gyro1);
-    //Prints Catapult State to Controller
+    // Prints Catapult State to Controller
     Controller1.Screen.setCursor(2, 1);
-    if (CatapultState == 3){
+    if (CatapultState == 3) {
       Controller1.Screen.print("Cata: PreMatch");
-    }
-    else if(CatapultState == 2){
+    } else if (CatapultState == 2) {
       Controller1.Screen.print("Cata: Intake Only");
+    } else {
+      Controller1.Screen.clearLine(2);
+      Controller1.Screen.print("Cata: Shoot");
     }
-    else{
-     Controller1.Screen.clearLine(2);
-     Controller1.Screen.print("Cata: Shoot");
-    }
-    //Prints Motor Temps to Controller
+    // Prints Motor Temps to Controller
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
     Controller1.Screen.print("%2.0f ", Intake.temperature(fahrenheit) / 10);
@@ -325,7 +321,7 @@ int CntrlrScreenTask() {
     Controller1.Screen.setCursor(3, 19);
     Controller1.Screen.print("%2.0f ", RRDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 22);
-    Controller1.Screen.print("%2.0f  ", Catapult.temperature(fahrenheit) / 10); 
+    Controller1.Screen.print("%2.0f  ", Catapult.temperature(fahrenheit) / 10);
   }
 }
 
@@ -415,8 +411,8 @@ int SensorsTask() {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-//Shoots the Catapult
-void Shoot() { 
+// Shoots the Catapult
+void Shoot() {
   if (CatapultSlipPosition) {
     CataSlip = false;
     Catapult.setVelocity(100, pct);
@@ -426,7 +422,7 @@ void Shoot() {
   }
 }
 
-//Task To Change Between Intake and shoot on the catapult
+// Task To Change Between Intake and shoot on the catapult
 void CataModeState() {
   if (CataMode) {
     CatapultSlipPosition = false;
@@ -445,7 +441,7 @@ void CataModeState() {
   }
 }
 
-//Catapult Rotation points
+// Catapult Rotation points
 int CatapultTask() {
   Catapult.spin(forward);
   while (1) {
@@ -489,8 +485,6 @@ int TriballDetectTask() {
   }
   return 0;
 }
-
-
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -681,7 +675,7 @@ void AutoDrive(int Forward, int RightTurn) {
 void ToggleButtHang() { ButtHang.set(!ButtHang); }
 void ToggleLowHang() { LowHang.set(!LowHang); }
 void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
-void ToggleRightWing() {WingsRight.set(!WingsRight); }
+void ToggleRightWing() { WingsRight.set(!WingsRight); }
 void ToggleBlocker() { Blocker.set(!Blocker); }
 void ToggleHang() { Hang.set(!Hang); }
 void ToggleWingsOut() {
@@ -738,27 +732,25 @@ void buttonLEFT_pressed() {
 // Brain Pressed =
 void brain_pressed() {
   if (AutonNumber == 1) {
-    //close side WP
+    // close side WP
     AutonNumber = 2;
   } else if (AutonNumber == 2) {
     // close side Elims
     AutonNumber = 3;
   } else if (AutonNumber == 3) {
-    //close side Blocking
+    // close side Blocking
     AutonNumber = 4;
   } else if (AutonNumber == 4) {
-    //far side WP
+    // far side WP
     AutonNumber = 5;
   } else if (AutonNumber == 5) {
-    //far side Elims
+    // far side Elims
     AutonNumber = 6;
-  }
-  else if (AutonNumber == 6) {
-    //skills
+  } else if (AutonNumber == 6) {
+    // skills
     AutonNumber = 7;
-  }
-  else if (AutonNumber == 7) {
-    //none
+  } else if (AutonNumber == 7) {
+    // none
     AutonNumber = 1;
   }
 }
@@ -820,6 +812,8 @@ void buttonRup_released2() {}
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
+// AutoDistance = Speed,Distance,Heading
+// AutoTurn = Speed,Heading,Accuracy(Room for error, if its within x of the target, you're good.)
 void CloseSideWP() {
   SetGyro(-40);
   ToggleWingsOut();
@@ -833,7 +827,6 @@ void CloseSideWP() {
   IntakeSpeed = -100;
   AutoDistance(60, 20, -260);
   AutoDistance(60, 15, -270);
-
 }
 
 void CloseSideElims() {
@@ -866,8 +859,8 @@ void CloseSideElims() {
   AutoDistance(50, 6, 145);
   IntakeSpeed = -100;
   AutoDistance(60, 28, 80);
-  //ToggleLeftWing();
-  //AutoTurn(50, 125, 2);
+  // ToggleLeftWing();
+  // AutoTurn(50, 125, 2);
   sleep(500);
   IntakeSpeed = 0;
   AutoDistance(-60, 20, 80);
@@ -876,7 +869,6 @@ void CloseSideElims() {
   AutoTillStop(40, -110);
   MotorStop = 1;
   CatapultState = 1;
-
 }
 
 void AutonSkills() {
@@ -885,12 +877,51 @@ void AutonSkills() {
   CatapultState = 1;
   AutoTurn(60, -15, 2);
   DriveTorque = 20;
-  AutoDistance(50, 3, -10);
-  sleep(35000); 
- 
+  AutoDistance(50, 3, -20);
+  sleep(2);
+  DriveTorque = 100;
+  AutoDistance(-80, 3, -20);
+  AutoTurn(70, 25, 2);
+  AutoDistance(-80, 14, 20);
+  AutoDistance(-80, 50, 0);
+  AutoDistance(-60, 20, 0);
+  AutoTurn(70, -50, 2);
+  DriveTorque = 20;
+  AutoDistance(-80, 30, -100);
+  sleep(100);
+  DriveTorque = 100;
+  AutoDistance(80, 8, -90);
+  /*AutoDistance(-80, 6, -90);
+  sleep(100);
+  AutoDistance(80, 8, -90);*/
+  AutoTurn(80, -145, 2);
+  AutoDistance(-80, 35, -140);
+  AutoTurn(80, 155, 2);
+  ToggleWingsOut();
+  AutoDistance(80, 25, 155);
+  sleep(50);
+  AutoDistance(-80, 20, 90);
+  AutoDistance(80, 17, 90);
+  AutoTurn(70, 180, 2);
+  AutoDistance(80, 10, 180);
+  AutoDistance(80, 15, 180);
+  ToggleWingsIn();
+  AutoDistance(-80, 25, 180);
+  AutoTurn(80, 270, 2);
+  AutoDistance(-80, 20, 270);
+  ToggleWingsIn();
+  AutoTurn(60, 210, 3);
+  ToggleWingsOut();
+  AutoDistance(50, 44, 205);
+  ToggleWingsIn();
+  AutoDistance(-50, 8, 90);
+  AutoTurn(80, 90, 3);
+  AutoDistance(80, 30, 90);
+  AutoTurn(80, 45, 3);
+  AutoDistance(-100, 30, 45);
 }
 
-void CloseSideBlock() { 
+void CloseSideBlock() {
   SetGyro(0);
   ToggleLeftWing();
   sleep(500);
@@ -900,7 +931,7 @@ void CloseSideBlock() {
   AutoDistance(80, 45, 0);
   IntakeSpeed = 100;
   sleep(2000);
-  IntakeSpeed  = 0;
+  IntakeSpeed = 0;
 }
 
 void FarSideWP() {
@@ -909,22 +940,22 @@ void FarSideWP() {
   CatapultState = 2;
   sleep(300);
   IntakeSpeed = 100;
-  //ToggleRightWing();
+  // ToggleRightWing();
   AutoTurn(60, 45, 3);
   AutoDistance(70, 5, 45);
   AutoTurn(60, 15, 2);
   IntakeSpeed = -100;
-  //ToggleRightWing();
+  // ToggleRightWing();
   sleep(100);
   AutoDistance(80, 20, 20);
-  //ToggleRightWing();
+  // ToggleRightWing();
   AutoDistance(-80, 10, 0);
   AutoTurn(60, -65, 1);
   IntakeSpeed = 100;
   AutoDistance(80, 45, -65);
   sleep(100);
   AutoTurn(60, 10, 3);
-  //IntakeSpeed = 0;
+  // IntakeSpeed = 0;
   AutoDistance(70, 2, 10);
   AutoTurn(60, 90, 3);
   ToggleLeftWing();
@@ -944,16 +975,9 @@ void FarSideWP() {
   AutoDistance(70, 10, 90);
   IntakeSpeed = -100;
   AutoDistance(70, 10, 90);*/
-
-
-
-
-  
 }
 
-void FarSideElims() {
-
-}
+void FarSideElims() {}
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -988,9 +1012,8 @@ void autonomous() {
   } else if (AutonNumber == 6) {
     AutonSkills();
   }
-    
 }
- void buttonA_pressed() { autonomous(); }
+void buttonA_pressed() { autonomous(); }
 /////////////////////////////////////////////////////////////
 //                                                         //
 //              ##        ##                               //
@@ -1008,7 +1031,7 @@ void autonomous() {
 /////////////////////////////////////////////////////////////
 
 void usercontrol() {
-   MotorStop = 1;
+  MotorStop = 1;
   ResetTimer();
   IntakeTaskRunning = true;
   AutonRunning = false;
