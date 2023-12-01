@@ -878,31 +878,27 @@ void AutonSkills() {
   AutoTurn(60, -15, 2);
   DriveTorque = 20;
   AutoDistance(50, 3, -20);
-  sleep(2);
+  sleep(37000);
   DriveTorque = 100;
   AutoDistance(-80, 3, -20);
   AutoTurn(70, 25, 2);
   AutoDistance(-80, 14, 20);
   AutoDistance(-80, 50, 0);
-  AutoDistance(-60, 20, 0);
+  AutoDistance(-60, 23, 0);
   AutoTurn(70, -50, 2);
-  DriveTorque = 20;
-  AutoDistance(-80, 30, -100);
+  AutoDistance(-80, 33, -100);
   sleep(100);
-  DriveTorque = 100;
   AutoDistance(80, 8, -90);
   /*AutoDistance(-80, 6, -90);
   sleep(100);
   AutoDistance(80, 8, -90);*/
-  AutoTurn(80, -145, 2);
+  AutoTurn(70, -145, 2);
   AutoDistance(-80, 35, -140);
-  AutoTurn(80, 155, 2);
-  ToggleWingsOut();
-  AutoDistance(80, 25, 155);
-  sleep(50);
-  AutoDistance(-80, 20, 90);
   AutoDistance(80, 17, 90);
-  AutoTurn(70, 180, 2);
+  DriveTorque = 100;
+  sleep(100);
+  AutoTurn(50, 180, 2);
+  DriveTorque = 100;
   AutoDistance(80, 10, 180);
   AutoDistance(80, 15, 180);
   ToggleWingsIn();
@@ -919,6 +915,11 @@ void AutonSkills() {
   AutoDistance(80, 30, 90);
   AutoTurn(80, 45, 3);
   AutoDistance(-100, 30, 45);
+  AutoDistance(100, 20, 30);
+  sleep(500);
+  AutoDistance(100, 15, 15);
+  sleep(800);
+  AutoDistance(100, 36, 0);
 }
 
 void CloseSideBlock() {
