@@ -1,4 +1,4 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
+ // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // RFDrive              motor         13
@@ -878,12 +878,13 @@ void AutonSkills() {
   CatapultState = 1;
   AutoTurn(60, -10, 2);
   AutoDistance(30, 3, -15);
-  sleep(37000);
+  sleep(2);
   AutoDistance(-80, 3, -20);
   AutoTurn(60, 25, 2);
   AutoDistance(-80, 14, 20);
   AutoDistance(-80, 50, 0);
   AutoDistance(-60, 23, 0);
+  IntakeSpeed = -100;
   AutoTurn(60, -50, 2);
   AutoDistance(-80, 35, -50);
   sleep(50);
@@ -909,14 +910,15 @@ void AutonSkills() {
   ToggleWingsIn();
   AutoDistance(-80, 25, 180);
   AutoTurn(60, 90, 3);
-  AutoDistance(80, 8, 90);
+  AutoDistance(80, 12, 90);
   AutoTurn(60, 200, 3);
   ToggleWingsOut();
   AutoDistance(70, 30, 190);
   sleep(100);
   ToggleWingsIn();
-  AutoDistance(-80, 30, 190);
-
+  AutoDistance(-80, 5, 190);
+  AutoTurn(60, 90, 2);
+ 
 }
 
 void CloseSideBlock() {
