@@ -451,7 +451,7 @@ int CatapultTask() {
           percent);
     }
     if (CatapultState == 1) {
-      CatapultGoal = 57.5;
+      CatapultGoal = 57;
     }
     if (CatapultState == 2) {
       CatapultGoal = 50.0;
@@ -459,7 +459,7 @@ int CatapultTask() {
     if (CatapultState == 3) {
       CatapultGoal = 20.0;
     }
-    if ((CataRotate.position(degrees) > 57.0) && CatapultState == 1) {
+    if ((CataRotate.position(degrees) > 56.0) && CatapultState == 1) {
       MotorStop = 0;
     }
     if ((CataRotate.position(degrees) > 49.0) && CatapultState == 2) {
@@ -812,6 +812,8 @@ void buttonRup_released2() {}
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
+// AutoDistance = Speed,Distance,Heading
+// AutoTurn = Speed,Heading,Accuracy(Room for error, if its within x of the target, you're good.)
 void CloseSideWP() {
   SetGyro(-40);
   ToggleWingsOut();
@@ -871,37 +873,50 @@ void CloseSideElims() {
 
 void AutonSkills() {
   SetGyro(0);
+  DriveTorque = 100;
   MotorStop = 1;
   CatapultState = 1;
-  AutoTurn(60, -15, 2);
-  DriveTorque = 20;
-  AutoDistance(50, 3, -20);
-  sleep(2);
-  DriveTorque = 100;
+  AutoTurn(60, -10, 2);
+  AutoDistance(30, 3, -15);
+  sleep(37000);
   AutoDistance(-80, 3, -20);
-  AutoTurn(70, 25, 2);
+  AutoTurn(60, 25, 2);
   AutoDistance(-80, 14, 20);
   AutoDistance(-80, 50, 0);
-  AutoDistance(-60, 20, 0);
-  AutoTurn(70, -50, 2);
-  DriveTorque = 20;
-  AutoDistance(-80, 30, -100);
-  sleep(100);
-  AutoDistance(80, 8, -90);
+  AutoDistance(-60, 23, 0);
+  AutoTurn(60, -50, 2);
+  AutoDistance(-80, 35, -50);
+  sleep(50);
+  AutoDistance(80, 10, -50);
   /*AutoDistance(-80, 6, -90);
   sleep(100);
   AutoDistance(80, 8, -90);*/
-  DriveTorque = 100;
-  AutoTurn(80, -145, 2);
-  AutoDistance(-80, 35, -140);
-  AutoTurn(80, 155, 2);
+  AutoTurn(60, 25, 2);
+  AutoDistance(80, 46, 25);
+  AutoTurn(60, 160, 2);
   ToggleWingsOut();
-  AutoDistance(80, 25, 155);
-  sleep(50);
-  AutoDistance(-80, 20, 90);
-  AutoDistance(80, 17, 90);
-  AutoTurn(70, 180, 2);
-  AutoDistance(80, 10, 180);
+  DriveTorque = 100;
+  AutoDistance(70, 30, 170);
+  sleep(100);
+  ToggleWingsIn();
+  AutoDistance(-80, 30, 180);
+  AutoTurn(60, 90, 2);
+  AutoDistance(80, 7, 90);
+  AutoTurn(60, 180, 2);
+  ToggleWingsOut();
+  AutoDistance(70, 30, 180);
+  sleep(100);
+  ToggleWingsIn();
+  AutoDistance(-80, 25, 180);
+  AutoTurn(60, 90, 3);
+  AutoDistance(80, 8, 90);
+  AutoTurn(60, 200, 3);
+  ToggleWingsOut();
+  AutoDistance(70, 30, 190);
+  sleep(100);
+  ToggleWingsIn();
+  AutoDistance(-80, 30, 190);
+
 }
 
 void CloseSideBlock() {
