@@ -9,6 +9,94 @@
 // Inertial13           inertial      13              
 // RBDrive              motor         19              
 // LBDrive              motor         15              
+// PuncherRight         motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         6               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// PuncherRight         motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
 // Shooter              motor         21              
 // Intake               motor         3               
 // Exp                  triport       5               
@@ -202,21 +290,12 @@ void pre_auton() {
   ResetDriveMotors();
 
   sleep(100);
-
-  
-
   Wings.set(false);
   Intake_Hold.set(true);
   Low_Hang.set(false);
   Lift.set(false);
   Kick_Arm.set(false);
   Hang_PTO.set(false);
-  Controller1.Screen.clearScreen();
-  Controller1.Screen.setCursor(1,1);
-  Controller1.Screen.print("Flywheel(B)");
-  Controller1.Screen.setCursor(2,1);
-  Controller1.Screen.print("Puncher(Y)");
-  waitUntil(Controller1.ButtonB.pressing()||Controller1.ButtonY.pressing());
   Controller1.Screen.clearScreen();
   // SET FIELD CONTROL STATE
   FCState = 1;
@@ -378,7 +457,7 @@ int CntrlrScreenTask() {
     Controller1.Screen.setCursor(3, 19);
     Controller1.Screen.print("%2.0f ", RTDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 22);
-    Controller1.Screen.print("%2.0f  ", Shooter.temperature(fahrenheit) / 10);
+    Controller1.Screen.print("%2.0f  ", PuncherLeft.temperature(fahrenheit) / 10);
   }
 }
 
@@ -468,49 +547,12 @@ int SensorsTask() {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-int ShooterTask() {
-  while (1) {
-    //if the shooter is a flywheel
-    if (Puncher_Flywheel == 1) {
-    Shooter.setVelocity((0.5 * Shooter.velocity(percent) + 0.5 * Flywheel_Speed), percent);
-      if (Flywheel_State >= 9 ){
-        Flywheel_Speed = 100;
-        Flywheel_State = 9;      
-        }
-      else if (Flywheel_State == 8) {
-        Flywheel_Speed = 95;
-      }
-      else if (Flywheel_State == 7) {
-        Flywheel_Speed = 90;
-      }
-      else if (Flywheel_State == 6) {
-        Flywheel_Speed = 85;
-      }
-      else if (Flywheel_State == 5) {
-        Flywheel_Speed = 80;
-      }
-      else if (Flywheel_State == 4) {
-        Flywheel_Speed =75;
-      }
-      else if (Flywheel_State == 3) {
-        Flywheel_Speed = 70;
-      }
-      else if (Flywheel_State == 2) {
-        Flywheel_Speed = 65;
-      }
-      else {
-        Flywheel_Speed = 60;
-        Flywheel_State = 1;
-      }
-    }
-     //if puncher is attached 
-    else  {
-     sleep(5);
-     Shooter.setVelocity(CatapultSpeed, pct);
-    }
+/*int ShooterTask(){
+while (1){
+
   }
 }
-
+*/
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -717,8 +759,10 @@ void ToggleHangPTO() { Hang_PTO.set(!Hang_PTO); }
 
 // L-UP =
 void buttonLup_pressed() {
-  Shooter.setVelocity(100, percent);
-  Shooter.spin(forward);
+  PuncherLeft.setVelocity(90, percent);
+  PuncherLeft.spin(forward);
+  PuncherRight.setVelocity(90, percent);
+  PuncherRight.spin(forward);
 }
 
 
@@ -731,7 +775,8 @@ void buttonLdown_pressed() {
 }
 // L-UP RELEASED =
 void buttonLup_released() {
-  Shooter.stop();
+  PuncherLeft.stop();
+  PuncherRight.stop();
 }
 
 // L-DOWN RELEASED =
@@ -1165,7 +1210,7 @@ int main() {
   task taskDrive(DriveTask); 
   task taskHang(HangTask);
   task taskIntake(IntakeTask);
-  task taskShooter(ShooterTask);
+ // task taskShooter(ShooterTask);
   Brain.Screen.pressed(brain_pressed);
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
