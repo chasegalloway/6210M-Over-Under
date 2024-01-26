@@ -21,6 +21,7 @@ extern digital_out Low_Hang;
 extern digital_out Hang_PTO;
 extern digital_out Intake_Hold;
 extern motor PuncherLeft;
+extern digital_out LeftBackWing;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

@@ -26,6 +26,7 @@ digital_out Low_Hang = digital_out(Exp.B);
 digital_out Hang_PTO = digital_out(Exp.F);
 digital_out Intake_Hold = digital_out(Exp.E);
 motor PuncherLeft = motor(PORT6, ratio18_1, false);
+digital_out LeftBackWing = digital_out(Exp.G);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
