@@ -6,22 +6,21 @@ extern brain Brain;
 extern motor RFDrive;
 extern motor LFDrive;
 extern controller Controller1;
-extern motor RRDrive;
-extern motor LRDrive;
-extern inertial Inertial1;
-extern motor RCDrive;
-extern motor LCDrive;
-extern motor Catapult;
+extern motor RTDrive;
+extern motor LTDrive;
+extern inertial Inertial13;
+extern motor RBDrive;
+extern motor LBDrive;
+extern motor PuncherRight;
 extern motor Intake;
 extern triport Exp;
-extern digital_out WingsLeft;
-extern rotation CataRotate;
-extern digital_out Blocker;
-extern digital_out Hang;
-extern digital_out WingsRight;
-extern digital_out LowHang;
-extern digital_out ButtHang;
-extern distance TriballDetect;
+extern digital_out Lift;
+extern digital_out Kick_Arm;
+extern digital_out Wings;
+extern digital_out Low_Hang;
+extern digital_out Hang_PTO;
+extern digital_out Intake_Hold;
+extern motor PuncherLeft;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

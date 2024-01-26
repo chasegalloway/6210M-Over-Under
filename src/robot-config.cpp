@@ -8,25 +8,24 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
-triport Exp = triport(PORT21);
-motor RFDrive = motor(PORT13, ratio18_1, false);
-motor LFDrive = motor(PORT14, ratio18_1, true);
+triport Exp = triport(PORT5);
+motor RFDrive = motor(PORT20, ratio6_1, false);
+motor LFDrive = motor(PORT16, ratio6_1, true);
 controller Controller1 = controller(primary);
-motor RRDrive = motor(PORT11, ratio18_1, false);
-motor LRDrive = motor(PORT18, ratio18_1, true);
-inertial Inertial1 = inertial(PORT1);
-motor RCDrive = motor(PORT12, ratio18_1, false);
-motor LCDrive = motor(PORT20, ratio18_1, true);
-motor Catapult = motor(PORT19, ratio36_1, false);
-motor Intake = motor(PORT16, ratio6_1, false);
-digital_out WingsLeft = digital_out(Exp.A);
-rotation CataRotate = rotation(PORT15, false);
-digital_out Blocker = digital_out(Exp.D);
-digital_out Hang = digital_out(Exp.C);
-digital_out WingsRight = digital_out(Exp.B);
-digital_out LowHang = digital_out(Exp.F);
-digital_out ButtHang = digital_out(Exp.G);
-distance TriballDetect = distance(PORT2);
+motor RTDrive = motor(PORT17, ratio6_1, true);
+motor LTDrive = motor(PORT14, ratio18_1, false);
+inertial Inertial13 = inertial(PORT13);
+motor RBDrive = motor(PORT19, ratio6_1, false);
+motor LBDrive = motor(PORT15, ratio6_1, true);
+motor PuncherRight = motor(PORT21, ratio18_1, true);
+motor Intake = motor(PORT3, ratio6_1, false);
+digital_out Lift = digital_out(Exp.A);
+digital_out Kick_Arm = digital_out(Exp.D);
+digital_out Wings = digital_out(Exp.C);
+digital_out Low_Hang = digital_out(Exp.B);
+digital_out Hang_PTO = digital_out(Exp.F);
+digital_out Intake_Hold = digital_out(Exp.E);
+motor PuncherLeft = motor(PORT6, ratio18_1, false);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

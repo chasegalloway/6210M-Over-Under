@@ -1,25 +1,132 @@
- // ---- START VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// RFDrive              motor         13
-// LFDrive              motor         14
-// Controller1          controller
-// RRDrive              motor         11
-// LRDrive              motor         18
-// Inertial1            inertial      1
-// RCDrive              motor         12
-// LCDrive              motor         20
-// Catapult             motor         19
-// Intake               motor         16
-// Exp                  triport       21
-// WingsLeft            digital_out   A
-// CataRotate           rotation      15
-// Blocker              digital_out   D
-// Hang                 digital_out   C
-// WingsRight           digital_out   B
-// LowHang              digital_out   F
-// ButtHang             digital_out   G
-// TriballDetect        distance      2
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// PuncherRight         motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         6               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// PuncherRight         motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// PuncherLeft          motor         8               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         20              
+// LFDrive              motor         16              
+// Controller1          controller                    
+// RTDrive              motor         17              
+// LTDrive              motor         14              
+// Inertial13           inertial      13              
+// RBDrive              motor         19              
+// LBDrive              motor         15              
+// Shooter              motor         21              
+// Intake               motor         3               
+// Exp                  triport       5               
+// Lift                 digital_out   A               
+// Kick_Arm             digital_out   D               
+// Wings                digital_out   C               
+// Low_Hang             digital_out   B               
+// Hang_PTO             digital_out   F               
+// Intake_Hold          digital_out   E               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -48,20 +155,25 @@ int Clock;
 int SlowestDrive;
 int FastestDrive;
 float TriBallThere;
-
+int HangToggle = 1;
+int HangDriveSpeedToggle = 0;
 // Drive Train Variables
 int LDSpeed = 0;
 int RDSpeed = 0;
 int DriveTorque = 100;
 bool DriveTrainHold = false;
 float TurnConstant = 1;
+int HangDriveSpeed = 0;
+int HangDriveSpeedGoal = 0;
+bool ControllerLock = true;
+
 
 // Intake Variables
 bool IntakeTaskRunning = true;
 int IntakeSpeed = 0;
 int IntakeTorque = 100;
 
-// Catapult Variables
+// Shooter Variables
 bool CataSlip = true;
 bool CatapultSlipPosition = true;
 bool CataMode = false;
@@ -70,12 +182,10 @@ float CatapultGoal;
 int CatapultState = 3;
 int MotorStop = 1;
 bool XToggle = true;
-
-// Color Sensor Variables
-int colorNumber = 0;
-bool isRed = false;
-bool startRolling = true;
-float CataTensionStorage = true;
+int Puncher_Flywheel = 1;
+int Flywheel_Speed = 100;
+int Flywheel_State = 9;
+int CatapultSpeed = 0;
 
 // Auton Variables
 bool RedSide = true;
@@ -119,11 +229,11 @@ void ResetTimer() {
 ////////                                              /////////
 ///////////////////////////////////////////////////////////////
 void ResetGyro() {
-  Inertial1.setRotation(0, deg);
+  Inertial13.setRotation(0, deg);
   sleep(5);
 }
 void SetGyro(int Heading) {
-  Inertial1.setRotation(Heading, deg);
+  Inertial13.setRotation(Heading, deg);
   sleep(5);
 }
 
@@ -135,10 +245,10 @@ void SetGyro(int Heading) {
 void ResetDriveMotors() {
   LFDrive.resetPosition();
   RFDrive.resetPosition();
-  LRDrive.resetPosition();
-  RRDrive.resetPosition();
-  LCDrive.resetPosition();
-  RCDrive.resetPosition();
+  LTDrive.resetPosition();
+  RTDrive.resetPosition();
+  LBDrive.resetPosition();
+  RBDrive.resetPosition();
   sleep(5);
 }
 
@@ -172,6 +282,7 @@ void StopDriveMotors() {
 ///////////////////////////////////////////////////////////////
 void pre_auton() {
   // PRINT TO BRIAN SCREEN "Pre Auton"
+  FCState = 0;
   Brain.Screen.clearScreen();
   Brain.Screen.printAt(320, 200, "Pre Auton");
 
@@ -179,19 +290,19 @@ void pre_auton() {
   ResetDriveMotors();
 
   sleep(100);
-
+  Wings.set(false);
+  Intake_Hold.set(true);
+  Low_Hang.set(false);
+  Lift.set(false);
+  Kick_Arm.set(false);
+  Hang_PTO.set(false);
+  Controller1.Screen.clearScreen();
   // SET FIELD CONTROL STATE
   FCState = 1;
 
-  WingsLeft.set(false);
-  WingsRight.set(false);
-  // Blocker.set(false);
-  Hang.set(false);
-  LowHang.set(false);
   sleep(500);
   Intake.spin(fwd);
   sleep(200);
-  CataRotate.setPosition(0, deg);
 }
 
 ///////////////////////////////////////////////////////////////
@@ -215,8 +326,8 @@ int BrainScreenTask() {
     Brain.Screen.clearScreen();
     Brain.Screen.printAt(1, 20, "LFMotor: %5.2f   ", Gyro1);
     Brain.Screen.printAt(188, 20, "RFMotor: %5.2f   ", Gyro1);
-    Brain.Screen.printAt(1, 40, "LRMotor: %5.2f   ", Gyro1);
-    Brain.Screen.printAt(188, 40, "RRMotor: %5.2f   ", Gyro1);
+    Brain.Screen.printAt(1, 40, "LTMotor: %5.2f   ", Gyro1);
+    Brain.Screen.printAt(188, 40, "RTMotor: %5.2f   ", Gyro1);
     Brain.Screen.printAt(1, 60, "Avg Motor Dist: %4.2f   ", AvgDriveMtrDist);
     Brain.Screen.printAt(1, 100, "Gyro: %5.2f    ", Gyro1);
     Brain.Screen.printAt(1, 140, "Clock: %d    ", Clock);
@@ -290,19 +401,44 @@ int CntrlrScreenTask() {
 
   Controller1.Screen.clearScreen();
   while (1) {
-    sleep(100);
+    sleep(50);
     // Prints Initrial Heading to Controller
     Controller1.Screen.setCursor(1, 1);
-    Controller1.Screen.print("Gyro: %3.0f  ", Gyro1);
+    Controller1.Screen.print("Gyro: %3.0f  ", Inertial13.roll());
     // Prints Catapult State to Controller
     Controller1.Screen.setCursor(2, 1);
-    if (CatapultState == 3) {
-      Controller1.Screen.print("Cata: PreMatch");
-    } else if (CatapultState == 2) {
-      Controller1.Screen.print("Cata: Intake Only");
-    } else {
-      Controller1.Screen.clearLine(2);
-      Controller1.Screen.print("Cata: Shoot");
+    Controller1.Screen.clearLine(2);
+    if(Puncher_Flywheel == 1){
+      if(Flywheel_State == 9) {
+        Controller1.Screen.print ("Flywheel Speed: 100");
+      }
+      else if(Flywheel_State == 8) {
+        Controller1.Screen.print ("Flywheel Speed: 95");
+      }
+      else if(Flywheel_State == 7) {
+        Controller1.Screen.print ("Flywheel Speed: 90");
+      }
+      else if(Flywheel_State == 6) {
+        Controller1.Screen.print ("Flywheel Speed: 85");
+      }
+      else if(Flywheel_State == 5) {
+        Controller1.Screen.print ("Flywheel Speed 80");
+      }
+      else if(Flywheel_State == 4) {
+        Controller1.Screen.print ("Flywheel Speed 75");
+      }
+      else if(Flywheel_State == 3) {
+        Controller1.Screen.print ("Flywheel Speed 70");
+      }
+      else if(Flywheel_State == 2) {
+        Controller1.Screen.print ("Flywheel Speed 65");
+      }
+      else {
+        Controller1.Screen.print ("Flywheel Speed 60");
+      }
+    }
+    else {
+      Controller1.Screen.print ("Puncher");
     }
     // Prints Motor Temps to Controller
     Controller1.Screen.clearLine(3);
@@ -311,17 +447,17 @@ int CntrlrScreenTask() {
     Controller1.Screen.setCursor(3, 4);
     Controller1.Screen.print("%2.0f ", LFDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 7);
-    Controller1.Screen.print("%2.0f ", LCDrive.temperature(fahrenheit) / 10);
-    Controller1.Screen.setCursor(3, 10);
-    Controller1.Screen.print("%2.0f ", LRDrive.temperature(fahrenheit) / 10);
-    Controller1.Screen.setCursor(3, 13);
     Controller1.Screen.print("%2.0f ", RFDrive.temperature(fahrenheit) / 10);
+    Controller1.Screen.setCursor(3, 10);
+    Controller1.Screen.print("%2.0f ", LBDrive.temperature(fahrenheit) / 10);
+    Controller1.Screen.setCursor(3, 13);
+    Controller1.Screen.print("%2.0f ", RBDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 16);
-    Controller1.Screen.print("%2.0f ", RCDrive.temperature(fahrenheit) / 10);
+    Controller1.Screen.print("%2.0f ", LTDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 19);
-    Controller1.Screen.print("%2.0f ", RRDrive.temperature(fahrenheit) / 10);
+    Controller1.Screen.print("%2.0f ", RTDrive.temperature(fahrenheit) / 10);
     Controller1.Screen.setCursor(3, 22);
-    Controller1.Screen.print("%2.0f  ", Catapult.temperature(fahrenheit) / 10);
+    Controller1.Screen.print("%2.0f  ", PuncherLeft.temperature(fahrenheit) / 10);
   }
 }
 
@@ -345,30 +481,30 @@ int SensorsTask() {
   while (1) {
     sleep(5);
     // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES
-    AvgDriveMtrDist = (LFDrive.position(deg) + RRDrive.position(deg)) * 0.025 *
+    AvgDriveMtrDist = (LFDrive.position(deg) + RTDrive.position(deg)) * 0.0095 *
                       21.5 / 20; // SCALED TO INCHES
     // GET AVERAGE MOTOR SPEED PERCENTAGE
-    AvgDriveMtrSpeed = (LFDrive.velocity(pct) + RRDrive.velocity(pct)) * .5;
+    AvgDriveMtrSpeed = (LFDrive.velocity(pct) + RTDrive.velocity(pct)) * .5;
 
     // GET GYRO VALUE
-    Gyro1 = Inertial1.rotation(deg);
+    Gyro1 = Inertial13.rotation(deg);
 
     // GET SLOWEST DRIVE MOTOR SPEED
     x = fabs(RFDrive.velocity(pct));
     if (x > fabs(LFDrive.velocity(pct))) {
       x = fabs(LFDrive.velocity(pct));
     }
-    if (x > fabs(LRDrive.velocity(pct))) {
-      x = fabs(LRDrive.velocity(pct));
+    if (x > fabs(LBDrive.velocity(pct))) {
+      x = fabs(LBDrive.velocity(pct));
     }
-    if (x > fabs(RRDrive.velocity(pct))) {
-      x = fabs(RRDrive.velocity(pct));
+    if (x > fabs(RBDrive.velocity(pct))) {
+      x = fabs(RBDrive.velocity(pct));
     }
-    if (x > fabs(LCDrive.velocity(pct))) {
-      x = fabs(LCDrive.velocity(pct));
+    if (x > fabs(LTDrive.velocity(pct))) {
+      x = fabs(LTDrive.velocity(pct));
     }
-    if (x > fabs(RCDrive.velocity(pct))) {
-      x = fabs(RCDrive.velocity(pct));
+    if (x > fabs(RTDrive.velocity(pct))) {
+      x = fabs(RTDrive.velocity(pct));
     }
     SlowestDrive = abs(x);
 
@@ -376,17 +512,17 @@ int SensorsTask() {
     if (x < fabs(LFDrive.velocity(pct))) {
       x = fabs(LFDrive.velocity(pct));
     }
-    if (x < fabs(LRDrive.velocity(pct))) {
-      x = fabs(LRDrive.velocity(pct));
+    if (x < fabs(LBDrive.velocity(pct))) {
+      x = fabs(LBDrive.velocity(pct));
     }
-    if (x < fabs(RRDrive.velocity(pct))) {
-      x = fabs(RRDrive.velocity(pct));
+    if (x < fabs(RBDrive.velocity(pct))) {
+      x = fabs(RBDrive.velocity(pct));
     }
-    if (x < fabs(LCDrive.velocity(pct))) {
-      x = fabs(LCDrive.velocity(pct));
+    if (x < fabs(LTDrive.velocity(pct))) {
+      x = fabs(LTDrive.velocity(pct));
     }
-    if (x < fabs(RCDrive.velocity(pct))) {
-      x = fabs(RCDrive.velocity(pct));
+    if (x < fabs(RTDrive.velocity(pct))) {
+      x = fabs(RTDrive.velocity(pct));
     }
     FastestDrive = abs(x);
 
@@ -407,84 +543,16 @@ int SensorsTask() {
 //                                                         //
 /////////////////////////////////////////////////////////////
 ////////                                            /////////
-////////            TASK FOR Catapult               /////////
+////////            TASK FOR Shooter                /////////
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-// Shoots the Catapult
-void Shoot() {
-  if (CatapultSlipPosition) {
-    CataSlip = false;
-    Catapult.setVelocity(100, pct);
-    sleep(200);
-    CataSlip = true;
-    MotorStop = 1;
-  }
-}
+/*int ShooterTask(){
+while (1){
 
-// Task To Change Between Intake and shoot on the catapult
-void CataModeState() {
-  if (CataMode) {
-    CatapultSlipPosition = false;
-    CataSlip = false;
-    CataMode = false;
-    Catapult.setVelocity(100, pct);
-    sleep(400);
-    CataSlip = true;
-    CatapultState = 2;
-    MotorStop = 1;
-  } else {
-    CatapultState = 1;
-    MotorStop = 1;
-    CatapultSlipPosition = true;
-    CataSlip = true;
   }
 }
-
-// Catapult Rotation points
-int CatapultTask() {
-  Catapult.spin(forward);
-  while (1) {
-    if (CataSlip) {
-      Catapult.setVelocity(
-          (((CatapultGoal - CataRotate.position(degrees)) * 1.9) * MotorStop),
-          percent);
-    }
-    if (CatapultState == 1) {
-      CatapultGoal = 57;
-    }
-    if (CatapultState == 2) {
-      CatapultGoal = 50.0;
-    }
-    if (CatapultState == 3) {
-      CatapultGoal = 20.0;
-    }
-    if ((CataRotate.position(degrees) > 56.0) && CatapultState == 1) {
-      MotorStop = 0;
-    }
-    if ((CataRotate.position(degrees) > 49.0) && CatapultState == 2) {
-      MotorStop = 0;
-    }
-    if ((CataRotate.position(degrees) > 19.0) && CatapultState == 3) {
-      MotorStop = 0;
-    }
-    wait(0.08, seconds);
-    wait(5, msec);
-  }
-  return 0;
-}
-
-int TriballDetectTask() {
-  while (1) {
-    TriBallThere = (TriballDetect.objectDistance(mm));
-    if (TriBallThere <= 15) {
-      wait(100, msec);
-      Shoot();
-    }
-    sleep(5);
-  }
-  return 0;
-}
+*/
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -529,35 +597,47 @@ int DriveTask() {
   while (1) {
     if (DriveTrainHold) {
       LFDrive.setStopping(hold);
-      LRDrive.setStopping(hold);
-      RRDrive.setStopping(hold);
+      LBDrive.setStopping(hold);
+      RBDrive.setStopping(hold);
       RFDrive.setStopping(hold);
-      LCDrive.setStopping(hold);
-      RCDrive.setStopping(hold);
+      LTDrive.setStopping(hold);
+      RTDrive.setStopping(hold);
     } else {
       LFDrive.setStopping(coast);
-      LRDrive.setStopping(coast);
-      RRDrive.setStopping(coast);
+      LBDrive.setStopping(coast);
+      RBDrive.setStopping(coast);
       RFDrive.setStopping(coast);
-      LCDrive.setStopping(coast);
-      RCDrive.setStopping(coast);
+      LTDrive.setStopping(coast);
+      RTDrive.setStopping(coast);
     }
 
     LFDrive.setMaxTorque(DriveTorque, pct);
-    LRDrive.setMaxTorque(DriveTorque, pct);
+    LBDrive.setMaxTorque(DriveTorque, pct);
     RFDrive.setMaxTorque(DriveTorque, pct);
-    RRDrive.setMaxTorque(DriveTorque, pct);
-    LCDrive.setMaxTorque(DriveTorque, pct);
-    RCDrive.setMaxTorque(DriveTorque, pct);
-
+    RBDrive.setMaxTorque(DriveTorque, pct);
+    LTDrive.setMaxTorque(DriveTorque, pct);
+    RTDrive.setMaxTorque(DriveTorque, pct);
+  
     LFDrive.spin(fwd, LDSpeed, pct);
-    LRDrive.spin(fwd, LDSpeed, pct);
-    LCDrive.spin(fwd, LDSpeed, pct);
+    LBDrive.spin(fwd, LDSpeed, pct);
+    LTDrive.spin(fwd, LDSpeed, pct);
     RFDrive.spin(fwd, RDSpeed, pct);
-    RRDrive.spin(fwd, RDSpeed, pct);
-    RCDrive.spin(fwd, RDSpeed, pct);
-
+    RBDrive.spin(fwd, RDSpeed, pct);
+    RTDrive.spin(fwd, RDSpeed, pct);
+    
     sleep(6);
+  }
+}
+
+int HangTask() {
+ while(1){
+  sleep(5);
+    if(HangDriveSpeedToggle == 1) {
+    
+    LDSpeed = (HangDriveSpeedGoal - Inertial13.orientation(roll, degrees));
+    RDSpeed = (HangDriveSpeedGoal - Inertial13.orientation(roll, degrees));
+    
+   }
   }
 }
 /////////////////////////////////////////////////////////////
@@ -609,7 +689,7 @@ void AutoTillHop(int Speed, double Heading) {
   ResetTimer();
   sleep(10);
   int RightTurnDiff;
-  while (Inertial1.roll() > -10) {
+  while (Inertial13.roll() > -10) {
     RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
@@ -626,14 +706,15 @@ void AutoTillHop(int Speed, double Heading) {
 void AutoTurn(int Speed, int Heading, int Accuracy) {
   float lsp;
   float rsp;
+  float scaling = .45;
   while (fabs((abs(Heading) - fabs(Gyro1))) > Accuracy ||
          fabs(LFDrive.velocity(pct)) > 2.5) {
-    lsp = +(Heading - Gyro1) * .5;
+    lsp = +(Heading - Gyro1) * scaling;
     if (fabs(lsp) < 2) {
       lsp = 2 * fabs(lsp) / lsp;
     }
     LDSpeed = lsp;
-    rsp = -(Heading - Gyro1) * .5;
+    rsp = -(Heading - Gyro1) * scaling;
     if (fabs(rsp) < 2) {
       rsp = 2 * fabs(rsp) / rsp;
     }
@@ -672,28 +753,31 @@ void AutoDrive(int Forward, int RightTurn) {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-void ToggleButtHang() { ButtHang.set(!ButtHang); }
-void ToggleLowHang() { LowHang.set(!LowHang); }
-void ToggleLeftWing() { WingsLeft.set(!WingsLeft); }
-void ToggleRightWing() { WingsRight.set(!WingsRight); }
-void ToggleBlocker() { Blocker.set(!Blocker); }
-void ToggleHang() { Hang.set(!Hang); }
-void ToggleWingsOut() {
-  WingsLeft = true;
-  WingsRight = true;
-}
-void ToggleWingsIn() {
-  WingsLeft = false;
-  WingsRight = false;
-}
+void ToggleLift() { Lift.set(!Lift); }
+void ToggleKick_Arm() { Kick_Arm.set(!Kick_Arm); }
+void ToggleHangPTO() { Hang_PTO.set(!Hang_PTO); }
+
 // L-UP =
-void buttonLup_pressed() { Shoot(); }
+void buttonLup_pressed() {
+  PuncherLeft.setVelocity(90, percent);
+  PuncherLeft.spin(forward);
+  PuncherRight.setVelocity(90, percent);
+  PuncherRight.spin(forward);
+}
+
+
 
 // L-DOWN =
-void buttonLdown_pressed() { ToggleBlocker(); }
-
+void buttonLdown_pressed() {
+  ToggleKick_Arm();
+  sleep(50);
+   ToggleLift();
+}
 // L-UP RELEASED =
-void buttonLup_released() {}
+void buttonLup_released() {
+  PuncherLeft.stop();
+  PuncherRight.stop();
+}
 
 // L-DOWN RELEASED =
 void buttonLdown_released() {}
@@ -711,20 +795,44 @@ void buttonRup_released() { IntakeSpeed = 0; }
 void buttonRdown_released() { IntakeSpeed = 0; }
 
 // UP = Wings OUT
-void buttonUP_pressed() { ToggleWingsOut(); }
-
-// DOWN = Wings IN
-void buttonDOWN_pressed() { ToggleWingsIn(); }
-
-// RIGHT =
-void buttonRIGHT_pressed() {
-  (Hang = false), (WingsLeft = false), (WingsRight = false);
+void buttonUP_pressed() {
+  Wings = true;
 }
 
-// LEFT =
+// DOWN = Wings IN
+void buttonDOWN_pressed() {
+  Wings = false;
+}
+// RIGHT =
+//void buttonRIGHT_pressed(); 
+
+// LEFT = Hang on the Horizontal Bar
 void buttonLEFT_pressed() {
-  if (Clock > 75000 || EndgameButtonCount == 4) {
-    ToggleHang(), ToggleBlocker();
+ if (Clock > 75000 || EndgameButtonCount == 4) {
+    if (HangToggle == 1) {
+      HangToggle = 2;
+      Lift = true;
+    } else {
+      Lift = false;
+      ControllerLock = false;
+      Hang_PTO = true;
+      LDSpeed = 100;
+      RDSpeed = 100;
+      sleep(200);
+      while(LTDrive.velocity(pct)>2){
+        sleep (10);
+      }
+      Hang_PTO = false;
+      LDSpeed = -10;
+      RDSpeed = -10;
+      sleep (100);
+      LDSpeed = 0;
+      RDSpeed = 0;
+      HangDriveSpeedGoal = 0;
+      HangDriveSpeedToggle = 1;
+
+
+    }
   } else {
     EndgameButtonCount += 1;
   }
@@ -755,34 +863,40 @@ void brain_pressed() {
   }
 }
 
-// B =
+// B =Shooter Select/ Flywheel Speed Up
 void buttonB_pressed() {
-  if (Clock > 75000 || EndgameButtonCount == 4) {
-    ToggleLowHang();
-  } else {
-    EndgameButtonCount += 1;
+  if(FCState == 0) {
+  Puncher_Flywheel = 1;
+  }
+  else {
+  Flywheel_State += -1;
   }
 }
-
 // X =
-void buttonX_pressed() {
-  CataModeState();
-  if (XToggle) {
-    CataMode = true;
-    XToggle = false;
-  } else {
-    (CataMode = false), (XToggle = true);
+void buttonX_pressed(){ 
+Flywheel_State += 1;
+}
+
+// Y = Shooter Selector/Low Hang
+void buttonY_pressed(){
+  if(FCState == 0){
+    Puncher_Flywheel = 2;
+  }
+  else {
+    if (Clock > 75000 || EndgameButtonCount == 4) {
+    Kick_Arm = true;
+    sleep(50);
+    Low_Hang = true;
+    } 
+    else {
+    EndgameButtonCount += 1;
+    }
   }
 }
 
-// Y = Butt Boost
-void buttonY_pressed() {
-  if (Clock > 75000 || EndgameButtonCount == 4) {
-    ToggleButtHang();
-  } else {
-    EndgameButtonCount += 1;
-  }
-}
+// A =
+
+
 
 void buttonLup_pressed2() {}
 
@@ -813,62 +927,65 @@ void buttonRup_released2() {}
 /////////////////////////////////////////////////////////////
 
 // AutoDistance = Speed,Distance,Heading
-// AutoTurn = Speed,Heading,Accuracy(Room for error, if its within x of the target, you're good.)
+// AutoTurn = Speed,Heading,Accuracy(Room for error, if its within x of the
+// target, you're good.)
 void CloseSideWP() {
-  SetGyro(-40);
-  ToggleWingsOut();
-  sleep(200);
-  AutoTurn(80, -90, 10);
-  ToggleWingsIn();
-  sleep(500);
-  AutoTurn(50, -260, 3);
-  CatapultState = 2;
-  MotorStop = 1;
+  SetGyro(30);
+  Intake_Hold = false;
+  ToggleKick_Arm();
+  sleep(300);
+  AutoTurn(60, 5, 2);
+  ToggleKick_Arm();
   IntakeSpeed = -100;
-  AutoDistance(60, 20, -260);
-  AutoDistance(60, 15, -270);
+  AutoDistance(60, 38, 5);
 }
 
 void CloseSideElims() {
-  SetGyro(-40);
-  ToggleLeftWing();
-  sleep(200);
-  AutoTurn(80, -90, 10);
-  ToggleLeftWing();
-  CatapultState = 2;
-  MotorStop = 1;
-  AutoTurn(80, 25, 2);
+  SetGyro(30);
+  Intake_Hold = false;
+  ToggleKick_Arm();
+  sleep(100);
+  AutoTurn(60, 0, 2);
+  ToggleKick_Arm();
+  sleep(100);
+  AutoTurn(60, -65, 2);
+  AutoDistance(80, 40, -65);
+  AutoDistance(60, 9, -65);
+  AutoTurn(60, -90, 2);
   IntakeSpeed = 100;
-  AutoDistance(80, 47, 17);
-  sleep(400);
-  IntakeSpeed = 0;
-  AutoDistance(-60, 10, 17);
-  AutoTurn(80, 90, 5);
-  AutoTillHop(60, 90);
-  IntakeSpeed = -100;
-  sleep(750);
-  IntakeSpeed = 0;
-  DriveTorque = 100;
-  AutoDistance(-50, 13, 90);
-  AutoTurn(50, 220, 3);
-  DriveTorque = 20;
-  AutoDistance(50, 20, 220);
-  AutoTillStop(40, 220);
-  DriveTorque = 100;
-  AutoTurn(50, 150, 3);
-  AutoDistance(50, 6, 145);
-  IntakeSpeed = -100;
-  AutoDistance(60, 28, 80);
-  // ToggleLeftWing();
-  // AutoTurn(50, 125, 2);
   sleep(500);
   IntakeSpeed = 0;
-  AutoDistance(-60, 20, 80);
-  AutoTurn(60, -100, 2);
-  DriveTorque = 25;
-  AutoTillStop(40, -110);
-  MotorStop = 1;
-  CatapultState = 1;
+  AutoDistance(-60, 3, -90);
+  AutoTurn(60, 0, 2);
+  Wings = true;
+  AutoDistance(80, 20, 0);
+  AutoDistance(-80, 10, 0);
+  Wings = false;
+  AutoTurn(60, 120, 3);
+  AutoDistance(80, 50, 120);
+  DriveTorque = 20;
+  AutoTillStop(60, 120);
+  DriveTorque = 100;
+  AutoTurn(60, 15, 2);
+  AutoDistance(80, 15, 0);
+  IntakeSpeed = -100;
+  AutoDistance(60, 17, 0);
+  sleep(500);
+  AutoDistance(-80, 40, 0);
+  /*SetGyro(30);
+  Intake_Hold = false;
+  ToggleKick_Arm();
+  AutoTurn(60, 0, 2);
+  ToggleKick_Arm();
+  IntakeSpeed = 100;
+  AutoDistance(60, 38, 0);
+  AutoTurn(60, -65, 2);
+  AutoDistance(60, 50, -65);
+  AutoTurn(60, -90, 2);
+  IntakeSpeed =-100;
+  AutoDistance(60, 4, -85);
+  sleep(1000);
+  IntakeSpeed = 0;*/
 }
 
 void AutonSkills() {
@@ -878,12 +995,13 @@ void AutonSkills() {
   CatapultState = 1;
   AutoTurn(60, -10, 2);
   AutoDistance(30, 3, -15);
-  sleep(2);
+  sleep(37000);
   AutoDistance(-80, 3, -20);
-  AutoTurn(60, 25, 2);
-  AutoDistance(-80, 14, 20);
+  AutoTurn(60, 20, 2);
+  AutoDistance(-80, 18, 20);
+  AutoTurn(60, 0, 2);
   AutoDistance(-80, 50, 0);
-  AutoDistance(-60, 23, 0);
+  AutoDistance(-60, 19, 0);
   IntakeSpeed = -100;
   AutoTurn(60, -50, 2);
   AutoDistance(-80, 35, -50);
@@ -895,37 +1013,43 @@ void AutonSkills() {
   AutoTurn(60, 25, 2);
   AutoDistance(80, 46, 25);
   AutoTurn(60, 160, 2);
-  ToggleWingsOut();
+  //ToggleWingsOut();
   DriveTorque = 100;
   AutoDistance(70, 30, 170);
   sleep(100);
-  ToggleWingsIn();
+  //ToggleWingsIn();
   AutoDistance(-80, 30, 180);
   AutoTurn(60, 90, 2);
   AutoDistance(80, 7, 90);
   AutoTurn(60, 180, 2);
-  ToggleWingsOut();
+  //ToggleWingsOut();
   AutoDistance(70, 30, 180);
   sleep(100);
-  ToggleWingsIn();
+  //ToggleWingsIn();
   AutoDistance(-80, 25, 180);
   AutoTurn(60, 90, 3);
-  AutoDistance(80, 12, 90);
+  AutoDistance(80, 5, 90);
   AutoTurn(60, 200, 3);
-  ToggleWingsOut();
-  AutoDistance(70, 30, 190);
+  //ToggleWingsOut();
+  AutoDistance(70, 30, 200);
   sleep(100);
-  ToggleWingsIn();
-  AutoDistance(-80, 5, 190);
+  //ToggleWingsIn();
+  AutoDistance(-80, 5, 200);
   AutoTurn(60, 90, 2);
- 
+  AutoDistance(70, 50, 100);
+  AutoTurn(60, 0, 2);
+  //ToggleBlocker();
+  //ToggleHang();
+  DriveTorque = 10;
+  AutoTillStop(40, 0);
+  //ToggleHang();
 }
 
 void CloseSideBlock() {
   SetGyro(0);
-  ToggleLeftWing();
+  //ToggleLeftWing();
   sleep(500);
-  ToggleLeftWing();
+  //ToggleLeftWing();
   CatapultState = 2;
   MotorStop = 1;
   AutoDistance(80, 45, 0);
@@ -958,7 +1082,7 @@ void FarSideWP() {
   // IntakeSpeed = 0;
   AutoDistance(70, 2, 10);
   AutoTurn(60, 90, 3);
-  ToggleLeftWing();
+  //ToggleLeftWing();
   IntakeSpeed = 0;
   /*sleep(50);
   AutoDistance(70, 15, 90);
@@ -1013,7 +1137,12 @@ void autonomous() {
     AutonSkills();
   }
 }
-void buttonA_pressed() { autonomous(); }
+
+void buttonA_pressed(){
+//  autonomous();
+  ToggleKick_Arm();
+
+}
 /////////////////////////////////////////////////////////////
 //                                                         //
 //              ##        ##                               //
@@ -1031,24 +1160,20 @@ void buttonA_pressed() { autonomous(); }
 /////////////////////////////////////////////////////////////
 
 void usercontrol() {
-  MotorStop = 1;
   ResetTimer();
   IntakeTaskRunning = true;
   AutonRunning = false;
   DriveTrainHold = false;
-  WingsLeft = false;
-  WingsRight = false;
+  Wings =false;
   DriveTorque = 100;
   FCState = 4;
   IntakeSpeed = 0;
-
-  if (Clock >= 140000) {
-    ButtHang = false;
-  }
+  Intake_Hold = false;
+  
 
   while (1) {
     sleep(10);
-    if (AutonRunning == false) {
+    if (AutonRunning == false && ControllerLock == true) {
       ControllerAxis1 = Controller1.Axis1.value();
       if (abs(ControllerAxis1) < 15) {
         ControllerAxis1 = 0;
@@ -1082,10 +1207,10 @@ int main() {
   task taskBrainScreen(BrainScreenTask);
   task taskCntrlrScreen(CntrlrScreenTask);
   task taskSensors(SensorsTask);
-  task taskDrive(DriveTask);
-  task taskCatapult(CatapultTask);
-  task taskTriballDetect(TriballDetectTask);
+  task taskDrive(DriveTask); 
+  task taskHang(HangTask);
   task taskIntake(IntakeTask);
+ // task taskShooter(ShooterTask);
   Brain.Screen.pressed(brain_pressed);
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
@@ -1097,7 +1222,7 @@ int main() {
   Controller1.ButtonR2.released(buttonRdown_released);
   Controller1.ButtonUp.pressed(buttonUP_pressed);
   Controller1.ButtonDown.pressed(buttonDOWN_pressed);
-  Controller1.ButtonRight.pressed(buttonRIGHT_pressed);
+  //Controller1.ButtonRight.pressed(buttonRIGHT_pressed);
   Controller1.ButtonLeft.pressed(buttonLEFT_pressed);
   Controller1.ButtonA.pressed(buttonA_pressed);
   Controller1.ButtonB.pressed(buttonB_pressed);
