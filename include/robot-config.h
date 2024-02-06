@@ -8,7 +8,7 @@ extern motor LFDrive;
 extern controller Controller1;
 extern motor RTDrive;
 extern motor LTDrive;
-extern inertial Inertial13;
+extern inertial Inertial11;
 extern motor RBDrive;
 extern motor LBDrive;
 extern motor PuncherRight;
