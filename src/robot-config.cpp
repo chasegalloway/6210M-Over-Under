@@ -18,13 +18,12 @@ inertial Inertial11 = inertial(PORT11);
 motor RBDrive = motor(PORT1, ratio6_1, false);
 motor LBDrive = motor(PORT2, ratio6_1, true);
 motor PuncherRight = motor(PORT7, ratio18_1, false);
-motor Intake = motor(PORT9, ratio18_1, true);
-digital_out Lift = digital_out(Exp.A);
+motor Intake = motor(PORT21, ratio18_1, true);
 digital_out Kick_Arm = digital_out(Brain.ThreeWirePort.C);
 digital_out Wings = digital_out(Brain.ThreeWirePort.D);
-digital_out Low_Hang = digital_out(Exp.B);
-digital_out Hang_PTO = digital_out(Exp.F);
-digital_out Intake_Hold = digital_out(Exp.E);
+digital_out Low_Hang = digital_out(Brain.ThreeWirePort.E);
+digital_out High_Hang = digital_out(Brain.ThreeWirePort.F);
+digital_out Intake_Hold = digital_out(Brain.ThreeWirePort.G);
 motor PuncherLeft = motor(PORT8, ratio18_1, true);
 digital_out LeftBackWing = digital_out(Brain.ThreeWirePort.A);
 
