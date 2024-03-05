@@ -397,7 +397,7 @@ int SensorsTask() {
   int x = 100;
   while (1) {
     sleep(5);
-    // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES
+    // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES(400 RPM)
     AvgDriveMtrDist = (LFDrive.position(deg) + RTDrive.position(deg)) * 0.0095 *
                       21.5 / 20; // SCALED TO INCHES
     // GET AVERAGE MOTOR SPEED PERCENTAGE
@@ -907,8 +907,8 @@ void CloseSideElims() {
 }
 
 void AutonSkills() {
-  IntakeSpeed = 100;
   SetGyro(52);
+  IntakeSpeed = 100;
   AutoTillStop(-70, 90);
   IntakeSpeed = 0;
   AutoDistance(60, 7, 90);
@@ -925,25 +925,45 @@ void AutonSkills() {
   Kick_Arm = false;
   AutoDistance(70, 44, 0);
   Wings = true;
-  AutoTurn(60, -90, 3);
+  AutoTurn(60, -90, 4);
   AutoDistance(80, 63, -88);
   AutoTurn(60, 0, 4);
-  AutoTillHop(60,0);
+  AutoTillHop(60, 0);
   sleep(100);
   Wings = false;
   AutoDistance(-80, 25, 0);
-  AutoTurn(60, 25, 3);
-  AutoDistance(-80, 20, 25);
-  AutoTurn(60, -35, 4);
-  AutoDistance(80, 30, -25);
-  AutoTurn(60, 0, 3);
+  AutoTurn(60, 28, 3);
+  AutoDistance(-80, 20, 28);
+  AutoTurn(60, -43, 4);
+  AutoDistance(80, 25, -32);
+  AutoTurn(60, -3, 3);
   Wings = true;
-  AutoDistance(80, 70, 0);
-  
+  AutoDistance(80, 73, 0);
+  Wings = false; //Remove later
+  AutoTurn(60, 36, 2);
+  AutoTillStop(80, 87);
+  AutoDistance(-70, 8, 90);
+  sleep(50);
+  AutoTillStop(80, 90);
+  AutoDistance(-70, 8, 90);
+  AutoTurn(60, 178, 5);
+  AutoDistance(80, 42, 172);
+  Wings = true; //Remove later
+  AutoTurn(60, 58, 5);
+  AutoTillStop(70, 0);
+  AutoDistance(-70, 15, 5);
+  AutoTillStop(70, 5);
+  Wings = false;
+  AutoDistance(-70, 38, 45);
+  AutoTurn(60, -90, 5);
+  Kick_Arm  = true;
+  LeftBackWing = true;
+  AutoDistance(-70, 28, -90);
+  AutoTurn(60,  -185, 3);
+  AutoTillStop(-70, -180);
 
 
-  
-  
+
   //Working Auto
   /*IntakeSpeed = 100;
   Intake_Hold = true;
