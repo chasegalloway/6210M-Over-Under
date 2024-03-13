@@ -690,7 +690,7 @@ void AutoDrive(int Forward, int RightTurn) {
 void ToggleKick_Arm() { Kick_Arm.set(!Kick_Arm); }
 void ToggleHigh_Hang() { High_Hang.set(!High_Hang); }
 void ToggleLowHang() { Low_Hang.set(!Low_Hang); }
-void ToggleShooter() { (!ShooterToggle); }
+void ToggleShooter() { }
 
 // L-UP =
 void buttonLup_pressed(){
@@ -698,7 +698,7 @@ void buttonLup_pressed(){
   PuncherRight.spin(forward);
   PuncherLeft.setVelocity(60, pct);
   PuncherRight.setVelocity(60, pct);
-  ShooterToggle = !ShooterToggle;
+//  ShooterToggle = !ShooterToggle;
 
 
 }
@@ -907,7 +907,7 @@ void CloseSideElims() {
 }
 
 void AutonSkills() {
-  SetGyro(52);
+   SetGyro(52);
   IntakeSpeed = 100;
   AutoTillStop(-70, 90);
   IntakeSpeed = 0;
@@ -926,7 +926,7 @@ void AutonSkills() {
   AutoDistance(70, 44, 0);
   Wings = true;
   AutoTurn(60, -90, 4);
-  AutoDistance(80, 63, -88);
+  AutoDistance(80, 65, -88);
   AutoTurn(60, 0, 4);
   AutoTillHop(60, 0);
   sleep(100);
@@ -943,7 +943,7 @@ void AutonSkills() {
   AutoTurn(60, 36, 2);
   AutoTillStop(80, 87);
   AutoDistance(-70, 8, 90);
-  sleep(50);
+  sleep(150);
   AutoTillStop(80, 90);
   AutoDistance(-70, 8, 90);
   AutoTurn(60, 178, 5);
@@ -958,27 +958,17 @@ void AutonSkills() {
   AutoTurn(60, -90, 5);
   Kick_Arm  = true;
   LeftBackWing = true;
-  AutoDistance(-70, 28, -90);
+  AutoDistance(-70, 29, -90);
   AutoTurn(60,  -185, 3);
   AutoTillStop(-70, -180);
   Kick_Arm  = false;
   LeftBackWing = false;
-  AutoDistance(70, 40, -180);
+  AutoDistance(70, 36, -180);
   AutoTurn(60, -90, 3);
-  AutoDistance(70, 25, -90);
-  AutoTurn(60, -180, 3);
-  Kick_Arm  = true;
-  LeftBackWing = true;
-  AutoDistance(70, 20, -210);
-  Kick_Arm  = false;
-  LeftBackWing = false;
-  AutoTurn(60, -180, 3);
-  AutoDistance(70, 15, -90);
-  AutoTurn(60, -180, 3);
-  Kick_Arm  = true;
-  LeftBackWing = true;
-  AutoTillStop(-70, -180);
-
+  AutoDistance(-70, 18, -90);
+  AutoTurn(60, -228, 3);
+  AutoDistance(-70, 15, -228);
+  AutoDistance(70, 15, -228);
 
 
   //Working Auto
@@ -1133,19 +1123,19 @@ void FarSideWP(){
   AutoDistance(-70, 35, 0);
   AutoTurn(60, -30, 3);
   LeftBackWing = true;
-  AutoDistance(-60, 17, -30);
+  AutoDistance(-60, 14, -30);
   AutoTurn(45, -90, 3);
   sleep(75);
   LeftBackWing = false;
   AutoTurn(60, -80, 4);
-  IntakeSpeed = -100;
+  //IntakeSpeed = -100;
   AutoTillStop(-60, -80);
   IntakeSpeed = 100;
   AutoDistance(60, 8, -90 );
-  AutoTurn(60, -255, 3);
+  AutoTurn(60, -252, 3);
   sleep(75);
   IntakeSpeed = -100;
-  AutoTillStop(60, -260);
+  AutoTillStop(60, -255);
   AutoDistance(-60, 13, -265);
   AutoTurn(60, -340, 4);
   IntakeSpeed = 100;
@@ -1236,7 +1226,6 @@ void AutonSkill2(){
   AutoTurn(60, 0, 5);
 }
 
-
 /////////////////////////////////////////////////////////////
 //                                                         //
 //                    #####                                //
@@ -1257,9 +1246,8 @@ void autonomous() {
   AutoHappen = true;
   AutonRunning = true;
   DriveTrainHold = true;
-  AutonSkills();
- /*if (AutonNumber == 1) {
-    CloseSideWP();
+ if (AutonNumber == 1) {
+  AutonSkills(); //  CloseSideWP();
   } else if (AutonNumber == 2) {
     CloseSideElims();
   } else if (AutonNumber == 3) {
@@ -1270,11 +1258,11 @@ void autonomous() {
     FarSideElims();
   } else if (AutonNumber == 6) {
     AutonSkills();
-  }*/
+  }
 }
 
 void buttonA_pressed(){
-//ToggleKick_Arm();
+//  ToggleKick_Arm();
   autonomous();
 }
 
