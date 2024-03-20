@@ -15,12 +15,13 @@ extern motor PuncherRight;
 extern motor Intake;
 extern triport Exp;
 extern digital_out Kick_Arm;
-extern digital_out Wings;
+extern digital_out LeftWing;
 extern digital_out Low_Hang;
 extern digital_out High_Hang;
-extern digital_out Intake_Hold;
 extern motor PuncherLeft;
 extern digital_out LeftBackWing;
+extern distance DistanceSensor;
+extern digital_out RightWing;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

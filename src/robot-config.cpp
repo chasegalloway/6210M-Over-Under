@@ -20,12 +20,13 @@ motor LBDrive = motor(PORT2, ratio6_1, true);
 motor PuncherRight = motor(PORT7, ratio18_1, false);
 motor Intake = motor(PORT21, ratio18_1, true);
 digital_out Kick_Arm = digital_out(Brain.ThreeWirePort.C);
-digital_out Wings = digital_out(Brain.ThreeWirePort.D);
+digital_out LeftWing = digital_out(Brain.ThreeWirePort.D);
 digital_out Low_Hang = digital_out(Brain.ThreeWirePort.E);
 digital_out High_Hang = digital_out(Brain.ThreeWirePort.F);
-digital_out Intake_Hold = digital_out(Brain.ThreeWirePort.G);
 motor PuncherLeft = motor(PORT8, ratio18_1, true);
 digital_out LeftBackWing = digital_out(Brain.ThreeWirePort.A);
+distance DistanceSensor = distance(PORT10);
+digital_out RightWing = digital_out(Brain.ThreeWirePort.G);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
