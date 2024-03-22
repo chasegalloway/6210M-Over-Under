@@ -1,163 +1,6 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         12              
-// Intake               motor         21              
-// Kick_Arm             digital_out   C               
-// LeftWing             digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// RightWing            digital_out   G               
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Kick_Arm             digital_out   C               
-// LeftWing             digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// RightWing            digital_out   G               
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Exp                  triport       12              
-// Kick_Arm             digital_out   C               
-// LeftWing             digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// RightWing            digital_out   G               
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Exp                  triport       12              
-// Kick_Arm             digital_out   C               
-// LeftWing             digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Exp                  triport       12              
-// Kick_Arm             digital_out   C               
-// LeftWing             digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// Intake_Hold          digital_out   G               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Exp                  triport       12              
-// Kick_Arm             digital_out   C               
-// Wings                digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// Intake_Hold          digital_out   G               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// DistanceSensor       distance      10              
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// RFDrive              motor         5               
-// LFDrive              motor         6               
-// Controller1          controller                    
-// RTDrive              motor         3               
-// LTDrive              motor         4               
-// Inertial11           inertial      11              
-// RBDrive              motor         1               
-// LBDrive              motor         2               
-// PuncherRight         motor         7               
-// Intake               motor         21              
-// Exp                  triport       12              
-// Kick_Arm             digital_out   C               
-// Wings                digital_out   D               
-// Low_Hang             digital_out   E               
-// High_Hang            digital_out   F               
-// Intake_Hold          digital_out   G               
-// PuncherLeft          motor         8               
-// LeftBackWing         digital_out   A               
-// ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
 // RFDrive              motor         20              
 // LFDrive              motor         16              
 // Controller1          controller                    
@@ -248,7 +91,7 @@ int AutonSide = 1;
 int AutoGryoCorr = 0;
 int AutonNumber = 1;
 bool AutoHappen = false;
-int ToggleAuton = 1;
+int ToggleAuton = 0;
 
 ///////////////////////////////////////////////////////////////
 //                                                           //
@@ -316,6 +159,24 @@ void StopDriveMotors() {
   RDSpeed = 0;
   LDSpeed = 0;
   RDSpeed = 0;
+  sleep(5);
+}
+
+///////////////////////////////////////////////////////////////
+////////                                              /////////
+////////      FUNCTION FOR STOPPING All MOTORS        /////////
+////////                                              /////////
+///////////////////////////////////////////////////////////////
+void StopAllMotors() {
+  LFDrive.stop();
+  RFDrive.stop();
+  LTDrive.stop();
+  RTDrive.stop();
+  LBDrive.stop();
+  RBDrive.stop();
+  Intake.stop();
+  PuncherLeft.stop();
+  PuncherRight.stop();
   sleep(5);
 }
 
@@ -1133,7 +994,7 @@ void AutonSkills2(){
   AutoTillStop(-70, 90);
   IntakeSpeed = 0;
   AutoDistance(60, 7, 90);
-  AutoTurn(60, -26, 5);
+  AutoTurn(60, -26, 3);
   Kick_Arm = true;
   IntakeSpeed = -100;
   PuncherLeft.spin(forward);
@@ -1149,32 +1010,28 @@ void AutonSkills2(){
   AutoTurn(60, -90, 5);
   AutoDistance(90, 57, -88);
   AutoTurn(60, 0, 5);
-  AutoTillHop(80, 0); //uncomment later
-  //AutoDistance(80, 8, 0); //remove later
+  AutoTillHop(80, 0); 
   sleep(100);
   WingsIn();
   AutoDistance(-80, 25, 0);
   AutoTurn(60, 28, 5);
   AutoDistance(-80, 20, 28);
   AutoTurn(60, -43, 5);
-  AutoDistance(80, 16, -32); //(25) (Consider reducing distance here)
+  AutoDistance(80, 16, -32); 
   AutoTurn(60, -3, 5);
-//  WingsOut();
-  AutoDistance(80, 78, 0); //Run left lane (73) 
-//  WingsIn(); //Remove later
-  AutoTurn(60, 36, 2);
+  AutoDistance(80, 78, 0); //Run left lane
+  AutoTurn(60, 36, 3);
   RightWing = true;
   AutoTillStop(80, 82); //Hit left goal 1
   AutoDistance(-80, 8, 90);
   sleep(100);
-  AutoTurn(70, 90, 3);
+  AutoTurn(70, 90, 5);
   AutoTillStop(80, 90); //Hit left goal 2
   RightWing = false;
   AutoDistance(-80, 8, 90);
   AutoTurn(60, 178, 5);
   IntakeSpeed = 0;
   AutoDistance(80, 45, 172);
-  //Original Position of the wings
   RightWing = true;
   AutoTurn(60, 58, 5);
   LeftWing = true; //Wings that moved (Aiden G: done to prevent tri-balls being pushed to wrong places)
@@ -1185,19 +1042,19 @@ void AutonSkills2(){
   AutoDistance(-80, 36, 43);  
   AutoTurn(60, -90, 5); 
   LeftBackWing = true;
-  AutoDistance(-80, 29, -90); //Tun and reves to move tri=balls
+  AutoDistance(-80, 29, -90); //Turn and reverse to move triballs
   AutoTurn(60, -185, 5);
   Kick_Arm = true;
   AutoTillStop(-80, -180); //Reverse to middle
   Kick_Arm  = false;
   LeftBackWing = false;
-  AutoDistance(80, 36, -180); //Move turn and reverse to center tri-balls (Aiden G: I think we might consider re-evaluating this approach. It seems a bit wasteful)
-  AutoTurn(60, -90, 3);
+  AutoDistance(80, 36, -180); //Move turn and reverse to center triballs
+  AutoTurn(60, -90, 5);
   AutoDistance(-80, 18, -90); //Move to score center
-  AutoTurn(60, -235, 3);
+  AutoTurn(60, -235, 5);
   LeftBackWing = true;
   Kick_Arm = true;
-  AutoDistance(-80, 27, -235); //Reverse to center tri-balls
+  AutoDistance(-80, 27, -235); //Reverse to center triballs
   LeftBackWing = false;
   Kick_Arm = false;
   AutoDistance(80, 27, -235); 
@@ -1220,7 +1077,6 @@ void AutonSkills2(){
 
 void FarSideWP(){
   SetGyro(0);
-//  Intake_Hold = true;
   IntakeSpeed = 100;
   sleep(300);
   AutoDistance(-70, 35, 0);
@@ -1266,7 +1122,6 @@ void FarSideWP(){
 }
 void FarSideElims() {
   SetGyro(0);
- // Intake_Hold = false;
   IntakeSpeed = 100;
   sleep(500);
   IntakeSpeed = 0;
@@ -1327,8 +1182,10 @@ void autonomous() {
   }
 }
 
-
-
+void buttonA_pressed(){
+  ToggleKick_Arm();
+//  autonomous();
+}
 /////////////////////////////////////////////////////////////
 //                                                         //
 //              ##        ##                               //
@@ -1355,8 +1212,7 @@ void usercontrol() {
   DriveTorque = 100;
   FCState = 4;
   IntakeSpeed = 0;
- // Intake_Hold = true;
-  
+  StopAllMotors();
 
   while (1) {
     sleep(10);
@@ -1383,35 +1239,29 @@ void usercontrol() {
     }
   }
 }
-void buttonA_pressed(){
-  ToggleKick_Arm();
-//  autonomous();
-}
 
 void buttonB_pressed() {
-  AutonisRunning = false;
-    usercontrol();
+  usercontrol();
     
 
 }
 
 void buttonDOWN_pressed() {
-ToggleAuton += 1;
+  if (Clock < 15000) {
+    ToggleAuton += 1;
+  }
 }
 
-int FuckMyLife() {
-while(1){
-  sleep(5);
-  if(ToggleAuton == 2) {
-    autonomous();
-  } else if(ToggleAuton >= 3){
-    AutonisRunning = false;
-    usercontrol();
-    PuncherLeft.setVelocity(1, pct);
-    PuncherRight.setVelocity(1, pct);
+int DCAutonToggleTask() {
+  while(1) {
     sleep(10);
-    PuncherLeft.stop();
-    PuncherRight.stop();
+    if(ToggleAuton == 1 && Clock < 15000) { 
+      autonomous();
+    } else if(ToggleAuton == 2 && Clock < 15000) {
+      StopAllMotors();
+      sleep(5);
+      usercontrol();
+      ToggleAuton = 0;
     }
   }
 }
@@ -1431,9 +1281,7 @@ int main() {
   task taskDrive(DriveTask); 
   task taskHang(HangTask);
   task taskIntake(IntakeTask);
-  task taskFuckMyLife(FuckMyLife);
-  //task taskSafeGuard(SafeGuard);
-  //task taskShooter(ShooterTask);
+  task taskDCAutonToggle(DCAutonToggleTask);
   Brain.Screen.pressed(brain_pressed);
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
