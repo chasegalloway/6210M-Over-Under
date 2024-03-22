@@ -16,7 +16,6 @@
 #include "v5_vcs.h"
 
 #include "robot-config.h"
-#include "odom.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
