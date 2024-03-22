@@ -13,7 +13,6 @@ extern motor RBDrive;
 extern motor LBDrive;
 extern motor PuncherRight;
 extern motor Intake;
-extern triport Exp;
 extern digital_out Kick_Arm;
 extern digital_out LeftWing;
 extern digital_out Low_Hang;

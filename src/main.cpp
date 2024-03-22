@@ -9,6 +9,50 @@
 // Inertial11           inertial      11              
 // RBDrive              motor         1               
 // LBDrive              motor         2               
+// PuncherRight         motor         12              
+// Intake               motor         21              
+// Kick_Arm             digital_out   C               
+// LeftWing             digital_out   D               
+// Low_Hang             digital_out   E               
+// High_Hang            digital_out   F               
+// PuncherLeft          motor         8               
+// LeftBackWing         digital_out   A               
+// DistanceSensor       distance      10              
+// RightWing            digital_out   G               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         5               
+// LFDrive              motor         6               
+// Controller1          controller                    
+// RTDrive              motor         3               
+// LTDrive              motor         4               
+// Inertial11           inertial      11              
+// RBDrive              motor         1               
+// LBDrive              motor         2               
+// PuncherRight         motor         7               
+// Intake               motor         21              
+// Kick_Arm             digital_out   C               
+// LeftWing             digital_out   D               
+// Low_Hang             digital_out   E               
+// High_Hang            digital_out   F               
+// PuncherLeft          motor         8               
+// LeftBackWing         digital_out   A               
+// DistanceSensor       distance      10              
+// RightWing            digital_out   G               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// RFDrive              motor         5               
+// LFDrive              motor         6               
+// Controller1          controller                    
+// RTDrive              motor         3               
+// LTDrive              motor         4               
+// Inertial11           inertial      11              
+// RBDrive              motor         1               
+// LBDrive              motor         2               
 // PuncherRight         motor         7               
 // Intake               motor         21              
 // Exp                  triport       12              
@@ -198,13 +242,13 @@ bool ShooterToggle = false;
 
 // Auton Variables
 bool RedSide = true;
-bool AutonRunning = false;
+bool AutonisRunning = false;
 int AutonStep = 0;
 int AutonSide = 1;
 int AutoGryoCorr = 0;
 int AutonNumber = 1;
 bool AutoHappen = false;
-int BarDetect = (DistanceSensor.objectDistance(mm));
+int ToggleAuton = 1;
 
 ///////////////////////////////////////////////////////////////
 //                                                           //
@@ -418,38 +462,7 @@ int CntrlrScreenTask() {
     // Prints Catapult State to Controller
     Controller1.Screen.setCursor(2, 1);
     Controller1.Screen.clearLine(2);
-    if(Puncher_Flywheel == 1){
-      if(Flywheel_State == 9) {
-        Controller1.Screen.print ("Flywheel Speed: 100");
-      }
-      else if(Flywheel_State == 8) {
-        Controller1.Screen.print ("Flywheel Speed: 95");
-      }
-      else if(Flywheel_State == 7) {
-        Controller1.Screen.print ("Flywheel Speed: 90");
-      }
-      else if(Flywheel_State == 6) {
-        Controller1.Screen.print ("Flywheel Speed: 85");
-      }
-      else if(Flywheel_State == 5) {
-        Controller1.Screen.print ("Flywheel Speed 80");
-      }
-      else if(Flywheel_State == 4) {
-        Controller1.Screen.print ("Flywheel Speed 75");
-      }
-      else if(Flywheel_State == 3) {
-        Controller1.Screen.print ("Flywheel Speed 70");
-      }
-      else if(Flywheel_State == 2) {
-        Controller1.Screen.print ("Flywheel Speed 65");
-      }
-      else {
-        Controller1.Screen.print ("Flywheel Speed 60");
-      }
-    }
-    else {
-      Controller1.Screen.print ("Puncher");
-    }
+    Controller1.Screen.print(ToggleAuton); 
     // Prints Motor Temps to Controller
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
@@ -557,7 +570,7 @@ int SensorsTask() {
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
 
-int ShooterTask() {
+/*int ShooterTask() {
   if(ShooterToggle){
   PuncherLeft.spin(forward);
   PuncherRight.spin(forward);
@@ -569,7 +582,7 @@ int ShooterTask() {
     PuncherRight.stop();
   }
   return(0);
-}
+}*/
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -687,7 +700,7 @@ void AutoDistance(int Speed, double Distance, double Heading) {
   ResetDriveMotors();
   sleep(10);
   int RightTurnDiff;
-  while (fabs(AvgDriveMtrDist) < Distance) {
+  while ((fabs(AvgDriveMtrDist) < Distance) && AutonisRunning) { 
     RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
@@ -701,12 +714,12 @@ void AutoTillStop(int Speed, double Heading) {
   ResetTimer();
   sleep(10);
   int RightTurnDiff;
-  while (abs(SlowestDrive) > 3 || Clock < 500) {
+  while ((SlowestDrive > 3 || Clock < 500) && AutonisRunning) {
     RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
     sleep(10);
-  }
+    }
   StopDriveMotors();
 }
 
@@ -715,12 +728,13 @@ void AutoTillDistanceSensor(int Speed, double Heading) {
   ResetTimer();
   sleep(10);
   int RightTurnDiff;
-  while ((DistanceSensor.objectDistance(mm)) >= 45 ) {
+  while (((DistanceSensor.objectDistance(mm)) >= 45) && AutonisRunning) {
     RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
     sleep(10);
-  }
+    }
+
   StopDriveMotors();
 }
 
@@ -729,7 +743,7 @@ void AutoTillHop(int Speed, double Heading) {
   ResetTimer();
   sleep(10);
   int RightTurnDiff;
-  while (Inertial11.roll() > -10) {
+  while ((Inertial11.roll() > -10) && AutonisRunning) {
     RightTurnDiff = (Heading - Gyro1) * .65;
     LDSpeed = Speed + RightTurnDiff;
     RDSpeed = Speed - RightTurnDiff;
@@ -747,8 +761,8 @@ void AutoTurn(int Speed, int Heading, int Accuracy) {
   float lsp;
   float rsp;
   float scaling = .445;
-  while (fabs((abs(Heading) - fabs(Gyro1))) > Accuracy ||
-         fabs(LFDrive.velocity(pct)) > 2.5) {
+  while ((fabs(Heading - Gyro1) > Accuracy  ||
+         (fabs(LFDrive.velocity(pct)) > 2.5)) && AutonisRunning) {
     lsp = +(Heading - Gyro1) * scaling;
     if (fabs(lsp) < 2) {
       lsp = 2 * fabs(lsp) / lsp;
@@ -797,9 +811,14 @@ void AutoDrive(int Forward, int RightTurn) {
 void ToggleKick_Arm() { Kick_Arm.set(!Kick_Arm); }
 void ToggleHigh_Hang() { High_Hang.set(!High_Hang); }
 void ToggleLowHang() { Low_Hang.set(!Low_Hang); }
-void ToggleShooter() { }
+void ToggleLeftWing() { LeftWing.set(!LeftWing); }
+void ToggleRightWing() { RightWing.set(!RightWing); }
 void WingsOut() { LeftWing.set(true), RightWing.set(true);  }
 void WingsIn() { LeftWing.set(false), RightWing.set(false); }
+void BackWingsOut() { LeftWing.set(true), Kick_Arm.set(true);  }
+void BackWingsIn() { LeftBackWing.set(false), Kick_Arm.set(false); }
+void ToggleBackWings() {LeftBackWing.set(!LeftBackWing), Kick_Arm.set(!Kick_Arm); }
+
 
 // L-UP =
 void buttonLup_pressed(){
@@ -842,26 +861,23 @@ void buttonRdown_released() { IntakeSpeed = 0; }
 
 // UP = Wings OUT
 void buttonUP_pressed() {
-
-}
-
-// DOWN = Wings IN
-void buttonDOWN_pressed() {
-
-}
-// RIGHT =
-void buttonRIGHT_pressed() {
- // Intake_Hold = false;
-}
-
-// LEFT = Hang on the Horizontal Bar
-void buttonLEFT_pressed() {
  if (Clock > 75000 || EndgameButtonCount == 4) {
     ToggleHigh_Hang();
   } else {
     EndgameButtonCount += 1;
   }
   
+
+}
+
+// RIGHT =
+void buttonRIGHT_pressed() {
+ ToggleRightWing();
+}
+
+// LEFT = Hang on the Horizontal Bar
+void buttonLEFT_pressed() {
+  ToggleLeftWing();
 }
 
 // Brain Pressed =
@@ -891,15 +907,10 @@ void brain_pressed() {
 }
 
 // B =Shooter Select/ Flywheel Speed Up
-void buttonB_pressed() {
-  LeftBackWing = false;
-  Kick_Arm = false;
 
-}
 // X =
 void buttonX_pressed(){ 
-LeftBackWing = true;
-Kick_Arm = true;
+ToggleBackWings();
 }
 // Y = Shooter Selector/Low Hang
 void buttonY_pressed(){
@@ -1029,7 +1040,7 @@ void AutonSkills() {
   PuncherRight.spin(forward);
   PuncherLeft.setVelocity(60, percent);
   PuncherRight.setVelocity(60, percent);
-  sleep(2000);
+  sleep(2000); //20000 Milliseconds = 20 seconds :O
   PuncherLeft.setVelocity(0, percent);
   PuncherRight.setVelocity(0, percent);
   Kick_Arm = false;
@@ -1049,13 +1060,15 @@ void AutonSkills() {
   AutoDistance(80, 16, -32); //(25) (Consider reducing distance here)
   AutoTurn(60, -3, 5);
 //  WingsOut();
-  AutoDistance(80, 73, 0); //Run left lane (73) 
+  AutoDistance(80, 78, 0); //Run left lane (73) 
 //  WingsIn(); //Remove later
   AutoTurn(60, 36, 2);
   RightWing = true;
-  AutoTillStop(80, 82); //Hit left goal 1
+  AutoTillStop(80, 78); //Hit left goal 1
   AutoDistance(-80, 8, 90);
-  sleep(150);
+  RightWing = false;
+  AutoTurn(60, 90, 3);
+  sleep(100);
   AutoTillStop(80, 90); //Hit left goal 2
   RightWing = false;
   AutoDistance(-80, 8, 90);
@@ -1066,11 +1079,110 @@ void AutonSkills() {
   RightWing = true;
   AutoTurn(60, 58, 5);
   LeftWing = true; //Wings that moved (Aiden G: done to prevent tri-balls being pushed to wrong places)
+  IntakeSpeed = -100;
   AutoTillStop(80, 0); //Front left hit
   AutoDistance(-80, 15, 5);
   AutoTillStop(80, 5); //Front left hit 2
   WingsIn();
   AutoDistance(-80, 36, 45);  
+  AutoTurn(60, 90, 5);
+  AutoDistance(80, 30, 90); //Tun and reves to move tri=balls
+  IntakeSpeed = -100;
+  DriveTorque = 10;
+  AutoTillStop(70, 90);
+  AutoDistance(-70, 3, 90);
+  DriveTorque = 100;
+  AutoTurn(60, 180, 3);
+  LeftBackWing = true;
+  AutoDistance(-70, 5, 180);
+  AutoTurn(60, 70, 3);
+  Kick_Arm = true;
+  AutoDistance(-70, 20, 70);
+  LeftBackWing = false;
+  Kick_Arm = false;
+  AutoDistance(70, 5, 70);
+  AutoTurn(60, 180, 5);
+  AutoDistance(70, 18, 180);
+  AutoTurn(60, 270, 5);
+  AutoDistance(70, 23, 270);
+  AutoTurn(60, 360, 5);
+  WingsOut();
+  AutoTillStop(70, 360);
+  AutoDistance(-80, 6, 360);
+  WingsIn();
+  AutoTurn(60, 270, 4);
+  AutoDistance(-70, 46, 270); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
+//  AutoTurn(60, 0, 5);
+//  AutoDistance(70, 3, 0);
+  AutoTurn(60, 180, 4); 
+  Kick_Arm = true;
+  AutoTillStop(-70, 270);
+  
+  
+
+
+
+  
+}
+
+void AutonSkills2(){
+    //Auton Notes
+  //Aiden G: Scores very well down center but pushes tri balls far off to the right and de-scores in excess - 3/14/24 4:46 PM
+   SetGyro(52);
+  IntakeSpeed = 100;
+  AutoTillStop(-70, 90);
+  IntakeSpeed = 0;
+  AutoDistance(60, 7, 90);
+  AutoTurn(60, -26, 5);
+  Kick_Arm = true;
+  IntakeSpeed = -100;
+  PuncherLeft.spin(forward);
+  PuncherRight.spin(forward);
+  PuncherLeft.setVelocity(60, percent);
+  PuncherRight.setVelocity(60, percent);
+  sleep(22000);
+  PuncherLeft.setVelocity(0, percent);
+  PuncherRight.setVelocity(0, percent);
+  Kick_Arm = false;
+  AutoDistance(80, 40, 0);
+  WingsOut();
+  AutoTurn(60, -90, 5);
+  AutoDistance(90, 57, -88);
+  AutoTurn(60, 0, 5);
+  AutoTillHop(80, 0); //uncomment later
+  //AutoDistance(80, 8, 0); //remove later
+  sleep(100);
+  WingsIn();
+  AutoDistance(-80, 25, 0);
+  AutoTurn(60, 28, 5);
+  AutoDistance(-80, 20, 28);
+  AutoTurn(60, -43, 5);
+  AutoDistance(80, 16, -32); //(25) (Consider reducing distance here)
+  AutoTurn(60, -3, 5);
+//  WingsOut();
+  AutoDistance(80, 78, 0); //Run left lane (73) 
+//  WingsIn(); //Remove later
+  AutoTurn(60, 36, 2);
+  RightWing = true;
+  AutoTillStop(80, 82); //Hit left goal 1
+  AutoDistance(-80, 8, 90);
+  sleep(100);
+  AutoTurn(70, 90, 3);
+  AutoTillStop(80, 90); //Hit left goal 2
+  RightWing = false;
+  AutoDistance(-80, 8, 90);
+  AutoTurn(60, 178, 5);
+  IntakeSpeed = 0;
+  AutoDistance(80, 45, 172);
+  //Original Position of the wings
+  RightWing = true;
+  AutoTurn(60, 58, 5);
+  LeftWing = true; //Wings that moved (Aiden G: done to prevent tri-balls being pushed to wrong places)
+  AutoTillStop(80, 0); //Front left hit
+  AutoDistance(-80, 15, 5);
+  AutoTillStop(80, 5); //Front left hit 2
+  WingsIn();
+  AutoDistance(-80, 36, 43);  
   AutoTurn(60, -90, 5); 
   LeftBackWing = true;
   AutoDistance(-80, 29, -90); //Tun and reves to move tri=balls
@@ -1081,175 +1193,29 @@ void AutonSkills() {
   LeftBackWing = false;
   AutoDistance(80, 36, -180); //Move turn and reverse to center tri-balls (Aiden G: I think we might consider re-evaluating this approach. It seems a bit wasteful)
   AutoTurn(60, -90, 3);
-  AutoDistance(-80, 18, -90);
+  AutoDistance(-80, 18, -90); //Move to score center
   AutoTurn(60, -235, 3);
   LeftBackWing = true;
   Kick_Arm = true;
-  AutoDistance(-80, 25, -235); //Reverse to center tri-balls
+  AutoDistance(-80, 27, -235); //Reverse to center tri-balls
   LeftBackWing = false;
   Kick_Arm = false;
-  AutoDistance(80, 25, -235); //Move to score center
+  AutoDistance(80, 27, -235); 
   AutoTurn(60, -90, 5);
   AutoDistance(80, 20, -90);
   AutoTurn(60, 0, 5);
   WingsOut();
   AutoTillStop(80, 0);
   WingsIn();
-  AutoDistance(-80, 10, 0);
+  AutoDistance(-80, 12, 0);
   AutoTurn(60, -90, 4);
-  AutoDistance(-70, 54, -90); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
+  AutoDistance(-70, 58, -90); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
 //  AutoTurn(60, 0, 5);
 //  AutoDistance(70, 3, 0);
-  AutoTurn(60, 180, 4); 
+  AutoTurn(60, -180, 4); 
   Kick_Arm = true;
-  AutoTillStop(-70, -90);
-  
-  
-
-
-
-  //Working Auto
-  /*IntakeSpeed = 100;
-  Intake_Hold = true;
-  SetGyro(51);
-  AutoDistance(-60, 19, 56);
-  IntakeSpeed = 0;
-  AutoTurn(60, 90, 5);
-  AutoDistance(-60, 8, 90);
-  AutoDistance(60, 7, 90);
-  AutoTurn(60, -26, 3);
-  AutoDistance(-30, 1, -26);
-  Kick_Arm = true;
-  PuncherLeft.setVelocity(60, percent);
-  PuncherRight.setVelocity(60, percent);
-  PuncherLeft.spin(forward);
-  PuncherRight.spin(forward);
-  IntakeSpeed = -100;
-  sleep(28000);
-  PuncherLeft.stop();
-  PuncherRight.stop();
-  Kick_Arm = false;
-  IntakeSpeed = 0; 
-  AutoTurn(60, 32, 5);
-  IntakeSpeed = -100;
-  AutoDistance(80, 38, 30);
-  AutoTurn(60, 0, 5);
-  AutoDistance(80, 55, 0);
-  AutoTurn(60, -30, 4);
-  AutoDistance(80, 28, -30);
-  AutoTurn(60, -82, 3);
-  AutoTillStop(60, -85);
-  sleep(75); 
-  AutoDistance(-60, 10, -85);
-  sleep(75);
-  AutoTillStop(60, -82);
-  AutoDistance(-60, 12, -82);
-  sleep(75);
-  AutoTurn(60, -165, 4);
-  AutoDistance(60, 46, -165);
-  AutoTurn(60, -90, 3);
-  AutoDistance(70, 14, -90);
-  WingsOut();
-  AutoTurn(60, 0, 3);
-  IntakeSpeed = -100;
-  AutoTillStop(60, 0);
-  sleep(75);
-  WingsIn();
-  IntakeSpeed = 0;
-  AutoDistance(-70, 38, 0);
-  AutoTurn(60, -90, 3);
-  AutoDistance(60, 3, -90);
-  AutoTurn(60, 0, 4);
-  WingsOut(); 
-  AutoTillStop(60, 0);
-  IntakeSpeed = -100;
-  sleep(75);
-  WingsIn();
-  AutoDistance(-60, 38, 0);
-  AutoTurn(60, -90, 5);
-  AutoDistance(60, 8, -90);
-  AutoTurn(60, 17, 5);
-  WingsOut();
-  AutoTillStop(60, 15);
-  sleep(75);
-  WingsIn();
-  AutoDistance(-60, 30, 15);
-  AutoTurn(60, -50, 4);
-  AutoDistance(70, 48, -50);
-  WingsOut();
-  AutoTurn(60, 55, 2);
-  AutoDistance(70, 20, 55);
-  WingsIn();
-  AutoTurn(70, 90, 2);
-  AutoTillStop(70, 90);
-  sleep(150);
-  AutoDistance(-70, 10, 90);
-  AutoTillStop(70, 90);
-  sleep(150);
-  AutoDistance(-70, 10, 90);
-  AutoTillStop(70, 90);
-  sleep(150);
-  AutoDistance(-70, 13, 90);
-  AutoTurn(60, 55, 2);
-  AutoDistance(-70, 12, 55);
-  AutoTurn(60, 0, 5);
-  AutoDistance(-80, 40, 0);*/
-
-  /*Intake_Hold = true;
-  SetGyro(0);
-  AutoTurn(60, 45, 2);
-  AutoDistance(-70, 2, 45);  
-  AutoTurn(60, -15, 2);
-  AutoDistance(-30, 2, -30);
-  Kick_Arm = true;
-  PuncherLeft.setVelocity(60, percent);
-  PuncherRight.setVelocity(60, percent);
-  PuncherLeft.spin(forward);
-  PuncherRight.spin(forward);
-  IntakeSpeed = -100;
-  sleep(35000);
-  PuncherLeft.setVelocity(0, percent);
-  PuncherRight.setVelocity(0, percent);
-  IntakeSpeed = 0;
-  Kick_Arm = false;
-  AutoDistance(70, 2, -35);
-  AutoTurn(60, 47, 2);
-  AutoDistance(70, 16, 45);
-  AutoTurn(60, 0, 5);
-AutoDistance(80, 73, 0);
-AutoTurn(60, 125, 2);
-AutoDistance(-80, 30, 120); //Crash into right barricade/
-Intake_Hold = true;
-AutoDistance(80, 5, 90);
-AutoTurn(90, 90, 3);
-AutoDistance(-80, 7, 90);
-
-AutoDistance(70, 6, 90);
-AutoTurn(-90, -135, 4);
-//sleep(200);
-AutoDistance(70, 40, -140);//Manuever to front-right goal/
-WingsOut();
-AutoDistance(70, 41 , 0); //Crash into front-right goal/
-sleep(100);
-WingsIn();
-AutoDistance(-70, 15, 0); //Manuever to front-left goal/
-AutoTurn(90, -90, 5); //Turn left to get to front-left goal
-AutoDistance(90, 6, -90);
-AutoTurn(90, 20, 6); //Turn to face the goal again
-WingsOut();
-AutoDistance(70, 27, 20);//Crash into front-left goal/
-//sleep(200);
-AutoDistance(-70, 28, 0); //Manuever to left barricade/
-WingsIn();
-AutoTurn(60, -52, 5);
-AutoDistance(70, 62, -52);
-AutoTurn(60, -120, 2);
-AutoDistance(-90, 32, -120);
-AutoDistance(90, 12, -90);
-AutoDistance(70, 12, -90);
-AutoDistance(70, 14, -90);
-AutoTurn(80, -130, 5);
-AutoDistance(60, 30, -145);*/
+  AutoTillStop(-70, -278);
+  AutoDistance(-70, 5, -270);
 }
 
 void FarSideWP(){
@@ -1344,7 +1310,7 @@ void FarSideSafe(){
 
 void autonomous() {
   AutoHappen = true;
-  AutonRunning = true;
+  AutonisRunning = true;
   DriveTrainHold = true;
  if (AutonNumber == 1) {
     CloseSideWP();
@@ -1357,14 +1323,11 @@ void autonomous() {
   } else if (AutonNumber == 5) {
     FarSideElims();
   } else if (AutonNumber == 6) {
-    AutonSkills();
+    AutonSkills2();
   }
 }
 
-void buttonA_pressed(){
-  //ToggleKick_Arm();
-  autonomous();
-}
+
 
 /////////////////////////////////////////////////////////////
 //                                                         //
@@ -1385,7 +1348,7 @@ void buttonA_pressed(){
 void usercontrol() {
   ResetTimer();
   IntakeTaskRunning = true;
-  AutonRunning = false;
+  AutonisRunning = false;
   DriveTrainHold = false;
   LeftWing = false;
   RightWing = false;
@@ -1397,7 +1360,7 @@ void usercontrol() {
 
   while (1) {
     sleep(10);
-    if (AutonRunning == false && ControllerLock == true) {
+    if (AutonisRunning == false) {
       ControllerAxis1 = Controller1.Axis1.value();
       if (abs(ControllerAxis1) < 15) {
         ControllerAxis1 = 0;
@@ -1420,7 +1383,40 @@ void usercontrol() {
     }
   }
 }
+void buttonA_pressed(){
+  ToggleKick_Arm();
+//  autonomous();
+}
 
+void buttonB_pressed() {
+  AutonisRunning = false;
+    usercontrol();
+    
+
+}
+
+void buttonDOWN_pressed() {
+ToggleAuton += 1;
+}
+
+int FuckMyLife() {
+while(1){
+  sleep(5);
+  if(ToggleAuton == 2) {
+    autonomous();
+  } else if(ToggleAuton >= 3){
+    AutonisRunning = false;
+    usercontrol();
+    PuncherLeft.setVelocity(1, pct);
+    PuncherRight.setVelocity(1, pct);
+    sleep(10);
+    PuncherLeft.stop();
+    PuncherRight.stop();
+    }
+  }
+}
+  
+  
 
 /////////////////////////////////////////////////////////////
 ////////                                            /////////
@@ -1435,6 +1431,7 @@ int main() {
   task taskDrive(DriveTask); 
   task taskHang(HangTask);
   task taskIntake(IntakeTask);
+  task taskFuckMyLife(FuckMyLife);
   //task taskSafeGuard(SafeGuard);
   //task taskShooter(ShooterTask);
   Brain.Screen.pressed(brain_pressed);
