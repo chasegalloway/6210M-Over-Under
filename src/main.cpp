@@ -1001,7 +1001,7 @@ void AutonSkills2(){
   PuncherRight.spin(forward);
   PuncherLeft.setVelocity(60, percent);
   PuncherRight.setVelocity(60, percent);
-  sleep(22000);
+  sleep(23000);
   PuncherLeft.setVelocity(0, percent);
   PuncherRight.setVelocity(0, percent);
   Kick_Arm = false;
@@ -1069,9 +1069,10 @@ void AutonSkills2(){
   AutoDistance(-70, 58, -90); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
 //  AutoTurn(60, 0, 5);
 //  AutoDistance(70, 3, 0);
-  AutoTurn(60, -180, 4); 
+  AutoTurn(60, -225, 4); 
   Kick_Arm = true;
-  AutoTillStop(-70, -278);
+  AutoDistance(-70, 9, -225);
+  AutoTillStop(-70, -280);
   AutoDistance(-70, 5, -270);
 }
 
@@ -1247,20 +1248,19 @@ void buttonB_pressed() {
 }
 
 void buttonDOWN_pressed() {
-  if (Clock < 15000) {
     ToggleAuton += 1;
   }
-}
 
 int DCAutonToggleTask() {
   while(1) {
     sleep(10);
     if(ToggleAuton == 1 && Clock < 15000) { 
       autonomous();
-    } else if(ToggleAuton == 2 && Clock < 15000) {
+    } else if(ToggleAuton == 2) {
       StopAllMotors();
       sleep(5);
       usercontrol();
+      sleep(100);
       ToggleAuton = 0;
     }
   }
