@@ -8,7 +8,6 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
-triport Exp = triport(PORT12);
 motor RFDrive = motor(PORT5, ratio6_1, false);
 motor LFDrive = motor(PORT6, ratio6_1, true);
 controller Controller1 = controller(primary);
@@ -17,7 +16,7 @@ motor LTDrive = motor(PORT4, ratio18_1, false);
 inertial Inertial11 = inertial(PORT11);
 motor RBDrive = motor(PORT1, ratio6_1, false);
 motor LBDrive = motor(PORT2, ratio6_1, true);
-motor PuncherRight = motor(PORT7, ratio18_1, false);
+motor PuncherRight = motor(PORT12, ratio18_1, false);
 motor Intake = motor(PORT21, ratio18_1, true);
 digital_out Kick_Arm = digital_out(Brain.ThreeWirePort.C);
 digital_out LeftWing = digital_out(Brain.ThreeWirePort.D);
