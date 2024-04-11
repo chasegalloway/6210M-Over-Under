@@ -21,16 +21,16 @@ void odom_constants(){
 
 void CloseSideWP() {
   default_constants();
-  Inertial11.setRotation(30, deg);
-  Intake.setVelocity(100, pct);
+  SetGyro(30);
+  IntakeSpeed = 100;
   Kick_Arm = true;
-  wait(300, msec);
-  Intake.setVelocity(0, pct);
+  sleep(300);
+  IntakeSpeed = 0;
   chassis.turn_to_angle(-40);
-  wait(100, msec);
+  sleep(100);
   Kick_Arm = false;
   chassis.turn_to_angle(-10);
-  Intake.setVelocity(-100, pct);
+  IntakeSpeed = -100;
   chassis.drive_distance(24, 0, 12, 1.5, 0, 10, 0);
  // chassis.drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti)
   chassis.turn_to_angle(5);

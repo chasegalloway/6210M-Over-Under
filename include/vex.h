@@ -1,13 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/*                                                                            */
-/*    Module:       vex.h                                                     */
-/*    Author:       Vex Robotics                                              */
-/*    Created:      1 Feb 2019                                                */
-/*    Description:  Default header for V5 projects                            */
-/*                                                                            */
-/*----------------------------------------------------------------------------*/
-//
-
 #pragma once
 #include <math.h>
 #include <stdio.h>
@@ -24,6 +14,7 @@
 #include "JAR-Template/PID.h"
 #include "autons.h"
 #include "JAR-Template/drive.h"
+#include "main.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \
