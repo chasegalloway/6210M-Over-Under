@@ -1,38 +1,50 @@
+#include "vex.h"
+
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// RFDrive              motor         20              
-// LFDrive              motor         16              
-// Controller1          controller                    
-// RTDrive              motor         17              
-// LTDrive              motor         14              
-// Inertial13           inertial      13              
-// RBDrive              motor         19              
-// LBDrive              motor         15              
-// PuncherRight         motor         21              
-// Intake               motor         3               
-// Exp                  triport       5               
-// Lift                 digital_out   A               
-// Kick_Arm             digital_out   D               
-// Wings                digital_out   C               
-// Low_Hang             digital_out   B               
-// High_Hang             digital_out   F               
-// Intake_Hold          digital_out   E               
-// PuncherLeft          motor         6               
-// LeftBackWing         digital_out   G               
+// Controller1          controller
+// RFDrive              motor         5
+// LFDrive              motor         6
+// RTDrive              motor         3
+// LTDrive              motor         4
+// RBDrive              motor         1
+// LBDrive              motor         2
+// PuncherRight         motor         12
+// Intake               motor         21
+// PuncherLeft          motor         8
+// Inertial11           inertial      11
+// Kick_Arm             digital_out   C
+// LeftWing             digital_out   D
+// Low_Hang             digital_out   E
+// High_Hang            digital_out   F
+// LeftBackWing         digital_out   A
+// Distance_Sensor      distance      10
+// RightWing            digital_out   G
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
-
-#include "vex.h"
 using namespace vex;
-vex::competition Competition;
+competition Competition;
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////               GLOBAL VARIABLES               /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+/*---------------------------------------------------------------------------*/
+/*                             VEXcode Config                                */
+/*                                                                           */
+/*  Before you do anything else, start by configuring your motors and        */
+/*  sensors using the V5 port icon in the top right of the screen. Doing     */
+/*  so will update robot-config.cpp and robot-config.h automatically, so     */
+/*  you don't have to. Ensure that your motors are reversed properly. For    */
+/*  the drive, spinning all motors forward should drive the robot forward.   */
+/*---------------------------------------------------------------------------*/
 
+/*---------------------------------------------------------------------------*/
+/*                             JAR-Template Config                           */
+/*                                                                           */
+/*  Where all the magic happens. Follow the instructions below to input      */
+/*  all the physical constants and values for your robot. You should         */
+/*  already have configured your robot manually with the sidebar configurer. */
+/*---------------------------------------------------------------------------*/
+
+// Variables(#1)
 // Controller Variables
 int FCState = 0;
 int ControllerAxis1;
@@ -51,6 +63,7 @@ int FastestDrive;
 float TriBallThere;
 int HangToggle = 1;
 int HangDriveSpeedToggle = 0;
+
 // Drive Train Variables
 int LDSpeed = 0;
 int RDSpeed = 0;
@@ -60,7 +73,6 @@ float TurnConstant = 1;
 int HangDriveSpeed = 0;
 int HangDriveSpeedGoal = 0;
 bool ControllerLock = true;
-
 
 // Intake Variables
 bool IntakeTaskRunning = true;
@@ -93,38 +105,17 @@ int AutonNumber = 1;
 bool AutoHappen = false;
 int ToggleAuton = 0;
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//           ##########                                      //
-//           ##                                              //
-//           ##                                              //
-//           #########                                       //
-//           ##                                              //
-//           ##                                              //
-//           ##                                              //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////              FUNCTION TO SLEEP               /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Basic Functions(#2)
+// Sleep
 void sleep(int sleepmsec) { task::sleep(sleepmsec); }
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////           FUNCTION FOR TIMER RESET           /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Resetting Timer
 void ResetTimer() {
   Brain.resetTimer();
   sleep(5);
 }
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////           FUNCTION FOR GYRO RESET            /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Gyro Stuff
 void ResetGyro() {
   Inertial11.setRotation(0, deg);
   sleep(5);
@@ -134,11 +125,7 @@ void SetGyro(int Heading) {
   sleep(5);
 }
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////  FUNCTION FOR RESETING DRIVE MOTOR ENCODERS  /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Resetting Motor Encoder Positions
 void ResetDriveMotors() {
   LFDrive.resetPosition();
   RFDrive.resetPosition();
@@ -149,11 +136,7 @@ void ResetDriveMotors() {
   sleep(5);
 }
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////      FUNCTION FOR STOPPING DRIVE MOTORS      /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Stopping Motors
 void StopDriveMotors() {
   LDSpeed = 0;
   RDSpeed = 0;
@@ -162,11 +145,6 @@ void StopDriveMotors() {
   sleep(5);
 }
 
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////      FUNCTION FOR STOPPING All MOTORS        /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
 void StopAllMotors() {
   LFDrive.stop();
   RFDrive.stop();
@@ -180,23 +158,103 @@ void StopAllMotors() {
   sleep(5);
 }
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//           #########         ###                           //
-//           ##      ##      ##   ##                         //
-//           ##      ##     ##     ##                        //
-//           #########     ###########                       //
-//           ##            ##       ##                       //
-//           ##            ##       ##                       //
-//           ##            ##       ##                       //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////      FUNCTION FOR PREPARING FOR AUTON        /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
-void pre_auton() {
-  // PRINT TO BRIAN SCREEN "Pre Auton"
+Drive chassis(
+
+    // Specify your drive setup below. There are eight options:
+    // ZERO_TRACKER_NO_ODOM, ZERO_TRACKER_ODOM, TANK_ONE_ENCODER,
+    // TANK_ONE_ROTATION, TANK_TWO_ENCODER, TANK_TWO_ROTATION,
+    // HOLONOMIC_TWO_ENCODER, and HOLONOMIC_TWO_ROTATION For example, if you are
+    // not using odometry, put ZERO_TRACKER_NO_ODOM below:
+    ZERO_TRACKER_ODOM,
+
+    // Add the names of your Drive motors into the motor groups below, separated
+    // by commas, i.e. motor_group(Motor1,Motor2,Motor3). You will input whatever
+    // motor names you chose when you configured your robot using the sidebar
+    // configurer, they don't have to be "Motor1" and "Motor2".
+
+    // Left Motors:
+    motor_group(LFDrive, LTDrive, LBDrive),
+
+    // Right Motors:
+    motor_group(RFDrive, RTDrive, RBDrive),
+
+    // Specify the PORT NUMBER of your inertial sensor, in PORT format (i.e.
+    // "PORT1", not simply "1"):
+    PORT11,
+
+    // Input your wheel diameter. (4" omnis are actually closer to 4.125"):
+    3.25,
+
+    // External ratio, must be in decimal, in the format of input teeth/output
+    // teeth. If your motor has an 84-tooth gear and your wheel has a 60-tooth
+    // gear, this value will be 1.4. If the motor drives the wheel directly, this
+    // value is 1:
+    0.65,
+
+    // Gyro scale, this is what your gyro reads when you spin the robot 360
+    // degrees. For most cases 360 will do fine here, but this scale factor can
+    // be very helpful when precision is necessary.
+    360,
+
+    /*---------------------------------------------------------------------------*/
+    /*                                  PAUSE! */
+    /*                                                                           */
+    /*  The rest of the drive constructor is for robots using POSITION TRACKING.
+     */
+    /*  If you are not using position tracking, leave the rest of the values as
+     */
+    /*  they are. */
+    /*---------------------------------------------------------------------------*/
+
+    // If you are using ZERO_TRACKER_ODOM, you ONLY need to adjust the FORWARD
+    // TRACKER CENTER DISTANCE.
+
+    // FOR HOLONOMIC DRIVES ONLY: Input your drive motors by position. This is
+    // only necessary for holonomic drives, otherwise this section can be left
+    // alone. LF:      //RF:
+    PORT1, -PORT2,
+
+    // LB:      //RB:
+    PORT3, -PORT4,
+
+    // If you are using position tracking, this is the Forward Tracker port (the
+    // tracker which runs parallel to the direction of the chassis). If this is a
+    // rotation sensor, enter it in "PORT1" format, inputting the port below. If
+    // this is an encoder, enter the port as an integer. Triport A will be a "1",
+    // Triport B will be a "2", etc.
+    3,
+
+    // Input the Forward Tracker diameter (reverse it to make the direction
+    // switch):
+    2.75,
+
+    // Input Forward Tracker center distance (a positive distance corresponds to
+    // a tracker on the right side of the robot, negative is left.) For a zero
+    // tracker tank drive with odom, put the positive distance from the center of
+    // the robot to the right side of the drive. This distance is in inches:
+    -2,
+
+    // Input the Sideways Tracker Port, following the same steps as the Forward
+    // Tracker Port:
+    1,
+
+    // Sideways tracker diameter (reverse to make the direction switch):
+    -2.75,
+
+    // Sideways tracker center distance (positive distance is behind the center
+    // of the robot, negative is in front):
+    5.5
+
+);
+
+int current_auton_selection = 0;
+bool auto_started = false;
+
+void pre_auton(void) {
+  // Initializing Robot Configuration. DO NOT REMOVE!
+  vexcodeInit();
+  default_constants();
+
   FCState = 0;
   Brain.Screen.clearScreen();
   Brain.Screen.printAt(320, 200, "Pre Auton");
@@ -207,34 +265,18 @@ void pre_auton() {
   sleep(100);
   LeftWing.set(false);
   RightWing.set(false);
-  //Intake_Hold.set(false);
+  // Intake_Hold.set(false);
   Low_Hang.set(false);
- 
+
   Kick_Arm.set(false);
   High_Hang.set(false);
   Controller1.Screen.clearScreen();
   LeftBackWing.set(false);
   // SET FIELD CONTROL STATE
   FCState = 1;
-
- 
 }
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//          ############     ########                        //
-//               ##          ##      ##                      //
-//               ##          ##      ##                      //
-//               ##          ########                        //
-//               ##          ##      ##                      //
-//               ##          ##      ##                      //
-//               ##          ########                        //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////     TASK TO PRINT DATA TO BRAIN'S SCREEN     /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Print Data to the Brain Screen
 int BrainScreenTask() {
   while (1) {
     sleep(100);
@@ -246,72 +288,31 @@ int BrainScreenTask() {
     Brain.Screen.printAt(1, 60, "Avg Motor Dist: %4.2f   ", AvgDriveMtrDist);
     Brain.Screen.printAt(1, 100, "Gyro: %5.2f    ", Gyro1);
     Brain.Screen.printAt(1, 140, "Clock: %d    ", Clock);
-    Brain.Screen.printAt(1, 170, "       ");
     Brain.Screen.printAt(370, 20, "Axis1: %d", ControllerAxis1);
     Brain.Screen.printAt(370, 40, "Axis2: %d", ControllerAxis2);
     Brain.Screen.printAt(370, 60, "Axis3: %d", ControllerAxis3);
     Brain.Screen.printAt(370, 80, "Axis4: %d", ControllerAxis4);
-    Brain.Screen.printAt(320, 110, "Reflect: %3.2f  ");
-    Brain.Screen.printAt(320, 150, "PotR: %3.2f   ");
-    // Brain.Screen.printAt(320, 170, "RingDumperROT: %5.2f   ");
 
-    if (AutonNumber == 1) {
-      Brain.Screen.printAt(1, 210, "Auton: Close Side WP");
-      Brain.Screen.setFillColor(red);
-    } else if (AutonNumber == 2) {
-      Brain.Screen.printAt(1, 210, "Auton: Close Side Elims");
-      Brain.Screen.setFillColor(blue);
-    } else if (AutonNumber == 3) {
-      Brain.Screen.printAt(1, 210, "Auton: Far Side Safe");
-      Brain.Screen.setFillColor("#008000");
-    } else if (AutonNumber == 4) {
-      Brain.Screen.printAt(1, 210, "Auton: Far Side WP");
-      Brain.Screen.setFillColor("#403e39");
-    } else if (AutonNumber == 5) {
-      Brain.Screen.printAt(1, 210, "Auton: Far Side Elims");
-      Brain.Screen.setFillColor(purple);
-    } else if (AutonNumber == 6) {
-      Brain.Screen.printAt(1, 210, "Auton: Skills");
-      Brain.Screen.setFillColor("#fc9e05");
-    } else if (AutonNumber == 7) {
-      Brain.Screen.printAt(1, 210, "Auton: None");
-      Brain.Screen.setFillColor(black);
+    if (FCState == 0) {
+      Brain.Screen.printAt(320, 200, "Pre Auton");
     }
-  }
-
-  if (FCState == 0) {
-    Brain.Screen.printAt(320, 200, "Pre Auton");
-  }
-  if (FCState == 1) {
-    Brain.Screen.printAt(320, 200, "Pre Auton Done");
-  }
-  if (FCState == 2) {
-    Brain.Screen.printAt(320, 200, "Autonomous");
-    Brain.Screen.printAt(320, 220, "Step %d", AutonStep);
-  }
-  if (FCState == 3) {
-    Brain.Screen.printAt(320, 200, "Autonomous Done");
-  }
-  if (FCState == 4) {
-    Brain.Screen.printAt(320, 200, "Driver");
+    if (FCState == 1) {
+      Brain.Screen.printAt(320, 200, "Pre Auton Done");
+    }
+    if (FCState == 2) {
+      Brain.Screen.printAt(320, 200, "Autonomous");
+      Brain.Screen.printAt(320, 220, "Step %d", AutonStep);
+    }
+    if (FCState == 3) {
+      Brain.Screen.printAt(320, 200, "Autonomous Done");
+    }
+    if (FCState == 4) {
+      Brain.Screen.printAt(320, 200, "Driver");
+    }
   }
 }
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//          ############      #######                        //
-//               ##         ##                               //
-//               ##         ##                               //
-//               ##         ##                               //
-//               ##         ##                               //
-//               ##         ##                               //
-//               ##           #######                        //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////  TASK TO PRINT DATA TO Controller'S SCREEN   /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Print Data to the Controller
 int CntrlrScreenTask() {
 
   Controller1.Screen.clearScreen();
@@ -319,11 +320,10 @@ int CntrlrScreenTask() {
     sleep(50);
     // Prints Initrial Heading to Controller
     Controller1.Screen.setCursor(1, 1);
-    Controller1.Screen.print("Gyro: %3.0f  ", Inertial11.heading());
-    // Prints Catapult State to Controller
-    Controller1.Screen.setCursor(2, 1);
-    Controller1.Screen.clearLine(2);
-    Controller1.Screen.print(ToggleAuton); 
+    // Controller1.Screen.print("Gyro: %3.0f  ", Inertial11.heading());
+    Controller1.Screen.print(chassis.clamped_drive_output); // temp debugging display
+    Controller1.Screen.setCursor(2, 1);                     // |
+    Controller1.Screen.print(chassis.clamped_heading_output);//\/
     // Prints Motor Temps to Controller
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);
@@ -345,35 +345,21 @@ int CntrlrScreenTask() {
   }
 }
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//          ############     ########                        //
-//               ##         ##                               //
-//               ##         ##                               //
-//               ##          ########                        //
-//               ##                 ##                       //
-//               ##                 ##                       //
-//               ##          ########                        //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////       TASK TO READ VALUES FROM SENSORS       /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
+// Read values from sensors
 int SensorsTask() {
   int x = 100;
   while (1) {
     sleep(5);
-    // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES(400 RPM)
-    AvgDriveMtrDist = (LFDrive.position(deg) + RTDrive.position(deg)) * 0.0095 *
-                      21.5 / 20; // SCALED TO INCHES
-    // GET AVERAGE MOTOR SPEED PERCENTAGE
+    // Get motor encoder values and scale them to rough inches (450 rpm)
+    AvgDriveMtrDist = (LFDrive.position(deg) + RTDrive.position(deg)) *
+                      0.01235 * 21.5 / 20; // scaled to rough inches
+    // Get the average motor speed in percent
     AvgDriveMtrSpeed = (LFDrive.velocity(pct) + RTDrive.velocity(pct)) * .5;
 
-    // GET GYRO VALUE
+    // Get gyro value
     Gyro1 = Inertial11.rotation(deg);
 
-    // GET SLOWEST DRIVE MOTOR SPEED
+    // Get slowest drive motor
     x = fabs(RFDrive.velocity(pct));
     if (x > fabs(LFDrive.velocity(pct))) {
       x = fabs(LFDrive.velocity(pct));
@@ -410,56 +396,12 @@ int SensorsTask() {
     }
     FastestDrive = abs(x);
 
-    // GET BRAIN CLOCK MSEC
+    // Get brain clock in msec
     Clock = Brain.timer(msec);
   }
 }
 
-/////////////////////////////////////////////////////////////
-//                                                         //
-//          ############      #######                      //
-//               ##         ##                             //
-//               ##         ##                             //
-//               ##         ##                             //
-//               ##         ##                             //
-//               ##         ##                             //
-//               ##          ########                      //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////            TASK FOR Shooter                /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
-
-/*int ShooterTask() {
-  if(ShooterToggle){
-  PuncherLeft.spin(forward);
-  PuncherRight.spin(forward);
-  PuncherLeft.setVelocity(60, pct);
-  PuncherRight.setVelocity(60, pct);
-  }
-  else{
-    PuncherLeft.stop();
-    PuncherRight.stop();
-  }
-  return(0);
-}*/
-
-/////////////////////////////////////////////////////////////
-//                                                         //
-//              ############         ##                    //
-//                   ##              ##                    //
-//                   ##              ##                    //
-//                   ##              ##                    //
-//                   ##              ##                    //
-//                   ##              ##                    //
-//                   ##              ##                    //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////           TASK FOR INTAKE                  /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
+//Intake Task
 int IntakeTask() {
   Intake.spin(forward);
   while (1) {
@@ -468,23 +410,8 @@ int IntakeTask() {
   }
 }
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//          ############     ########                        //
-//               ##          ##      ##                      //
-//               ##          ##       ##                     //
-//               ##          ##       ##                     //
-//               ##          ##       ##                     //
-//               ##          ##      ##                      //
-//               ##          ########                        //
-//                                                           //
-///////////////////////////////////////////////////////////////
-////////                                              /////////
-////////             TASK FOR DRIVE MOTOR             /////////
-////////                                              /////////
-///////////////////////////////////////////////////////////////
-
-int DriveTask() {
+// Task for Drive Motors
+/*int DriveTask() {
   while (1) {
     if (DriveTrainHold) {
       LFDrive.setStopping(hold);
@@ -518,262 +445,72 @@ int DriveTask() {
     
     sleep(6);
   }
-}
-
-int HangTask() {
- while(1){
-  sleep(5);
-    if(HangDriveSpeedToggle == 1) {
-    
-    LDSpeed = (HangDriveSpeedGoal - Inertial11.orientation(roll, degrees));
-    RDSpeed = (HangDriveSpeedGoal - Inertial11.orientation(roll, degrees));
-    
-   }
-  }
-}
-
-/*int SafeGuard() {
-  if(Lift){
-    WingsIn();
-    Kick_Arm = false;
-    LeftBackWing = false;
-  }
-  return(0);
 }*/
-/////////////////////////////////////////////////////////////
-//                                                         //
-//           #########        ###                          //
-//           ##             ##   ##                        //
-//           ##            ##     ##                       //
-//           ########     ###########                      //
-//           ##           ##       ##                      //
-//           ##           ##       ##                      //
-//           ##           ##       ##                      //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////          FUNCTION FOR AUTO DISTANCE        /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
-/* If you want to keep spinning after drive do 1xxx = Speed (xxx being
-the speed you want) */
-void AutoDistance(int Speed, double Distance, double Heading) {
-  ResetDriveMotors();
-  sleep(10);
-  int RightTurnDiff;
-  while ((fabs(AvgDriveMtrDist) < Distance) && AutonisRunning) { 
-    RightTurnDiff = (Heading - Gyro1) * .65;
-    LDSpeed = Speed + RightTurnDiff;
-    RDSpeed = Speed - RightTurnDiff;
-    sleep(10);
-  }
-  StopDriveMotors();
-}
-
-void AutoTillStop(int Speed, double Heading) {
-  ResetDriveMotors();
-  ResetTimer();
-  sleep(10);
-  int RightTurnDiff;
-  while ((SlowestDrive > 3 || Clock < 500) && AutonisRunning) {
-    RightTurnDiff = (Heading - Gyro1) * .65;
-    LDSpeed = Speed + RightTurnDiff;
-    RDSpeed = Speed - RightTurnDiff;
-    sleep(10);
-    }
-  StopDriveMotors();
-}
-
-void AutoTillDistanceSensor(int Speed, double Heading) {
-  ResetDriveMotors();
-  ResetTimer();
-  sleep(10);
-  int RightTurnDiff;
-  while (((DistanceSensor.objectDistance(mm)) >= 45) && AutonisRunning) {
-    RightTurnDiff = (Heading - Gyro1) * .65;
-    LDSpeed = Speed + RightTurnDiff;
-    RDSpeed = Speed - RightTurnDiff;
-    sleep(10);
-    }
-
-  StopDriveMotors();
-}
-
-void AutoTillHop(int Speed, double Heading) {
-  ResetDriveMotors();
-  ResetTimer();
-  sleep(10);
-  int RightTurnDiff;
-  while ((Inertial11.roll() > -10) && AutonisRunning) {
-    RightTurnDiff = (Heading - Gyro1) * .65;
-    LDSpeed = Speed + RightTurnDiff;
-    RDSpeed = Speed - RightTurnDiff;
-    sleep(10);
-  }
-  StopDriveMotors();
-}
-
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////          FUNCTION FOR AUTO TURN            /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
-void AutoTurn(int Speed, int Heading, int Accuracy) {
-  float lsp;
-  float rsp;
-  float scaling = .445;
-  while ((fabs(Heading - Gyro1) > Accuracy  ||
-         (fabs(LFDrive.velocity(pct)) > 2.5)) && AutonisRunning) {
-    lsp = +(Heading - Gyro1) * scaling;
-    if (fabs(lsp) < 2) {
-      lsp = 2 * fabs(lsp) / lsp;
-    }
-    LDSpeed = lsp;
-    rsp = -(Heading - Gyro1) * scaling;
-    if (fabs(rsp) < 2) {
-      rsp = 2 * fabs(rsp) / rsp;
-    }
-    RDSpeed = rsp;
-    sleep(5);
-  }
-
-  StopDriveMotors();
-  sleep(10);
-}
-
-///////////////////////////////////////////////////////////////
-////////                                            ///////////
-////////           FUNCTION FOR AUTO-DRIVE          ///////////
-////////                                            ///////////
-///////////////////////////////////////////////////////////////
-void AutoDrive(int Forward, int RightTurn) {
-  LDSpeed = Forward - RightTurn;
-  RDSpeed = Forward + RightTurn;
-  sleep(5);
-}
-
-/////////////////////////////////////////////////////////////
-//                                                         //
-//                ########                                 //
-//                ##      ##                               //
-//                ##      ##                               //
-//                ########                                 //
-//                ##      ##                               //
-//                ##      ##                               //
-//                ########                                 //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////            FUNCTION FOR BUTTONS            /////////
-////////                                            ///////// 
-/////////////////////////////////////////////////////////////
 
 
+// Buttons
 void ToggleKick_Arm() { Kick_Arm.set(!Kick_Arm); }
 void ToggleHigh_Hang() { High_Hang.set(!High_Hang); }
 void ToggleLowHang() { Low_Hang.set(!Low_Hang); }
 void ToggleLeftWing() { LeftWing.set(!LeftWing); }
 void ToggleRightWing() { RightWing.set(!RightWing); }
-void WingsOut() { LeftWing.set(true), RightWing.set(true);  }
+void WingsOut() { LeftWing.set(true), RightWing.set(true); }
 void WingsIn() { LeftWing.set(false), RightWing.set(false); }
-void BackWingsOut() { LeftWing.set(true), Kick_Arm.set(true);  }
+void BackWingsOut() { LeftWing.set(true), Kick_Arm.set(true); }
 void BackWingsIn() { LeftBackWing.set(false), Kick_Arm.set(false); }
-void ToggleBackWings() {LeftBackWing.set(!LeftBackWing), Kick_Arm.set(!Kick_Arm); }
+void ToggleBackWings() {
+  LeftBackWing.set(!LeftBackWing), Kick_Arm.set(!Kick_Arm);
+}
 
-
-// L-UP =
-void buttonLup_pressed(){
+// L-UP = Run Puncher
+void buttonLup_pressed() {
   PuncherLeft.spin(forward);
   PuncherRight.spin(forward);
   PuncherLeft.setVelocity(60, pct);
   PuncherRight.setVelocity(60, pct);
-
-
 }
 
+// L-DOWN = Front Wings Out
+void buttonLdown_pressed() { WingsOut(); }
 
-
-// L-DOWN =
-void buttonLdown_pressed() {
-  WingsOut();
-}
-// L-UP RELEASED =
+// L-UP RELEASED = Stop Puncher
 void buttonLup_released() {
   PuncherLeft.stop();
   PuncherRight.stop();
 }
 
-// L-DOWN RELEASED =
-void buttonLdown_released() {
-  WingsIn();
-}
+// L-DOWN RELEASED = Front Wings In
+void buttonLdown_released() { WingsIn(); }
 
-// R-UP = Intake UP
+// R-UP = Intake
 void buttonRup_pressed() { IntakeSpeed = 100; }
 
-// R-DOWN = Intake DOWN
+// R-DOWN = Outtake
 void buttonRdown_pressed() { IntakeSpeed = -100; }
 
-// R-UP RELEASED = Intake STOP
+// R-UP RELEASED = Stop Intake
 void buttonRup_released() { IntakeSpeed = 0; }
-
-// R-DOWN RELEASED = Intake STOP
 void buttonRdown_released() { IntakeSpeed = 0; }
 
-// UP = Wings OUT
+// UP = Toggle High Hang Endgame
 void buttonUP_pressed() {
- if (Clock > 75000 || EndgameButtonCount == 4) {
+  if (Clock > 75000 || EndgameButtonCount == 4) {
     ToggleHigh_Hang();
   } else {
     EndgameButtonCount += 1;
   }
-  
-
 }
 
-// RIGHT =
-void buttonRIGHT_pressed() {
- ToggleRightWing();
-}
+// RIGHT = Toggle Right Wing
+void buttonRIGHT_pressed() { ToggleRightWing(); }
 
-// LEFT = Hang on the Horizontal Bar
-void buttonLEFT_pressed() {
-  ToggleLeftWing();
-}
+// LEFT = Toggle Left Wing
+void buttonLEFT_pressed() { ToggleLeftWing(); }
 
-// Brain Pressed =
-void brain_pressed() {
-  if (AutonNumber == 1) {
-    // close side WP
-    AutonNumber = 2;
-  } else if (AutonNumber == 2) {
-    // close side Elims
-    AutonNumber = 3;
-  } else if (AutonNumber == 3) {
-    // close side Blocking
-    AutonNumber = 4;
-  } else if (AutonNumber == 4) {
-    // far side WP
-    AutonNumber = 5;
-  } else if (AutonNumber == 5) {
-    // far side Elims
-    AutonNumber = 6;
-  } else if (AutonNumber == 6) {
-    // skills
-    AutonNumber = 7;
-  } else if (AutonNumber == 7) {
-    // none
-    AutonNumber = 1;
-  }
-}
+// X = Toggle Back Wings
+void buttonX_pressed() { ToggleBackWings(); }
 
-// B =Shooter Select/ Flywheel Speed Up
-
-// X =
-void buttonX_pressed(){ 
-ToggleBackWings();
-}
-// Y = Shooter Selector/Low Hang
+// Y = Toggle Low Hang
 void buttonY_pressed(){
  if (Clock > 75000 || EndgameButtonCount == 4) {
     ToggleLowHang();
@@ -783,10 +520,7 @@ void buttonY_pressed(){
     }
   }
 
-// A = (found under Auton subfunctions)
-
-
-
+// Unused Buttons
 void buttonLup_pressed2() {}
 
 void buttonLdown_pressed2() {}
@@ -799,411 +533,59 @@ void buttonRdown_released2() {}
 
 void buttonRup_released2() {}
 
-/////////////////////////////////////////////////////////////
-//                                                         //
-//                    #####                                //
-//                   ##   ##                               //
-//                  ##     ##                              //
-//                 ###########                             //
-//                 ##       ##                             //
-//                 ##       ##                             //
-//                 ##       ##                             //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////           AUTONOMOUS SUBFUNCTIONS          /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
+void buttonB_pressed() {}
 
-// AutoDistance = Speed,Distance,Heading
-// AutoTurn = Speed,Heading,Accuracy(Room for error, if its within x of the
-// target, you're good.)
-void CloseSideWP() {
-  SetGyro(30);
-  IntakeSpeed = 100;
-  ToggleKick_Arm();
-  sleep(300);
-  IntakeSpeed = 0;
-  AutoTurn(60, -40, 2);
-  sleep(100);
-  ToggleKick_Arm();
-  AutoTurn(60, 14, 2);
+void buttonDOWN_pressed() {}
 
-  IntakeSpeed = -100;
-  AutoDistance(60, 27, 14);
-  AutoTurn(60, 5, 2);
-  AutoTillDistanceSensor(40, 0);
-}
-
-void CloseSideElims() {
-  SetGyro(30);
-  IntakeSpeed = 100;
-  ToggleKick_Arm();
-  sleep(100);
-  IntakeSpeed = 0;
-  AutoTurn(60, 5, 2);
-  ToggleKick_Arm();
-  sleep(200);
-  AutoTurn(60, -62, 2);
-  AutoDistance(80, 38, -62);
-  AutoDistance(60, 8, -62);
-  AutoTurn(60, -90, 2);
-  AutoDistance(60, 4, -90);
-  IntakeSpeed = 100;
-  sleep(600);
-  IntakeSpeed = 25;
-  AutoDistance(-40, 3, -90);
-  AutoTurn(60, 0, 2);
-  WingsOut();
-  AutoDistance(80, 18, 0);
-  AutoDistance(-80, 10, 0);
-  WingsIn();
-  sleep(200);
-  AutoTurn(60, 120, 3);
-  AutoDistance(80, 40, 120);
-  DriveTorque = 20;
-  AutoTillStop(60, 120);
-  DriveTorque = 100;
-  AutoTurn(60, 15, 2);
-  AutoDistance(80, 15, 0);
-  IntakeSpeed = -100;
-  AutoDistance(60, 17, 0);
-  sleep(500);
-  AutoDistance(-80, 35, 0);
-  /*SetGyro(30);
-  Intake_Hold = false;
-  ToggleKick_Arm();
-  AutoTurn(60, 0, 2);
-  ToggleKick_Arm();
-  IntakeSpeed = 100;
-  AutoDistance(60, 38, 0);
-  AutoTurn(60, -65, 2);
-  AutoDistance(60, 50, -65);
-  AutoTurn(60, -90, 2);
-  IntakeSpeed =-100;
-  AutoDistance(60, 4, -85);
-  sleep(1000);
-  IntakeSpeed = 0;*/
-}
-
-void AutonSkills() {
-  //Auton Notes
-  //Aiden G: Scores very well down center but pushes tri balls far off to the right and de-scores in excess - 3/14/24 4:46 PM
-   SetGyro(52);
-  IntakeSpeed = 100;
-  AutoTillStop(-70, 90);
-  IntakeSpeed = 0;
-  AutoDistance(60, 7, 90);
-  AutoTurn(60, -26, 5);
-  Kick_Arm = true;
-  IntakeSpeed = -100;
-  PuncherLeft.spin(forward);
-  PuncherRight.spin(forward);
-  PuncherLeft.setVelocity(60, percent);
-  PuncherRight.setVelocity(60, percent);
-  sleep(2000); //20000 Milliseconds = 20 seconds :O
-  PuncherLeft.setVelocity(0, percent);
-  PuncherRight.setVelocity(0, percent);
-  Kick_Arm = false;
-  AutoDistance(80, 40, 0);
-  WingsOut();
-  AutoTurn(60, -90, 5);
-  AutoDistance(90, 57, -88);
-  AutoTurn(60, 0, 5);
-  AutoTillHop(80, 0); //uncomment later
-  //AutoDistance(80, 8, 0); //remove later
-  sleep(100);
-  WingsIn();
-  AutoDistance(-80, 25, 0);
-  AutoTurn(60, 28, 5);
-  AutoDistance(-80, 20, 28);
-  AutoTurn(60, -43, 5);
-  AutoDistance(80, 16, -32); //(25) (Consider reducing distance here)
-  AutoTurn(60, -3, 5);
-//  WingsOut();
-  AutoDistance(80, 78, 0); //Run left lane (73) 
-//  WingsIn(); //Remove later
-  AutoTurn(60, 36, 2);
-  RightWing = true;
-  AutoTillStop(80, 78); //Hit left goal 1
-  AutoDistance(-80, 8, 90);
-  RightWing = false;
-  AutoTurn(60, 90, 3);
-  sleep(100);
-  AutoTillStop(80, 90); //Hit left goal 2
-  RightWing = false;
-  AutoDistance(-80, 8, 90);
-  AutoTurn(60, 178, 5);
-  IntakeSpeed = 0;
-  AutoDistance(80, 42, 172);
-  //Original Position of the wings
-  RightWing = true;
-  AutoTurn(60, 58, 5);
-  LeftWing = true; //Wings that moved (Aiden G: done to prevent tri-balls being pushed to wrong places)
-  IntakeSpeed = -100;
-  AutoTillStop(80, 0); //Front left hit
-  AutoDistance(-80, 15, 5);
-  AutoTillStop(80, 5); //Front left hit 2
-  WingsIn();
-  AutoDistance(-80, 36, 45);  
-  AutoTurn(60, 90, 5);
-  AutoDistance(80, 30, 90); //Tun and reves to move tri=balls
-  IntakeSpeed = -100;
-  DriveTorque = 10;
-  AutoTillStop(70, 90);
-  AutoDistance(-70, 3, 90);
-  DriveTorque = 100;
-  AutoTurn(60, 180, 3);
-  LeftBackWing = true;
-  AutoDistance(-70, 5, 180);
-  AutoTurn(60, 70, 3);
-  Kick_Arm = true;
-  AutoDistance(-70, 20, 70);
-  LeftBackWing = false;
-  Kick_Arm = false;
-  AutoDistance(70, 5, 70);
-  AutoTurn(60, 180, 5);
-  AutoDistance(70, 18, 180);
-  AutoTurn(60, 270, 5);
-  AutoDistance(70, 23, 270);
-  AutoTurn(60, 360, 5);
-  WingsOut();
-  AutoTillStop(70, 360);
-  AutoDistance(-80, 6, 360);
-  WingsIn();
-  AutoTurn(60, 270, 4);
-  AutoDistance(-70, 46, 270); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
-//  AutoTurn(60, 0, 5);
-//  AutoDistance(70, 3, 0);
-  AutoTurn(60, 180, 4); 
-  Kick_Arm = true;
-  AutoTillStop(-70, 270);
-  
-  
-
-
-
-  
-}
-
-void AutonSkills2(){
-    //Auton Notes
-  //Aiden G: Scores very well down center but pushes tri balls far off to the right and de-scores in excess - 3/14/24 4:46 PM
-   SetGyro(52);
-  IntakeSpeed = 100;
-  AutoTillStop(-70, 90);
-  IntakeSpeed = 0;
-  AutoDistance(60, 7, 90);
-  AutoTurn(60, -26, 3);
-  Kick_Arm = true;
-  IntakeSpeed = -100;
-  PuncherLeft.spin(forward);
-  PuncherRight.spin(forward);
-  PuncherLeft.setVelocity(60, percent);
-  PuncherRight.setVelocity(60, percent);
-  sleep(23000);
-  PuncherLeft.setVelocity(0, percent);
-  PuncherRight.setVelocity(0, percent);
-  Kick_Arm = false;
-  AutoDistance(80, 40, 0);
-  WingsOut();
-  AutoTurn(60, -90, 5);
-  AutoDistance(90, 57, -88);
-  AutoTurn(60, 0, 5);
-  AutoTillHop(80, 0); 
-  sleep(100);
-  WingsIn();
-  AutoDistance(-80, 25, 0);
-  AutoTurn(60, 28, 5);
-  AutoDistance(-80, 20, 28);
-  AutoTurn(60, -43, 5);
-  AutoDistance(80, 16, -32); 
-  AutoTurn(60, -3, 5);
-  AutoDistance(80, 78, 0); //Run left lane
-  AutoTurn(60, 36, 3);
-  RightWing = true;
-  AutoTillStop(80, 82); //Hit left goal 1
-  AutoDistance(-80, 8, 90);
-  sleep(100);
-  AutoTurn(70, 90, 5);
-  AutoTillStop(80, 90); //Hit left goal 2
-  RightWing = false;
-  AutoDistance(-80, 8, 90);
-  AutoTurn(60, 178, 5);
-  IntakeSpeed = 0;
-  AutoDistance(80, 45, 172);
-  RightWing = true;
-  AutoTurn(60, 58, 5);
-  LeftWing = true; //Wings that moved (Aiden G: done to prevent tri-balls being pushed to wrong places)
-  AutoTillStop(80, 0); //Front left hit
-  AutoDistance(-80, 15, 5);
-  AutoTillStop(80, 5); //Front left hit 2
-  WingsIn();
-  AutoDistance(-80, 36, 43);  
-  AutoTurn(60, -90, 5); 
-  LeftBackWing = true;
-  AutoDistance(-80, 29, -90); //Turn and reverse to move triballs
-  AutoTurn(60, -185, 5);
-  Kick_Arm = true;
-  AutoTillStop(-80, -180); //Reverse to middle
-  Kick_Arm  = false;
-  LeftBackWing = false;
-  AutoDistance(80, 36, -180); //Move turn and reverse to center triballs
-  AutoTurn(60, -90, 5);
-  AutoDistance(-80, 18, -90); //Move to score center
-  AutoTurn(60, -235, 5);
-  LeftBackWing = true;
-  Kick_Arm = true;
-  AutoDistance(-80, 27, -235); //Reverse to center triballs
-  LeftBackWing = false;
-  Kick_Arm = false;
-  AutoDistance(80, 27, -235); 
-  AutoTurn(60, -90, 5);
-  AutoDistance(80, 20, -90);
-  AutoTurn(60, 0, 5);
-  WingsOut();
-  AutoTillStop(80, 0);
-  WingsIn();
-  AutoDistance(-80, 12, 0);
-  AutoTurn(60, -90, 4);
-  AutoDistance(-70, 58, -90); //Move to far-right side of the goal (Aiden G: Consider going close to wall to catch more tri-balls)
-//  AutoTurn(60, 0, 5);
-//  AutoDistance(70, 3, 0);
-  AutoTurn(60, -225, 4); 
-  Kick_Arm = true;
-  AutoDistance(-70, 9, -225);
-  AutoTillStop(-70, -280);
-  AutoDistance(-70, 5, -270);
-}
-
-void FarSideWP(){
-  SetGyro(0);
-  IntakeSpeed = 100;
-  sleep(300);
-  AutoDistance(-70, 35, 0);
-  AutoTurn(60, -30, 3);
-  LeftBackWing = true;
-  AutoDistance(-60, 14, -30);
-  AutoTurn(45, -90, 3);
-  sleep(75);
-  LeftBackWing = false;
-  AutoTurn(60, -80, 4);
-  //IntakeSpeed = -100;
-  AutoTillStop(-60, -80);
-  IntakeSpeed = 100;
-  AutoDistance(60, 8, -90 );
-  AutoTurn(60, -252, 3);
-  sleep(75);
-  IntakeSpeed = -100;
-  AutoTillStop(60, -255);
-  AutoDistance(-60, 13, -265);
-  AutoTurn(60, -340, 4);
-  IntakeSpeed = 100;
-  AutoDistance(80, 49, -338);
-  sleep(250);
-  AutoTurn(60, -195, 4);
-  AutoDistance(70, 15, -197);
-  IntakeSpeed = -100;
-  sleep(400);
-  AutoTurn(60, -320, 4);
-  IntakeSpeed = 100;
-  AutoDistance(70, 23, -320);
-  sleep(400);
-  AutoTurn(60, -173, 4);
-  IntakeSpeed = -100;
-  WingsOut();
-  AutoDistance(70, 25, -173);
-  AutoTillStop(70, -173);
-  AutoDistance(-70, 20, -173);
-   WingsIn();
-
-
-  
-
-}
-void FarSideElims() {
-  SetGyro(0);
-  IntakeSpeed = 100;
-  sleep(500);
-  IntakeSpeed = 0;
-  AutoDistance(-70, 34, 0);
-  AutoTurn(50, -38, 2);
-  LeftBackWing = true;
-  AutoDistance(-40, 14, -38);
-  AutoTurn(50, -90, 2);
-  sleep(200);
-  LeftBackWing = false;
-  AutoTurn(50, -70, 2);
-  AutoDistance(-70, 15, -70);
-  AutoTurn(50, -90, 2);
-  AutoDistance(-70, 7, -90);
-}
-
-void FarSideSafe(){
-  SetGyro(0);
-  IntakeSpeed = 100;
-  sleep(400);
-  IntakeSpeed = 0;
-  AutoTillStop(60, 0);
-  AutoDistance(-60, 10, 0); 
-}
-
-/////////////////////////////////////////////////////////////
-//                                                         //
-//                    #####                                //
-//                   ##   ##                               //
-//                  ##     ##                              //
-//                 ###########                             //
-//                 ##       ##                             //
-//                 ##       ##                             //
-//                 ##       ##                             //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////          FEILD CONTROL AUTONOMOUS          /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
-
-void autonomous() {
-  AutoHappen = true;
-  AutonisRunning = true;
-  DriveTrainHold = true;
- if (AutonNumber == 1) {
-    CloseSideWP();
-  } else if (AutonNumber == 2) {
-    CloseSideElims();
-  } else if (AutonNumber == 3) {
-    FarSideSafe();
-  } else if (AutonNumber == 4) {
-    FarSideWP();
-  } else if (AutonNumber == 5) {
-    FarSideElims();
-  } else if (AutonNumber == 6) {
-    AutonSkills2();
+// Autonomous
+void autonomous(void) {
+  auto_started = true;
+  switch (current_auton_selection) {
+  case 0:
+    drive_test(); //drive_test(); // This is the default auton, if you don't select from the
+                  // brain.
+    break; // Change these to be your own auton functions in order to use the
+           // auton selector.
+  case 1: // Tap the screen to cycle through autons.
+    drive_test();
+    break;
+  case 2:
+    turn_test();
+    break;
+  case 3:
+    swing_test();
+    break;
+  case 4:
+    full_test();
+    break;
+  case 5:
+    odom_test();
+    break;
+  case 6:
+    tank_odom_test();
+    break;
+  case 7:
+    holonomic_odom_test();
+    break;
   }
 }
 
 void buttonA_pressed(){
-  ToggleKick_Arm();
-//  autonomous();
+//  ToggleKick_Arm();
+  autonomous();
 }
-/////////////////////////////////////////////////////////////
-//                                                         //
-//              ##        ##                               //
-//              ##        ##                               //
-//              ##        ##                               //
-//              ##        ##                               //
-//              ##        ##                               //
-//               ##      ##                                //
-//                 ######                                  //
-//                                                         //
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////           FUNCTION FOR USERCONTROL         /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
+/*---------------------------------------------------------------------------*/
+/*                                                                           */
+/*                              User Control Task                            */
+/*                                                                           */
+/*  This task is used to control your robot during the user control phase of */
+/*  a VEX Competition.                                                       */
+/*                                                                           */
+/*  You must modify the code to add your own robot specific commands here.   */
+/*---------------------------------------------------------------------------*/
 
-void usercontrol() {
+// User Control
+void usercontrol(void) {
   ResetTimer();
   IntakeTaskRunning = true;
   AutonisRunning = false;
@@ -1212,77 +594,42 @@ void usercontrol() {
   RightWing = false;
   DriveTorque = 100;
   FCState = 4;
-  IntakeSpeed = 0;
-  StopAllMotors();
 
+//  task taskDrive(DriveTask); 
   while (1) {
-    sleep(10);
-    if (AutonisRunning == false) {
-      ControllerAxis1 = Controller1.Axis1.value();
-      if (abs(ControllerAxis1) < 15) {
-        ControllerAxis1 = 0;
-      }
-      ControllerAxis2 = Controller1.Axis2.value();
-      if (abs(ControllerAxis2) < 15) {
-        ControllerAxis2 = 0;
-      }
-      ControllerAxis3 = Controller1.Axis3.value();
-      if (abs(ControllerAxis3) < 15) {
-        ControllerAxis3 = 0;
-      }
-      ControllerAxis4 = Controller1.Axis4.value();
-      if (abs(ControllerAxis4) < 15) {
-        ControllerAxis4 = 0;
-      }
+    // This is the main execution loop for the user control program.
+    // Each time through the loop your program should update motor + servo
+    // values based on feedback from the joysticks.
 
-      LDSpeed = ControllerAxis3 + ControllerAxis1;
-      RDSpeed = ControllerAxis3 - ControllerAxis1;
-    }
+    // ........................................................................
+    // Insert user code here. This is where you use the joystick values to
+    // update your motors, etc.
+    // ........................................................................
+
+    // Replace this line with chassis.control_tank(); for tank drive
+    // or chassis.control_holonomic(); for holo drive.
+    chassis.control_arcade();
+
+    wait(20, msec); // Sleep the task for a short amount of time to
+                    // prevent wasted resources.
   }
 }
 
-void buttonB_pressed() {
-  usercontrol();
-    
-
-}
-
-void buttonDOWN_pressed() {
-    ToggleAuton += 1;
-  }
-
-int DCAutonToggleTask() {
-  while(1) {
-    sleep(10);
-    if(ToggleAuton == 1 && Clock < 15000) { 
-      autonomous();
-    } else if(ToggleAuton == 2) {
-      StopAllMotors();
-      sleep(5);
-      usercontrol();
-      sleep(100);
-      ToggleAuton = 0;
-    }
-  }
-}
-  
-  
-
-/////////////////////////////////////////////////////////////
-////////                                            /////////
-////////         MAIN PROGRAM (START TASKS)         /////////
-////////                                            /////////
-/////////////////////////////////////////////////////////////
+//
+// Main will set up the competition functions and callbacks.
+//
 int main() {
+  // Set up callbacks for autonomous and driver control periods.
+  //Competition.autonomous(autonomous);
+  //Competition.drivercontrol(usercontrol);
+
+  // Run the pre-autonomous function.
   pre_auton();
   task taskBrainScreen(BrainScreenTask);
   task taskCntrlrScreen(CntrlrScreenTask);
   task taskSensors(SensorsTask);
-  task taskDrive(DriveTask); 
-  task taskHang(HangTask);
   task taskIntake(IntakeTask);
-  task taskDCAutonToggle(DCAutonToggleTask);
-  Brain.Screen.pressed(brain_pressed);
+  
   Controller1.ButtonL1.pressed(buttonLup_pressed);
   Controller1.ButtonL2.pressed(buttonLdown_pressed);
   Controller1.ButtonL1.released(buttonLup_released);
@@ -1299,4 +646,6 @@ int main() {
   Controller1.ButtonB.pressed(buttonB_pressed);
   Controller1.ButtonX.pressed(buttonX_pressed);
   Controller1.ButtonY.pressed(buttonY_pressed);
+
+
 }

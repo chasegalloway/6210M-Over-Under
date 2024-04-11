@@ -1,0 +1,3 @@
+Create multiple variables for drive_output and heading_output so they are not used so many times
+Print various variable values
+Check every instance of drive_max_voltage
