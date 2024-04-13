@@ -1,0 +1,7 @@
+Set all gains to zero (Kp=0, Ki=0, Kd=0).
+
+Increase Kp until the output of the loop oscillates, then the Kp should be set to approximately half of that value for a "quarter amplitude decay" type response.
+
+Then increase Ki until any offset is corrected in sufficient time for the process. However, too much Ki will cause instability.
+
+Finally, increase Kd, if required, until the loop is acceptably quick to reach its reference after a load disturbance. However, too much Kd will cause excessive response and overshoot. A fast PID loop tuning usually overshoots slightly to reach the setpoint more quickly; however, some systems cannot accept overshoot, in which case an over-damped closed-loop system is required, which will require a Kp setting significantly less than half that of the P setting causing oscillation.

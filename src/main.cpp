@@ -321,9 +321,11 @@ int CntrlrScreenTask() {
     // Prints Initrial Heading to Controller
     Controller1.Screen.setCursor(1, 1);
     // Controller1.Screen.print("Gyro: %3.0f  ", Inertial11.heading());
-    Controller1.Screen.print(chassis.clamped_drive_output); // temp debugging display
+    Controller1.Screen.print(chassis.leftVelocity); // temp debugging display
     Controller1.Screen.setCursor(2, 1);                     // |
-    Controller1.Screen.print(chassis.clamped_heading_output);//\/
+    Controller1.Screen.print(chassis.rightVelocity);//\/
+    Controller1.Screen.setCursor(2, 5);                     
+    Controller1.Screen.print(chassis.drive_output);
     // Prints Motor Temps to Controller
     Controller1.Screen.clearLine(3);
     Controller1.Screen.setCursor(3, 1);

@@ -21,17 +21,17 @@ void odom_constants(){
 
 void CloseSideWP() {
   default_constants();
-  SetGyro(30);
-  IntakeSpeed = 100;
+  // SetGyro(30);
+  // IntakeSpeed = 100;
   Kick_Arm = true;
-  sleep(300);
-  IntakeSpeed = 0;
-  chassis.turn_to_angle(-40);
-  sleep(100);
-  Kick_Arm = false;
-  chassis.turn_to_angle(-10);
-  IntakeSpeed = -100;
-  chassis.drive_distance(24, 0, 12, 1.5, 0, 10, 0);
+  // sleep(300);
+  // IntakeSpeed = 0;
+  // chassis.turn_to_angle(-40);
+  // sleep(100);
+  // Kick_Arm = false;
+  // chassis.turn_to_angle(-10);
+  // IntakeSpeed = -100;
+  //chassis.drive_distance(24, 0, 12, 1.5, 0, 10, 0);
  // chassis.drive_distance(float distance, float heading, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti)
   chassis.turn_to_angle(5);
   // AutoTillDistanceSensor(40, 0);
@@ -39,8 +39,7 @@ void CloseSideWP() {
 
 
 void drive_test(){
-  chassis.set_drive_constants_velocity(100, 1.5, 0, 10, 0);
-  chassis.drive_distance_velocity(40, 0, 100, 0);
+  chassis.drive_distance_chase(100, 30, 0);
   // chassis.drive_distance(12);
   // chassis.drive_distance(18);
   // chassis.drive_distance(-36);
@@ -60,12 +59,12 @@ void swing_test(){
 }
 
 void full_test(){
-  chassis.drive_distance(24);
-  chassis.turn_to_angle(-45);
-  chassis.drive_distance(-36);
-  chassis.right_swing_to_angle(-90);
-  chassis.drive_distance(24);
-  chassis.turn_to_angle(0);
+  // chassis.drive_distance(24);
+  // chassis.turn_to_angle(-45);
+  // chassis.drive_distance(-36);
+  // chassis.right_swing_to_angle(-90);
+  // chassis.drive_distance(24);
+  // chassis.turn_to_angle(0);
 }
 
 void odom_test(){
