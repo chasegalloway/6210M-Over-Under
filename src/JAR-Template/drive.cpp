@@ -161,34 +161,6 @@ void Drive::turn_to_angle(float angle, float turn_max_voltage, float turn_settle
   DriveR.stop(hold);
 }
 
-double integral = 0;
-double previous_error = 0;
-
-double kP = 0;
-double kI = 0;
-double kD = 0;
-
-void Drive::drive_distance_chase(int velocity, double distance, double heading) {
-  drive_distance_chase(velocity, distance, heading, drive_kp_chase, drive_ki_chase, drive_kd_chase);
-}
-
-void Drive::drive_distance_chase(int velocity, double distance, double heading, double drive_kp_chase, double drive_ki_chase, double drive_kd_chase) {
-  chassis.reset_drive_motors();
-  task::sleep(10);
-  double turn_difference_right;
-  while ((fabs(chassis.average_distance) < distance) /*&& AutonisRunning*/) { 
-    double error = heading -  chassis.gyro;
-    integral += error;
-    double derivative = error - previous_error;
-    turn_difference_right = kP * error + kI * integral + kD * derivative;
-    chassis.lspeed = velocity + turn_difference_right;
-    chassis.rspeed = velocity - turn_difference_right;
-    previous_error = error;
-    task::sleep(10);
-  }
-  chassis.stop_drive_motors();
-}
-
 void Drive::drive_distance(float distance){
   drive_distance(distance, desired_heading, drive_max_voltage, heading_max_voltage, drive_settle_error, drive_settle_time, drive_timeout, drive_kp, drive_ki, drive_kd, drive_starti, heading_kp, heading_ki, heading_kd, heading_starti);
 }

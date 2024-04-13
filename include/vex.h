@@ -15,6 +15,7 @@
 #include "autons.h"
 #include "JAR-Template/drive.h"
 #include "main.h"
+#include "chase/chase_drive.h"
 
 #define waitUntil(condition)                                                   \
   do {                                                                         \

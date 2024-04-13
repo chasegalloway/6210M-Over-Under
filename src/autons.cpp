@@ -39,7 +39,7 @@ void CloseSideWP() {
 
 
 void drive_test(){
-  chassis.drive_distance_chase(100, 30, 0);
+  chase.drive_distance_chase(100, 30, 0);
   // chassis.drive_distance(12);
   // chassis.drive_distance(18);
   // chassis.drive_distance(-36);

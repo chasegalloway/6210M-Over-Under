@@ -72,10 +72,6 @@ public:
   
   float desired_heading;
 
-  double drive_kp_chase;
-  double drive_ki_chase;
-  double drive_kd_chase;
-
   Drive(enum::drive_setup drive_setup, motor_group DriveL, motor_group DriveR, int gyro_port, float wheel_diameter, float wheel_ratio, float gyro_scale, int DriveLF_port, int DriveRF_port, int DriveLB_port, int DriveRB_port, int ForwardTracker_port, float ForwardTracker_diameter, float ForwardTracker_center_distance, int SidewaysTracker_port, float SidewaysTracker_diameter, float SidewaysTracker_center_distance);
 
   void drive_with_voltage(float leftVoltage, float rightVoltage);
@@ -109,36 +105,6 @@ public:
   void turn_to_angle(float angle, float turn_max_voltage);
   void turn_to_angle(float angle, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout);
   void turn_to_angle(float angle, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti);
-
-  void reset_drive_motors() {
-    LFDrive.resetPosition();
-    RFDrive.resetPosition();
-    LTDrive.resetPosition();
-    RTDrive.resetPosition();
-    LBDrive.resetPosition();
-    RBDrive.resetPosition();
-    task::sleep(5);
-  }
-
-
-  void stop_drive_motors() {
-    LFDrive.stop();
-    RFDrive.stop();
-    LTDrive.stop();
-    RTDrive.stop();
-    LBDrive.stop();
-    RBDrive.stop();
-    task::sleep(5);
-  }
-
-  int lspeed = 0;
-  int rspeed = 0;
-  double gyro = Inertial11.rotation(deg);
-
-  double average_distance = (LFDrive.position(deg) + RTDrive.position(deg)) * 0.0095 * 21.5 / 20;
-
-  void drive_distance_chase(int velocity, double distance, double heading);
-  void drive_distance_chase(int velocity, double distance, double heading, double drive_kp_chase, double drive_ki_chase, double drive_kd_chase);
 
   void drive_distance(float distance);
   void drive_distance(float distance, float heading);

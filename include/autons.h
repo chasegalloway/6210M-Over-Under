@@ -3,7 +3,11 @@
 
 class Drive;
 
+class Chase;
+
 extern Drive chassis;
+
+extern Chase chase;
 
 void default_constants();
 
