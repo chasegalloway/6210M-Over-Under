@@ -8,24 +8,24 @@ using code = vision::code;
 brain  Brain;
 
 // VEXcode device constructors
-motor RFDrive = motor(PORT5, ratio6_1, false);
-motor LFDrive = motor(PORT6, ratio6_1, true);
+motor RFDrive = motor(PORT11, ratio6_1, false);
+motor LFDrive = motor(PORT20, ratio6_1, true);
 controller Controller1 = controller(primary);
-motor RTDrive = motor(PORT3, ratio6_1, true);
-motor LTDrive = motor(PORT4, ratio18_1, false);
-inertial Inertial11 = inertial(PORT11);
-motor RBDrive = motor(PORT1, ratio6_1, false);
-motor LBDrive = motor(PORT2, ratio6_1, true);
-motor PuncherRight = motor(PORT12, ratio18_1, false);
+motor RMDrive = motor(PORT12, ratio6_1, false);
+motor LMDrive = motor(PORT19, ratio18_1, true);
+inertial Inertial15 = inertial(PORT15);
+motor RBDrive = motor(PORT13, ratio6_1, false);
+motor LBDrive = motor(PORT17, ratio6_1, true);
+motor Puncher = motor(PORT8, ratio18_1, true);
 motor Intake = motor(PORT21, ratio18_1, true);
-digital_out Kick_Arm = digital_out(Brain.ThreeWirePort.C);
+digital_out Kick_Arm = digital_out(Brain.ThreeWirePort.B);
 digital_out LeftWing = digital_out(Brain.ThreeWirePort.D);
-digital_out Low_Hang = digital_out(Brain.ThreeWirePort.E);
-digital_out High_Hang = digital_out(Brain.ThreeWirePort.F);
-motor PuncherLeft = motor(PORT8, ratio18_1, true);
+digital_out Hang_PTO = digital_out(Brain.ThreeWirePort.E);
+digital_out Hang_Release = digital_out(Brain.ThreeWirePort.F);
 digital_out LeftBackWing = digital_out(Brain.ThreeWirePort.A);
-distance DistanceSensor = distance(PORT10);
-digital_out RightWing = digital_out(Brain.ThreeWirePort.G);
+distance DistanceSensor = distance(PORT16);
+digital_out RightWing = digital_out(Brain.ThreeWirePort.C);
+rotation HangPosition = rotation(PORT3, false);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

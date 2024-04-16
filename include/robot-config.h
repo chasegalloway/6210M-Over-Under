@@ -6,21 +6,21 @@ extern brain Brain;
 extern motor RFDrive;
 extern motor LFDrive;
 extern controller Controller1;
-extern motor RTDrive;
-extern motor LTDrive;
-extern inertial Inertial11;
+extern motor RMDrive;
+extern motor LMDrive;
+extern inertial Inertial15;
 extern motor RBDrive;
 extern motor LBDrive;
-extern motor PuncherRight;
+extern motor Puncher;
 extern motor Intake;
 extern digital_out Kick_Arm;
 extern digital_out LeftWing;
-extern digital_out Low_Hang;
-extern digital_out High_Hang;
-extern motor PuncherLeft;
+extern digital_out Hang_PTO;
+extern digital_out Hang_Release;
 extern digital_out LeftBackWing;
 extern distance DistanceSensor;
 extern digital_out RightWing;
+extern rotation HangPosition;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
