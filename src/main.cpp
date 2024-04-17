@@ -869,12 +869,12 @@ void CloseSideSafeWP() {
 void CloseSideWP() {
   SetGyro(17);
   IntakeSpeed = 100;
-  AutoDistance(100, 54, 17);
+  drive_distance(100, 54, 17);
   sleep(250);
-  AutoDistance(-60, 59, 17);
+  drive_distance(-60, 59, 17);
   sleep(100);
   turn(70, 105, 3);
-  AutoDistance(-60, 10, 105);
+  drive_distance(-60, 10, 105);
   IntakeSpeed = -100;
   Kick_Arm = true;
   turn(100, 65, 2);
@@ -882,7 +882,7 @@ void CloseSideWP() {
   Kick_Arm = false;
   turn(100, 80, 2);
   IntakeSpeed = -100;
-  AutoDistance(80, 27, 80);
+  drive_distance(80, 27, 80);
   turn(100, 90, 2);
   AutoTillUnderBar(40, 0);
 }
