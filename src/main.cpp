@@ -40,9 +40,9 @@ int ControllerAxis4;
 int EndgameButtonCount;
 
 // Sensor Variables
-double AvgDriveMtrDist;
+//double AvgDriveMtrDist;
 double AvgDriveMtrSpeed;
-double Gyro1;
+// double Gyro1;
 int Clock;
 int SlowestDrive;
 int FastestDrive;
@@ -50,8 +50,8 @@ float TriBallThere;
 int HangToggle = 1;
 int HangDriveSpeedToggle = 0;
 // Drive Train Variables
-int LDSpeed = 0;
-int RDSpeed = 0;
+// int LDSpeed = 0;
+// int RDSpeed = 0;
 int DriveTorque = 100;
 bool DriveTrainHold = false;
 float TurnConstant = 1;
@@ -82,7 +82,7 @@ bool ShooterToggle = false;
 
 // Auton Variables
 bool RedSide = true;
-bool AutonisRunning = false;
+// bool AutonisRunning = false;
 int AutonStep = 0;
 int AutonSide = 1;
 int AutoGryoCorr = 0;
