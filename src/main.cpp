@@ -40,9 +40,9 @@ int ControllerAxis4;
 int EndgameButtonCount;
 
 // Sensor Variables
-//double AvgDriveMtrDist;
+double AvgDriveMtrDist;
 double AvgDriveMtrSpeed;
-// double Gyro1;
+double Gyro1;
 int Clock;
 int SlowestDrive;
 int FastestDrive;
@@ -50,8 +50,8 @@ float TriBallThere;
 int HangToggle = 1;
 int HangDriveSpeedToggle = 0;
 // Drive Train Variables
-// int LDSpeed = 0;
-// int RDSpeed = 0;
+int LDSpeed = 0;
+int RDSpeed = 0;
 int DriveTorque = 100;
 bool DriveTrainHold = false;
 float TurnConstant = 1;
@@ -82,7 +82,7 @@ bool ShooterToggle = false;
 
 // Auton Variables
 bool RedSide = true;
-// bool AutonisRunning = false;
+bool AutonisRunning = false;
 int AutonStep = 0;
 int AutonSide = 1;
 int AutoGryoCorr = 0;
@@ -359,7 +359,7 @@ int SensorsTask() {
   while (1) {
     sleep(5);
     // GET MOTOR ENCODERS AND SCALE THEM TO DISTANCE IN INCHES(450 RPM)
-    AvgDriveMtrDist = (LFDrive.position(deg) + RMDrive.position(deg)) * 0.0134;
+    AvgDriveMtrDist = (LFDrive.position(deg) + RMDrive.position(deg)) * 0.0120;
 
     // GET AVERAGE MOTOR SPEED PERCENTAGE
     AvgDriveMtrSpeed = (LFDrive.velocity(pct) + RMDrive.velocity(pct)) * .5;
@@ -564,7 +564,7 @@ void AutoDistance(int Speed, double Distance, double Heading) {
 }
 
 void drive_distance(int Speed, double Distance, double Heading) {
-  double kP = 0.2;
+  double kP = 0.4;
   double kI = 0.06;
   double kD = 0.0;
   double integral = 0;
@@ -634,6 +634,7 @@ void AutoTillHop(int Speed, double Heading) {
 ////////          FUNCTION FOR AUTO TURN            /////////
 ////////                                            /////////
 /////////////////////////////////////////////////////////////
+
 void AutoTurn(int Speed, int Heading, int Accuracy) {
   float lsp;
   float rsp;
@@ -657,15 +658,15 @@ void AutoTurn(int Speed, int Heading, int Accuracy) {
   StopDriveMotors();
   sleep(10);
 }
-
-void turn(int Speed, int Heading, int Accuracy) {
-  double lsp;
-  double rsp;
+  
   int integral = 0;
   int previous_error = 0;
   double kP = 0.36;
   double kI = 0;
   double kD = 0;
+void turn(int Speed, int Heading, int Accuracy) {
+  double lsp;
+  double rsp;
 
   int new_heading = Heading + Accuracy - 1;
   while ((fabs(new_heading - Gyro1) > Accuracy || (fabs(LFDrive.velocity(pct)) > 2.5)) && AutonisRunning) {
@@ -688,6 +689,8 @@ void turn(int Speed, int Heading, int Accuracy) {
   }
 
   StopDriveMotors();
+  // integral = 0;
+  // previous_error = 0;
   sleep(10);
 }
 ///////////////////////////////////////////////////////////////
@@ -846,8 +849,11 @@ void buttonRup_released2() {}
 
 void PIDTest() {
   SetGyro(0);
-  drive_distance(-100, 50, 0);
-  turn(100, 90, 3);
+  AutoDistance(80, 50, 0);
+  AutoTurn(60, 180, 0);
+  AutoDistance(80, 50, 180);
+  AutoTurn(60, 0, 0);
+  AutoDistance(80, 50, 0);
 }
 
 void CloseSideSafeWP() {
@@ -856,35 +862,38 @@ void CloseSideSafeWP() {
   ToggleKick_Arm();
   sleep(300);
   IntakeSpeed = 0;
-  turn(100, -40, 2);
+  AutoTurn(60, -40, 2);
   sleep(100);
   ToggleKick_Arm();
-  turn(100, 15, 2);
+  AutoTurn(60, 15, 2);
   IntakeSpeed = -100;
-  drive_distance(80, 27, 14);
-  turn(100, 0, 2);
+  AutoDistance(80, 27, 14);
+  AutoTurn(60, 0, 2);
   AutoTillUnderBar(40, 0);
 }
 
 void CloseSideWP() {
   SetGyro(17);
   IntakeSpeed = 100;
-  drive_distance(100, 54, 17);
+  LeftWing = true;
+  sleep(200);
+  LeftWing = false;
+  AutoDistance(90, 54, 17);
   sleep(250);
-  drive_distance(-60, 59, 17);
+  AutoDistance(-80, 58, 17);
   sleep(100);
-  turn(70, 105, 3);
-  drive_distance(-60, 10, 105);
+  AutoTurn(60, 120, 3);
   IntakeSpeed = -100;
+  AutoDistance(-60, 6, 110);
   Kick_Arm = true;
-  turn(100, 65, 2);
-  sleep(100);
+  sleep(300);
+  AutoTurn(60, 50, 2);
+  sleep(300);
   Kick_Arm = false;
-  turn(100, 80, 2);
-  IntakeSpeed = -100;
-  drive_distance(80, 27, 80);
-  turn(100, 90, 2);
-  AutoTillUnderBar(40, 0);
+  AutoTurn(60, 110, 2);
+  AutoDistance(80, 18, 110);
+  AutoTurn(60, 90, 2);
+  AutoTillUnderBar(40, 90);
 }
 
 void CloseSideElims() {
